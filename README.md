@@ -1,5 +1,4 @@
-# my_recipes
-
+# My Recipes
 An application to hold all of your recipes
 
 ## Getting Started
