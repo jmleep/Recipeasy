@@ -48,7 +48,6 @@ class RecipeDatabaseManager {
 
     final List<Map<String, dynamic>> maps = await db.query(RecipeDatabase.recipeTable);
 
-    // Convert the List<Map<String, dynamic> into a List<Dog>.
     return List.generate(maps.length, (i) {
       return Recipe(
         id: maps[i]['id'],

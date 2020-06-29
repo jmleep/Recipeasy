@@ -29,7 +29,7 @@ class RecipeDatabase {
     return await openDatabase(
       // Set the path to the database.
       join(await getDatabasesPath(), databaseName),
-      // When the database is first created, create a table to store dogs.
+
       onCreate: (db, version) {
         // Run the CREATE TABLE statement on the database.
         db.execute(
