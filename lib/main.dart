@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_recipes/database/RecipeDataManager.dart';
+import 'package:my_recipes/database/recipe_data_manager.dart';
 import 'package:my_recipes/widgets/recipe_app_bar.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -42,7 +42,6 @@ class Main extends StatefulWidget {
 }
 
 class _MainState extends State<Main> {
-
   Future<List<Recipe>> recipes;
 
   @override
@@ -67,14 +66,16 @@ class _MainState extends State<Main> {
                     onDismissed: (direction) async {
                       HapticFeedback.mediumImpact();
 
-                      await RecipeDatabaseManager.deleteRecipe(snapshot.data[index]);
+                      await RecipeDatabaseManager.deleteRecipe(
+                          snapshot.data[index]);
                       var deletedRecipe = snapshot.data[index].name;
                       snapshot.data.removeAt(index);
                       setState(() {
                         recipes = RecipeDatabaseManager.allRecipes();
                       });
 
-                      Scaffold.of(context).showSnackBar(SnackBar(content: Text("$deletedRecipe deleted")));
+                      Scaffold.of(context).showSnackBar(
+                          SnackBar(content: Text("$deletedRecipe deleted")));
                     },
                     child: ListTile(
                       title: Text('$recipeName'),
@@ -92,34 +93,37 @@ class _MainState extends State<Main> {
         }
 
         return Scaffold(
-          appBar: RecipeAppBar(title: widget.title),
+          appBar: RecipeAppBar(
+            title: widget.title,
+            allowBack: false,
+          ),
           body: Center(child: child),
           backgroundColor: Theme.of(context).accentColor,
           floatingActionButton: FloatingActionButton.extended(
-            onPressed: () {
+            onPressed: () async {
               HapticFeedback.mediumImpact();
 
-              // TODO: remove
-              Recipe r = new Recipe(name: 'Carbonara a la Virginia', notes: 'yum!', meatContent: MeatContent.meat);
-              RecipeDatabaseManager.upsertRecipe(r);
-
-              setState(() {
-                recipes = RecipeDatabaseManager.allRecipes();
-              });
-
-              Navigator.push(
+              await Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => AddEditRecipe()),
               );
 
-
+              setState(() {
+                recipes = RecipeDatabaseManager.allRecipes();
+              });
             },
             backgroundColor: Theme.of(context).primaryColor,
-            icon: Icon(Icons.note_add, color: Colors.white,),
-            label: Text('New Recipe', style: GoogleFonts.pacifico(
+            icon: Icon(
+              Icons.note_add,
               color: Colors.white,
-              fontSize: 20,
-            ),),
+            ),
+            label: Text(
+              'New Recipe',
+              style: GoogleFonts.pacifico(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
           ),
         );
       },
