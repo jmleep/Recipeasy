@@ -1,10 +1,11 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/database/recipe_data_manager.dart';
-import 'package:my_recipes/widgets/recipe_app_bar.dart';
+import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'model/recipe.dart';
-import 'routes/add_edit_recipe_route.dart';
+import '../../model/recipe.dart';
+import '../add_edit_recipe/route.dart';
 
 void main() {
   runApp(MyRecipeApp());
@@ -61,8 +62,21 @@ class _MainState extends State<Main> {
               itemBuilder: (BuildContext context, int index) {
                 var recipeName = snapshot.data[index].name;
                 return Dismissible(
+                    direction: DismissDirection.endToStart,
                     key: UniqueKey(),
-                    background: Container(color: Colors.red),
+                    background: Container(
+                      color: Colors.red,
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Icon(
+                            Icons.delete,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
                     onDismissed: (direction) async {
                       HapticFeedback.mediumImpact();
 

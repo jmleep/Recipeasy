@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class PrimaryMiniButton extends StatelessWidget {
+class MiniPrimaryButton extends StatelessWidget {
   final Function onButtonPress; 
   final IconData icon;
 
-  PrimaryMiniButton({this.onButtonPress, this.icon});
+  MiniPrimaryButton({this.onButtonPress, this.icon});
 
   @override
   Widget build(BuildContext context) {
