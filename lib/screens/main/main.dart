@@ -1,11 +1,15 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/database/recipe_data_manager.dart';
+import 'package:my_recipes/screens/main/recipe_list_item.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:my_recipes/widgets/dismissible_background.dart';
 import '../../model/recipe.dart';
-import '../add_edit_recipe/route.dart';
+import '../add_edit_recipe/add_edit_recipe.dart';
 
 void main() {
   runApp(MyRecipeApp());
@@ -61,22 +65,13 @@ class _MainState extends State<Main> {
           child = ListView.separated(
               itemBuilder: (BuildContext context, int index) {
                 var recipeName = snapshot.data[index].name;
+                var recipeColor = snapshot.data[index].color;
+                var recipeImagePath = snapshot.data[index].imagePath;
+
                 return Dismissible(
                     direction: DismissDirection.endToStart,
                     key: UniqueKey(),
-                    background: Container(
-                      color: Colors.red,
-                      child: Align(
-                        alignment: Alignment.centerRight,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Icon(
-                            Icons.delete,
-                            color: Colors.white,
-                          ),
-                        ),
-                      ),
-                    ),
+                    background: DismissibleBackground(),
                     onDismissed: (direction) async {
                       HapticFeedback.mediumImpact();
 
@@ -91,14 +86,16 @@ class _MainState extends State<Main> {
                       Scaffold.of(context).showSnackBar(
                           SnackBar(content: Text("$deletedRecipe deleted")));
                     },
-                    child: ListTile(
-                      title: Text('$recipeName'),
-                      onTap: () {
-                        HapticFeedback.mediumImpact();
-                      },
+                    child: RecipeListItem(
+                      key: UniqueKey(),
+                      recipeName: recipeName,
+                      recipeImagePath: recipeImagePath,
+                      recipeColor: recipeColor,
                     ));
               },
-              separatorBuilder: (BuildContext context, int index) => Divider(),
+              separatorBuilder: (BuildContext context, int index) => SizedBox(
+                    height: 10,
+                  ),
               itemCount: snapshot.data.length);
         } else {
           child = Text(
@@ -111,7 +108,10 @@ class _MainState extends State<Main> {
             title: widget.title,
             allowBack: false,
           ),
-          body: Center(child: child),
+          body: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Center(child: child),
+          ),
           backgroundColor: Theme.of(context).accentColor,
           floatingActionButton: FloatingActionButton.extended(
             onPressed: () async {

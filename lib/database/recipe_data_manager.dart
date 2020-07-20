@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/util/utils.dart';
 import 'package:sqflite/sqflite.dart';
@@ -56,6 +57,8 @@ class RecipeDatabaseManager {
         name: maps[i]['name'],
         meatContent:
             Utils.cast<String>(maps[i]['meat_content']).toMeatContent(),
+        imagePath: maps[i]['imagePath'],
+        color: new Color(maps[i]['color'])
       );
     });
   }
