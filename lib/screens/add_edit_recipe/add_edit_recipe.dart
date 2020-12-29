@@ -1,17 +1,15 @@
 import 'dart:io';
 
-import 'package:image_picker/image_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_recipes/database/recipe_data_manager.dart';
-import 'package:my_recipes/model/ingredient.dart';
-import 'package:my_recipes/model/recipe.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:my_recipes/util/widget_styles.dart';
-import 'package:flutter_material_color_picker/flutter_material_color_picker.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
-import 'package:my_recipes/widgets/buttons/button_primary.dart';
+import 'package:my_recipes/widgets/buttons/button_color_picker.dart';
+import 'package:my_recipes/widgets/buttons/button_image_picker.dart';
 import 'package:my_recipes/widgets/buttons/button_primary_mini.dart';
+import 'package:my_recipes/widgets/buttons/button_save_recipe.dart';
 
 class AddEditRecipe extends StatefulWidget {
   @override
@@ -39,6 +37,19 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
     }
   }
 
+  void setColor(BuildContext context) {
+    setState(() {
+      _recipeColor = _tempRecipeColor;
+    });
+    Navigator.of(context).pop();
+  }
+
+  void setTempColor(Color color) {
+    setState(() {
+      _tempRecipeColor = color;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,76 +74,18 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
                             children: <Widget>[
                               Padding(
                                 padding: const EdgeInsets.all(8.0),
-                                child: FlatButton(
-                                  child: _image != null
-                                      ? CircleAvatar(
-                                          radius: 105,
-                                          backgroundColor: _recipeColor,
-                                          child: CircleAvatar(
-                                              backgroundImage:
-                                                  FileImage(_image),
-                                              radius: 100.0))
-                                      : CircleAvatar(
-                                          radius: 105,
-                                          backgroundColor: _recipeColor,
-                                          child: CircleAvatar(
-                                              backgroundColor: Colors.grey,
-                                              child: Icon(
-                                                Icons.add_a_photo,
-                                                color: Colors.white,
-                                              ),
-                                              radius: 100.0),
-                                        ),
-                                  onPressed: getImage,
-                                ),
+                                child: ImagePickerButton(
+                                    recipeColor: _recipeColor,
+                                    getImage: this.getImage,
+                                    image: _image),
                               ),
                             ]),
                         Container(
                           alignment: Alignment.bottomRight,
-                          child: FlatButton(
-                            child: CircleAvatar(
-                              backgroundColor: _recipeColor,
-                              radius: 25.0,
-                              child: Icon(Icons.palette,
-                                  color: _recipeColor.computeLuminance() > 0.5
-                                      ? Colors.black
-                                      : Colors.white),
-                            ),
-                            onPressed: () {
-                              showDialog(
-                                  context: context,
-                                  child: AlertDialog(
-                                    contentPadding: const EdgeInsets.all(8.0),
-                                    content: Container(
-                                      child: MaterialColorPicker(
-                                        onMainColorChange: (Color color) {
-                                          setState(() {
-                                            _tempRecipeColor = color;
-                                          });
-                                        },
-                                        selectedColor: _recipeColor,
-                                        allowShades: false,
-                                        shrinkWrap: true,
-                                      ),
-                                    ),
-                                    actions: [
-                                      FlatButton(
-                                        child: Text('Cancel'),
-                                        onPressed: Navigator.of(context).pop,
-                                      ),
-                                      FlatButton(
-                                        child: Text('Select'),
-                                        onPressed: () {
-                                          setState(() {
-                                            _recipeColor = _tempRecipeColor;
-                                          });
-                                          Navigator.of(context).pop();
-                                        },
-                                      ),
-                                    ],
-                                  ));
-                            },
-                          ),
+                          child: ColorPickerButton(
+                              recipeColor: _recipeColor,
+                              setColor: this.setColor,
+                              setTempColor: this.setTempColor),
                         ),
                         SizedBox(
                           height: 20,
@@ -195,29 +148,12 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: PrimaryButton(
-                icon: Icons.save,
-                text: 'Save',
-                onButtonPress: () {
-                  HapticFeedback.mediumImpact();
-
-                  if (_formKey.currentState.validate()) {
-                    List<Ingredient> userIngredients =
-                        _ingredients.map((e) => Ingredient(value: e)).toList();
-
-                    Recipe r = new Recipe(
-                        name: _nameController.text,
-                        notes: 'yum!',
-                        meatContent: MeatContent.meat,
-                        ingredients: userIngredients,
-                        imagePath: _imagePath,
-                        color: _recipeColor);
-
-                    RecipeDatabaseManager.upsertRecipe(r);
-
-                    Navigator.pop(context);
-                  }
-                }),
+            child: SaveRecipeButton(
+                formKey: _formKey,
+                ingredients: _ingredients,
+                nameController: _nameController,
+                imagePath: _imagePath,
+                recipeColor: _recipeColor),
           ),
         ],
       ),

@@ -1,13 +1,12 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:my_recipes/database/recipe_data_manager.dart';
 import 'package:my_recipes/screens/main/recipe_list_item.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
-import 'package:flutter/services.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:my_recipes/widgets/dismissible_background.dart';
+
 import '../../model/recipe.dart';
 import '../add_edit_recipe/add_edit_recipe.dart';
 
@@ -29,7 +28,8 @@ class MyRecipeApp extends StatelessWidget {
       ),
       darkTheme: ThemeData(
         primaryColor: Colors.deepOrange,
-        accentColor: Colors.black54,
+        backgroundColor: Colors.black12,
+        accentColor: Colors.black12,
         brightness: Brightness.dark,
       ),
       home: Main(title: 'My Recipes 🥘'),

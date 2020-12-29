@@ -36,11 +36,11 @@ class RecipeListItem extends StatelessWidget {
                       FileImage(snapshot.data),
                     )
                         : CircleAvatar(
-                      radius: 30,
-                      child: Icon(Icons.photo),
-                      backgroundColor: Colors.grey,
-                      foregroundColor: Colors.white,
-                    );
+                      radius: 45,
+                            child: Icon(Icons.photo),
+                            backgroundColor: Colors.grey,
+                            foregroundColor: Colors.white,
+                          );
                   }),
             ],
           ),
