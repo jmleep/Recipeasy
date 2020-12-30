@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_recipes/model/ingredient.dart';
 import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/util/utils.dart';
 import 'package:sqflite/sqflite.dart';
@@ -28,6 +29,13 @@ class RecipeDatabaseManager {
       });
     }
 
+    if (recipe.photos != null && recipe.photos.length > 0) {
+      recipe.photos.forEach((element) {
+        upsertFutures.add(
+            db.insert(RecipeDatabase.photosTable, element.toMap(recipeId)));
+      });
+    }
+
     Future.wait(upsertFutures);
 
     return recipeId;
@@ -40,12 +48,28 @@ class RecipeDatabaseManager {
         where: "recipe_id = ?", whereArgs: [recipe.id]);
     await db.delete(RecipeDatabase.stepsTable,
         where: "recipe_id = ?", whereArgs: [recipe.id]);
+    await db.delete(RecipeDatabase.photosTable,
+        where: "recipe_id = ?", whereArgs: [recipe.id]);
 
     return db.delete(RecipeDatabase.recipeTable,
         where: "id = ?", whereArgs: [recipe.id]);
   }
 
-  static Future<List<Recipe>> allRecipes() async {
+  static Future<List<Ingredient>> getIngredients(int recipeId) async {
+    final Database db = await RecipeDatabase.instance.database;
+
+    final List<Map<String, dynamic>> maps = await db.query(
+        RecipeDatabase.ingredientsTable,
+        where: 'recipe_id = ?',
+        whereArgs: [recipeId]);
+
+    return List.generate(maps.length, (i) {
+      return Ingredient(
+          id: maps[i]['id'], recipeId: recipeId, value: maps[i]['value']);
+    });
+  }
+
+  static Future<List<Recipe>> getAllRecipes() async {
     final Database db = await RecipeDatabase.instance.database;
 
     final List<Map<String, dynamic>> maps =
@@ -53,13 +77,12 @@ class RecipeDatabaseManager {
 
     return List.generate(maps.length, (i) {
       return Recipe(
-        id: maps[i]['id'],
-        name: maps[i]['name'],
-        meatContent:
-            Utils.cast<String>(maps[i]['meat_content']).toMeatContent(),
-        imagePath: maps[i]['imagePath'],
-        color: new Color(maps[i]['color'])
-      );
+          id: maps[i]['id'],
+          name: maps[i]['name'],
+          meatContent:
+              Utils.cast<String>(maps[i]['meat_content']).toMeatContent(),
+          primaryImagePath: maps[i]['primaryImagePath'],
+          color: new Color(maps[i]['color']));
     });
   }
 }

@@ -10,7 +10,7 @@ class SaveRecipeButton extends StatelessWidget {
   const SaveRecipeButton({
     Key key,
     @required GlobalKey<FormState> formKey,
-    @required List<String> ingredients,
+    @required List<Ingredient> ingredients,
     @required TextEditingController nameController,
     @required imagePath,
     @required MaterialColor recipeColor,
@@ -22,7 +22,7 @@ class SaveRecipeButton extends StatelessWidget {
         super(key: key);
 
   final GlobalKey<FormState> _formKey;
-  final List<String> _ingredients;
+  final List<Ingredient> _ingredients;
   final TextEditingController _nameController;
   final _imagePath;
   final MaterialColor _recipeColor;
@@ -36,15 +36,13 @@ class SaveRecipeButton extends StatelessWidget {
           HapticFeedback.mediumImpact();
 
           if (_formKey.currentState.validate()) {
-            List<Ingredient> userIngredients =
-                _ingredients.map((e) => Ingredient(value: e)).toList();
 
             Recipe r = new Recipe(
                 name: _nameController.text,
                 notes: 'yum!',
                 meatContent: MeatContent.meat,
-                ingredients: userIngredients,
-                imagePath: _imagePath,
+                ingredients: _ingredients,
+                primaryImagePath: _imagePath,
                 color: _recipeColor);
 
             RecipeDatabaseManager.upsertRecipe(r);

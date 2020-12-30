@@ -4,6 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_recipes/database/recipe_data_manager.dart';
+import 'package:my_recipes/model/ingredient.dart';
+import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/util/widget_styles.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/button_color_picker.dart';
@@ -12,12 +15,17 @@ import 'package:my_recipes/widgets/buttons/button_primary_mini.dart';
 import 'package:my_recipes/widgets/buttons/button_save_recipe.dart';
 
 class AddEditRecipe extends StatefulWidget {
+  final Recipe recipe;
+
+  AddEditRecipe({Key key, this.recipe}) : super(key: key);
+
   @override
   _AddEditRecipeState createState() => _AddEditRecipeState();
 }
 
 class _AddEditRecipeState extends State<AddEditRecipe> {
-  final _ingredients = List<String>();
+  Future<List<Ingredient>> existingIngredients;
+  var _ingredients = List<Ingredient>();
   final _formKey = GlobalKey<FormState>();
   var _recipeColor = Colors.orange;
   var _tempRecipeColor = Colors.orange;
@@ -25,6 +33,15 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
   var _imagePath;
   final _picker = ImagePicker();
   final _nameController = TextEditingController();
+
+  @override
+  void initState() {
+    super.initState();
+    if (widget.recipe != null) {
+      existingIngredients =
+          RecipeDatabaseManager.getIngredients(widget.recipe.id);
+    }
+  }
 
   Future getImage() async {
     final pickedFile = await _picker.getImage(source: ImageSource.gallery);
@@ -48,6 +65,20 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
     setState(() {
       _tempRecipeColor = color;
     });
+  }
+
+  Widget displayIngredients(
+      BuildContext context, AsyncSnapshot<List<Ingredient>> snapshot) {
+    Widget view = Text('No ingredients');
+    if (snapshot.hasData && snapshot.data.length > 0) {
+      // view = ListView.builder(
+      //     itemBuilder: (BuildContext context, int index) {
+      //       var ingredient = snapshot.data[index].value;
+      //       return TextFormField(initialValue: ingredient,);
+      //     });
+    }
+
+    return view;
   }
 
   @override
@@ -104,16 +135,23 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
                         SizedBox(
                           height: 10,
                         ),
+                        FutureBuilder<List<Ingredient>>(
+                          future: existingIngredients,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<Ingredient>> snapshot) {
+                            return displayIngredients(context, snapshot);
+                          },
+                        ),
                         ListView.builder(
                           shrinkWrap: true,
                           itemCount: _ingredients.length,
                           itemBuilder: (context, index) {
                             return TextFormField(
-                              autofocus: _ingredients[index].isEmpty,
+                              autofocus: _ingredients[index].value.isEmpty,
                               decoration: InputDecoration(
                                   hintText: 'ingredient...',
                                   fillColor: Colors.black54),
-                              initialValue: _ingredients[index],
+                              initialValue: _ingredients[index].value,
                             );
                           },
                         ),
@@ -126,13 +164,14 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
                             HapticFeedback.mediumImpact();
                             if (_ingredients.length > 0 &&
                                 _ingredients[_ingredients.length - 1]
+                                    .value
                                     .isNotEmpty) {
                               setState(() {
-                                _ingredients.add('');
+                                _ingredients.add(new Ingredient(value: ''));
                               });
                             } else {
                               setState(() {
-                                _ingredients.add('');
+                                _ingredients.add(new Ingredient(value: ''));
                               });
                             }
                           },

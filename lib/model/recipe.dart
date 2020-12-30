@@ -1,7 +1,8 @@
 import 'dart:ui';
 
 import 'package:my_recipes/model/ingredient.dart';
-import 'package:flutter/foundation.dart';
+import 'package:my_recipes/model/photo.dart';
+
 import 'ingredient.dart';
 import 'step.dart';
 
@@ -10,13 +11,22 @@ class Recipe {
   final String name;
   final List<Ingredient> ingredients;
   final List<Step> steps;
+  final List<Photo> photos;
   final String notes;
   final MeatContent meatContent;
-  final String imagePath;
+  final String primaryImagePath;
   final Color color;
 
-  Recipe({this.id, this.name, this.ingredients, this.steps, this.notes,
-    this.meatContent, this.imagePath, this.color});
+  Recipe(
+      {this.id,
+      this.name,
+      this.ingredients,
+      this.steps,
+      this.photos,
+      this.notes,
+      this.meatContent,
+      this.primaryImagePath,
+      this.color});
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> values = new Map();
@@ -24,7 +34,7 @@ class Recipe {
       'name': name,
       'notes': notes,
       'meat_content': meatContent.toString(),
-      'imagePath': imagePath,
+      'primaryImagePath': primaryImagePath,
       'color': color.value
     });
 
