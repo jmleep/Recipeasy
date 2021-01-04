@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:my_recipes/model/recipe.dart';
-import 'package:my_recipes/screens/add_edit_recipe/add_edit_recipe.dart';
+import 'package:my_recipes/screens/add_edit_recipe/add_edit_recipe2.dart';
 
 Future<File> _getFile(String filename) async {
   File f = new File(filename);
@@ -60,7 +60,7 @@ class RecipeListItem extends StatelessWidget {
         await Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => AddEditRecipe(
+              builder: (context) => AddEditRecipe2(
                     recipe: recipe,
                   )),
         );

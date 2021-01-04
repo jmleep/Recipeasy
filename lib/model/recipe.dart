@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:my_recipes/model/ingredient.dart';
-import 'package:my_recipes/model/photo.dart';
+import 'package:my_recipes/model/recipe_photo.dart';
 
 import 'ingredient.dart';
 import 'step.dart';
@@ -11,7 +11,7 @@ class Recipe {
   final String name;
   final List<Ingredient> ingredients;
   final List<Step> steps;
-  final List<Photo> photos;
+  final List<RecipePhoto> photos;
   final String notes;
   final MeatContent meatContent;
   final String primaryImagePath;

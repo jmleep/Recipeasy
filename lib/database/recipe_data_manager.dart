@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_recipes/model/ingredient.dart';
 import 'package:my_recipes/model/recipe.dart';
+import 'package:my_recipes/model/recipe_photo.dart';
 import 'package:my_recipes/util/utils.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -83,6 +84,20 @@ class RecipeDatabaseManager {
               Utils.cast<String>(maps[i]['meat_content']).toMeatContent(),
           primaryImagePath: maps[i]['primaryImagePath'],
           color: new Color(maps[i]['color']));
+    });
+  }
+
+  static Future<List<RecipePhoto>> getImages(int recipeId) async {
+    final Database db = await RecipeDatabase.instance.database;
+
+    final List<Map<String, dynamic>> maps = await db.query(
+        RecipeDatabase.ingredientsTable,
+        where: 'recipe_id = ?',
+        whereArgs: [recipeId]);
+
+    return List.generate(maps.length, (i) {
+      return RecipePhoto(
+          id: maps[i]['id'], recipeId: recipeId, value: maps[i]['value']);
     });
   }
 }

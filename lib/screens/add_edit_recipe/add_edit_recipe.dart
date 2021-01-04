@@ -160,6 +160,7 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
                         ),
                         MiniPrimaryButton(
                           icon: Icons.add_circle_outline,
+                          buttonText: 'Add Ingredient',
                           onButtonPress: () {
                             HapticFeedback.mediumImpact();
                             if (_ingredients.length > 0 &&

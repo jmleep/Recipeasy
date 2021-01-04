@@ -1,10 +1,21 @@
 import 'package:flutter/material.dart';
 
 class MiniPrimaryButton extends StatelessWidget {
-  final Function onButtonPress; 
+  final Function onButtonPress;
   final IconData icon;
+  final String buttonText;
 
-  MiniPrimaryButton({this.onButtonPress, this.icon});
+  MiniPrimaryButton({this.onButtonPress, this.icon, this.buttonText});
+
+  Widget getIcon() {
+    if (icon != null) {
+      return Icon(
+        icon,
+        color: Colors.white,
+      );
+    }
+    return SizedBox.shrink();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -18,14 +29,11 @@ class MiniPrimaryButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Icon(
-              icon,
-              color: Colors.white,
-            ),
+            getIcon(),
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Text(
-                'Add Ingredient',
+                buttonText,
                 style: TextStyle(color: Colors.white),
               ),
             ),
