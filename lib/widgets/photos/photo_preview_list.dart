@@ -39,25 +39,34 @@ class PhotoPreviewList extends StatelessWidget {
                   width: 75,
                 );
 
-                Widget response = imageWidget;
+                List<Widget> stackContents = List<Widget>();
+                stackContents.add(imageWidget);
 
                 if (index == this.activePhoto) {
-                  response = Stack(
-                    children: <Widget>[
-                      imageWidget,
-                      Positioned(
-                          bottom: 5,
-                          right: 15,
-                          child: Icon(
-                            Icons.check_circle,
-                            color: Colors.deepOrange,
-                          )),
-                    ],
-                  );
+                  stackContents.add(Container(
+                      width: 75,
+                      decoration: BoxDecoration(
+                          border: Border(
+                        bottom: BorderSide(width: 5, color: Colors.orange),
+                      ))));
                 }
 
+                // TODO: add set primary photo functionality
+                // if (index == this.primaryPhoto) {
+                //   stackContents.add(Positioned(
+                //       bottom: 5,
+                //       right: 15,
+                //       child: Icon(
+                //         Icons.check_circle,
+                //         color: Colors.deepOrange,
+                //       )));
+                // }
+
                 return GestureDetector(
-                    onTap: () => setActivePhoto(index), child: response);
+                    onTap: () => setActivePhoto(index),
+                    child: Stack(
+                        alignment: Alignment.center,
+                        children: <Widget>[...stackContents]));
               },
             ),
           ),

@@ -12,8 +12,6 @@ class RecipeDatabaseManager {
   static Future<int> upsertRecipe(Recipe recipe) async {
     final Database db = await RecipeDatabase.instance.database;
 
-    print(recipe);
-
     int recipeId = await db.insert(RecipeDatabase.recipeTable, recipe.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
 

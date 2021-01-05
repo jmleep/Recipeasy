@@ -1,201 +1,218 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_recipes/database/recipe_database_manager.dart';
-import 'package:my_recipes/model/ingredient.dart';
+import 'package:my_recipes/database/recipe_photo_database_manager.dart';
 import 'package:my_recipes/model/recipe.dart';
+import 'package:my_recipes/model/recipe_photo.dart';
 import 'package:my_recipes/util/widget_styles.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
-import 'package:my_recipes/widgets/buttons/button_color_picker.dart';
-import 'package:my_recipes/widgets/buttons/button_image_picker.dart';
-import 'package:my_recipes/widgets/buttons/button_primary_mini.dart';
-import 'package:my_recipes/widgets/buttons/button_save_recipe.dart';
+import 'package:my_recipes/widgets/photos/active_photo.dart';
+import 'package:my_recipes/widgets/photos/photo_preview_list.dart';
 
 class AddEditRecipe extends StatefulWidget {
   final Recipe recipe;
 
-  AddEditRecipe({Key key, this.recipe}) : super(key: key);
-
   @override
   _AddEditRecipeState createState() => _AddEditRecipeState();
+
+  AddEditRecipe({this.recipe});
 }
 
 class _AddEditRecipeState extends State<AddEditRecipe> {
-  Future<List<Ingredient>> existingIngredients;
-  var _ingredients = List<Ingredient>();
-  final _formKey = GlobalKey<FormState>();
-  var _recipeColor = Colors.orange;
-  var _tempRecipeColor = Colors.orange;
-  File _image;
-  var _imagePath;
+  List<RecipePhoto> _tempRecipePhotos = new List<RecipePhoto>();
   final _picker = ImagePicker();
-  final _nameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _previewScrollController = new ScrollController();
+  var _recipeNameController = TextEditingController();
+  var _activePhoto = 0;
 
-  @override
-  void initState() {
-    super.initState();
+  setupRecipeData() async {
     if (widget.recipe != null) {
-      existingIngredients =
-          RecipeDatabaseManager.getIngredients(widget.recipe.id);
-    }
-  }
-
-  Future getImage() async {
-    final pickedFile = await _picker.getImage(source: ImageSource.gallery);
-
-    if (pickedFile != null) {
       setState(() {
-        _imagePath = pickedFile.path;
-        _image = File(pickedFile.path);
+        _recipeNameController = TextEditingController(text: widget.recipe.name);
+      });
+
+      RecipePhotoDatabaseManager.getImages(widget.recipe.id).then((value) {
+        setState(() {
+          _tempRecipePhotos = value;
+        });
       });
     }
   }
 
-  void setColor(BuildContext context) {
-    setState(() {
-      _recipeColor = _tempRecipeColor;
-    });
-    Navigator.of(context).pop();
-  }
+  deletePhoto(int index) {
+    var activePhoto = 0;
 
-  void setTempColor(Color color) {
-    setState(() {
-      _tempRecipeColor = color;
-    });
-  }
-
-  Widget displayIngredients(
-      BuildContext context, AsyncSnapshot<List<Ingredient>> snapshot) {
-    Widget view = Text('No ingredients');
-    if (snapshot.hasData && snapshot.data.length > 0) {
-      // view = ListView.builder(
-      //     itemBuilder: (BuildContext context, int index) {
-      //       var ingredient = snapshot.data[index].value;
-      //       return TextFormField(initialValue: ingredient,);
-      //     });
+    if (index != 0) {
+      if (_tempRecipePhotos.length > 2) {
+        activePhoto = _activePhoto - 1;
+      } else {
+        activePhoto = 0;
+      }
     }
 
-    return view;
+    setState(() {
+      _activePhoto = activePhoto;
+      _tempRecipePhotos.removeAt(index);
+    });
+  }
+
+  Future addImageToTempListOfPhotos() async {
+    final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      RecipePhoto photo = new RecipePhoto(value: pickedFile.path);
+
+      setState(() {
+        _tempRecipePhotos.add(photo);
+        _activePhoto = _tempRecipePhotos.length - 1;
+      });
+
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        _previewScrollController.animateTo(
+          _previewScrollController.position.maxScrollExtent,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      });
+    }
+  }
+
+  Future saveTempListOfPhotos() async {
+    if (_formKey.currentState.validate()) {
+      Recipe recipe;
+
+      if (widget.recipe != null) {
+        recipe = widget.recipe;
+        recipe.name = _recipeNameController.text;
+        recipe.photos = _tempRecipePhotos;
+      } else {
+        recipe = new Recipe(
+            name: _recipeNameController.text, photos: _tempRecipePhotos);
+      }
+
+      await RecipeDatabaseManager.upsertRecipe(recipe);
+
+      Navigator.pop(context);
+    }
+  }
+
+  List<AppBarAction> getAppBarActions() {
+    return [
+      new AppBarAction(
+          Icon(
+            Icons.add_a_photo,
+            color: Theme.of(context).primaryColor,
+          ),
+          addImageToTempListOfPhotos),
+      new AppBarAction(
+          Icon(
+            Icons.check,
+            color: Theme.of(context).primaryColor,
+          ),
+          saveTempListOfPhotos)
+    ];
+  }
+
+  swipeActivePhoto(DragEndDetails details) {
+    var scrollPosition;
+
+    if (details.primaryVelocity < 0) {
+      if (_activePhoto > 2 || _previewScrollController.position.pixels != _previewScrollController.position.minScrollExtent) {
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          _previewScrollController.animateTo(
+            (_activePhoto - 2) * 75.0,
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeOut,
+          );
+        });
+      }
+
+      setActivePhoto(_activePhoto + 1);
+    } else {
+      SchedulerBinding.instance.addPostFrameCallback((_) {
+        _previewScrollController.animateTo(
+          (_activePhoto - 2) * 75.0,
+          duration: const Duration(milliseconds: 300),
+          curve: Curves.easeOut,
+        );
+      });
+
+      setActivePhoto(_activePhoto - 1);
+    }
+  }
+
+  setActivePhoto(int index) {
+    if (index < 0 || index >= _tempRecipePhotos.length) {
+      return;
+    }
+
+    setState(() {
+      _activePhoto = index;
+    });
+  }
+
+  String getTitle() {
+    if (widget.recipe != null) {
+      return "Edit Recipe";
+    }
+    return "Add Recipe";
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setupRecipeData();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).accentColor,
       appBar: RecipeAppBar(
-        title: "Add Recipe",
+        title: getTitle(),
+        actions: getAppBarActions(),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: <Widget>[
-          Flexible(
-            child: ListView(shrinkWrap: true, children: [
-              Form(
+      body: Container(
+        child: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Form(
                   key: _formKey,
-                  child: Padding(
-                    padding: const EdgeInsets.all(10),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: <Widget>[
-                        Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: ImagePickerButton(
-                                    recipeColor: _recipeColor,
-                                    getImage: this.getImage,
-                                    image: _image),
-                              ),
-                            ]),
-                        Container(
-                          alignment: Alignment.bottomRight,
-                          child: ColorPickerButton(
-                              recipeColor: _recipeColor,
-                              setColor: this.setColor,
-                              setTempColor: this.setTempColor),
-                        ),
-                        SizedBox(
-                          height: 20,
-                        ),
-                        TextFormField(
-                          controller: _nameController,
-                          decoration: ReusableStyleWidget.inputDecoration(
-                              context, 'Recipe Name'),
-                          validator: (value) {
-                            if (value.isEmpty) {
-                              return 'Please enter some text';
-                            }
-                            return null;
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        FutureBuilder<List<Ingredient>>(
-                          future: existingIngredients,
-                          builder: (BuildContext context,
-                              AsyncSnapshot<List<Ingredient>> snapshot) {
-                            return displayIngredients(context, snapshot);
-                          },
-                        ),
-                        ListView.builder(
-                          shrinkWrap: true,
-                          itemCount: _ingredients.length,
-                          itemBuilder: (context, index) {
-                            return TextFormField(
-                              autofocus: _ingredients[index].value.isEmpty,
-                              decoration: InputDecoration(
-                                  hintText: 'ingredient...',
-                                  fillColor: Colors.black54),
-                              initialValue: _ingredients[index].value,
-                            );
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        MiniPrimaryButton(
-                          icon: Icons.add_circle_outline,
-                          buttonText: 'Add Ingredient',
-                          onButtonPress: () {
-                            HapticFeedback.mediumImpact();
-                            if (_ingredients.length > 0 &&
-                                _ingredients[_ingredients.length - 1]
-                                    .value
-                                    .isNotEmpty) {
-                              setState(() {
-                                _ingredients.add(new Ingredient(value: ''));
-                              });
-                            } else {
-                              setState(() {
-                                _ingredients.add(new Ingredient(value: ''));
-                              });
-                            }
-                          },
-                        ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        //Spacer(),
-                      ],
-                    ),
-                  )),
-            ]),
+                  child: TextFormField(
+                    controller: _recipeNameController,
+                    decoration: ReusableStyleWidget.inputDecoration(
+                        context, 'Recipe Name'),
+                    validator: (value) {
+                      if (value.isEmpty) {
+                        return 'Please a recipe name!';
+                      }
+                      return null;
+                    },
+                  ),
+                ),
+              ),
+              ActivePhoto(
+                tempRecipePhotos: _tempRecipePhotos,
+                activePhoto: _activePhoto,
+                addImageToTempListOfPhotos: addImageToTempListOfPhotos,
+                swipeActivePhoto: swipeActivePhoto,
+                deletePhoto: deletePhoto,
+              ),
+              PhotoPreviewList(
+                  scrollController: _previewScrollController,
+                  tempRecipePhotos: _tempRecipePhotos,
+                  setActivePhoto: setActivePhoto,
+                  activePhoto: _activePhoto),
+            ],
           ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: SaveRecipeButton(
-                formKey: _formKey,
-                ingredients: _ingredients,
-                nameController: _nameController,
-                imagePath: _imagePath,
-                recipeColor: _recipeColor),
-          ),
-        ],
+        ),
       ),
     );
   }

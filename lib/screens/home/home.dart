@@ -2,14 +2,14 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_recipes/database/recipe_database_manager.dart';
-import 'package:my_recipes/screens/add_edit_recipe/add_edit_recipe2.dart';
+import 'package:my_recipes/screens/add_edit_recipe/add_edit_recipe.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/button_add_recipe_floating_action.dart';
 import 'package:my_recipes/widgets/dismissible_background.dart';
 import 'package:my_recipes/widgets/list_items/list_item_recipe.dart';
 
 import '../../model/recipe.dart';
-import '../add_edit_recipe/add_edit_recipe.dart';
+import '../add_edit_recipe/add_edit_recipe_old.dart';
 
 class Home extends StatefulWidget {
   final String title;
@@ -69,7 +69,7 @@ class _HomeState extends State<Home> {
     await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => AddEditRecipe2(
+          builder: (context) => AddEditRecipe(
             recipe: recipe,
           )),
     );

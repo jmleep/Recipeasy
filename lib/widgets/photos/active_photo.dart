@@ -32,6 +32,18 @@ class ActivePhoto extends StatelessWidget {
                       new File(tempRecipePhotos[activePhoto].value))),
               Positioned(
                   bottom: 10,
+                  left: 10,
+                  child: RoundedButton(
+                    buttonText: 'Make Primary Photo',
+                    borderColor: Colors.blue,
+                    fillColor: Colors.white70,
+                    textColor: Colors.black,
+                    onPressed: () {
+                      deletePhoto(activePhoto);
+                    },
+                  )),
+              Positioned(
+                  bottom: 10,
                   right: 10,
                   child: RoundedButton(
                     buttonText: 'Delete Photo',
@@ -39,7 +51,7 @@ class ActivePhoto extends StatelessWidget {
                     fillColor: Colors.red,
                     textColor: Colors.white,
                     onPressed: () {
-                      deletePhoto(activePhoto);
+
                     },
                   )),
             ],
