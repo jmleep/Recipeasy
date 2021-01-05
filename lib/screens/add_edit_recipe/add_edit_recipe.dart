@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_recipes/database/recipe_database_manager.dart';
 import 'package:my_recipes/database/recipe_photo_database_manager.dart';
@@ -104,6 +105,8 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
 
       await RecipeDatabaseManager.upsertRecipe(recipe);
 
+      HapticFeedback.heavyImpact();
+
       Navigator.pop(context);
     }
   }
@@ -125,27 +128,33 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
     ];
   }
 
+  triggerScrollAnimation(double position) {
+    SchedulerBinding.instance.addPostFrameCallback((_) {
+      _previewScrollController.animateTo(
+        position,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    });
+  }
+
   swipeActivePhoto(DragEndDetails details) {
+    HapticFeedback.selectionClick();
+
+    final double photoWidth = 75.0;
+    final double separatorWidth = 10.0;
+    final double totalWidth = photoWidth + separatorWidth;
+
     if (details.primaryVelocity < 0) {
-      if (_activePhoto > 2 || _previewScrollController.position.pixels != _previewScrollController.position.minScrollExtent) {
-        SchedulerBinding.instance.addPostFrameCallback((_) {
-          _previewScrollController.animateTo(
-            (_activePhoto - 2) * 75.0,
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeOut,
-          );
-        });
+      if (_activePhoto > 2 ||
+          _previewScrollController.position.pixels !=
+              _previewScrollController.position.minScrollExtent) {
+        triggerScrollAnimation((_activePhoto - 1) * totalWidth);
       }
 
       setActivePhoto(_activePhoto + 1);
     } else {
-      SchedulerBinding.instance.addPostFrameCallback((_) {
-        _previewScrollController.animateTo(
-          (_activePhoto - 2) * 75.0,
-          duration: const Duration(milliseconds: 300),
-          curve: Curves.easeOut,
-        );
-      });
+      triggerScrollAnimation((_activePhoto - 2) * totalWidth);
 
       setActivePhoto(_activePhoto - 1);
     }

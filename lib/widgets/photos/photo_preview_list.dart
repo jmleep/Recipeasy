@@ -26,7 +26,7 @@ class PhotoPreviewList extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           child: ConstrainedBox(
             constraints: new BoxConstraints(minHeight: 100, maxHeight: 100),
-            child: ListView.builder(
+            child: ListView.separated(
               controller: scrollController,
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
@@ -66,6 +66,11 @@ class PhotoPreviewList extends StatelessWidget {
                     child: Stack(
                         alignment: Alignment.center,
                         children: <Widget>[...stackContents]));
+              },
+              separatorBuilder: (BuildContext context, int index) {
+                return SizedBox(
+                  width: 10,
+                );
               },
             ),
           ),
