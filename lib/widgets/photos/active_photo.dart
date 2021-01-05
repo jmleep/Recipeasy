@@ -39,7 +39,7 @@ class ActivePhoto extends StatelessWidget {
                     fillColor: Colors.white70,
                     textColor: Colors.black,
                     onPressed: () {
-                      deletePhoto(activePhoto);
+
                     },
                   )),
               Positioned(
@@ -51,7 +51,7 @@ class ActivePhoto extends StatelessWidget {
                     fillColor: Colors.red,
                     textColor: Colors.white,
                     onPressed: () {
-
+                      deletePhoto(activePhoto);
                     },
                   )),
             ],
