@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
@@ -7,6 +5,8 @@ import 'package:my_recipes/database/recipe_data_manager.dart';
 import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
+import 'package:my_recipes/widgets/photos/active_photo.dart';
+import 'package:my_recipes/widgets/photos/photo_preview_list.dart';
 
 class AddEditRecipe2 extends StatefulWidget {
   final Recipe recipe;
@@ -18,14 +18,14 @@ class AddEditRecipe2 extends StatefulWidget {
 }
 
 class _AddEditRecipe2State extends State<AddEditRecipe2> {
-  Future<List<RecipePhoto>> _recipeImages;
   List<RecipePhoto> _tempRecipePhotos = new List<RecipePhoto>();
   final _picker = ImagePicker();
-  var activePhoto = 0;
+  var _activePhoto = 0;
 
   void getRecipeImages() async {
     if (widget.recipe != null) {
-      _recipeImages = RecipeDatabaseManager.getImages(widget.recipe.id);
+      RecipeDatabaseManager.getImages(widget.recipe.id)
+          .then((value) => _tempRecipePhotos = value);
     }
   }
 
@@ -63,33 +63,11 @@ class _AddEditRecipe2State extends State<AddEditRecipe2> {
     ];
   }
 
-  Widget getPhotoList() {
-    return ConstrainedBox(
-      constraints: new BoxConstraints(minHeight: 100, maxHeight: 100),
-      child: ListView.builder(
-        scrollDirection: Axis.horizontal,
-        shrinkWrap: true,
-        itemCount: _tempRecipePhotos.length,
-        itemBuilder: (context, index) {
-          File image = new File(_tempRecipePhotos[index].value);
-          return GestureDetector(
-            onTap: () => setActivePhoto(index),
-            child: Image.file(
-              image,
-              height: 100,
-              width: 75,
-            ),
-          );
-        },
-      ),
-    );
-  }
-
   swipeActivePhoto(DragEndDetails details) {
     if (details.primaryVelocity < 0) {
-      setActivePhoto(activePhoto + 1);
+      setActivePhoto(_activePhoto + 1);
     } else {
-      setActivePhoto(activePhoto - 1);
+      setActivePhoto(_activePhoto - 1);
     }
   }
 
@@ -99,36 +77,8 @@ class _AddEditRecipe2State extends State<AddEditRecipe2> {
     }
 
     setState(() {
-      activePhoto = index;
+      _activePhoto = index;
     });
-  }
-
-  Widget getActivePhoto() {
-    var container;
-    if (_tempRecipePhotos.length > 0) {
-      container = Container(
-          color: Colors.red,
-          constraints: BoxConstraints.expand(),
-          child: Image.file(new File(_tempRecipePhotos[activePhoto].value)));
-    } else {
-      container = Container(
-        color: Colors.grey,
-        constraints: BoxConstraints.expand(),
-        child: Icon(
-          Icons.add_a_photo,
-          color: Colors.white,
-        ),
-      );
-    }
-
-    return Expanded(
-        child: GestureDetector(
-      onHorizontalDragEnd: (details) => swipeActivePhoto(details),
-      child: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: container,
-      ),
-    ));
   }
 
   @override
@@ -152,8 +102,15 @@ class _AddEditRecipe2State extends State<AddEditRecipe2> {
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              getActivePhoto(),
-              getPhotoList(),
+              ActivePhoto(
+                  tempRecipePhotos: _tempRecipePhotos,
+                  activePhoto: _activePhoto,
+                  addImageToTempListOfPhotos: addImageToTempListOfPhotos,
+                  swipeActivePhoto: swipeActivePhoto),
+              PhotoPreviewList(
+                  tempRecipePhotos: _tempRecipePhotos,
+                  setActivePhoto: setActivePhoto,
+                  activePhoto: _activePhoto),
             ],
           ),
         ),
