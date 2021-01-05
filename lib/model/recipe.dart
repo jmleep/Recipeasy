@@ -14,8 +14,8 @@ class Recipe {
   List<RecipePhoto> photos;
   String notes;
   MeatContent meatContent;
-  String primaryImagePath;
   Color color;
+  String primaryPhotoPath;
 
   Recipe(
       {this.id,
@@ -25,8 +25,8 @@ class Recipe {
       this.photos,
       this.notes,
       this.meatContent,
-      this.primaryImagePath,
-      this.color});
+      this.color,
+      this.primaryPhotoPath});
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> values = new Map();
@@ -34,7 +34,6 @@ class Recipe {
       'name': name,
       'notes': notes,
       'meat_content': meatContent.toString(),
-      'primaryImagePath': primaryImagePath,
       'color': color != null ? color.value : 0
     });
 

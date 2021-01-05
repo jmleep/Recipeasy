@@ -17,7 +17,7 @@ class RecipeListItem extends StatelessWidget {
   Widget getImage() {
     return Expanded(
       child: FutureBuilder(
-          future: _getFile(recipe.primaryImagePath),
+          future: _getFile(recipe.primaryPhotoPath),
           builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
             Widget response;
 

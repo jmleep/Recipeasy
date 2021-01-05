@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:my_recipes/database/recipe_photo_database_manager.dart';
 import 'package:my_recipes/model/ingredient.dart';
 import 'package:my_recipes/model/recipe.dart';
-import 'package:my_recipes/model/recipe_photo.dart';
 import 'package:my_recipes/util/utils.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -34,8 +33,6 @@ class RecipeDatabaseManager {
     }
 
     if (recipe.photos != null && recipe.photos.length > 0) {
-      await RecipePhotoDatabaseManager.deletePhotosForRecipe(recipeId);
-
       recipe.photos.forEach((element) {
         upsertFutures.add(db.insert(
             RecipeDatabase.photosTable, element.toMap(recipeId),
@@ -55,8 +52,8 @@ class RecipeDatabaseManager {
         where: "recipe_id = ?", whereArgs: [recipe.id]);
     await db.delete(RecipeDatabase.stepsTable,
         where: "recipe_id = ?", whereArgs: [recipe.id]);
-    await db.delete(RecipeDatabase.photosTable,
-        where: "recipe_id = ?", whereArgs: [recipe.id]);
+
+    RecipePhotoDatabaseManager.deletePhotosForRecipe(recipe.id);
 
     return db.delete(RecipeDatabase.recipeTable,
         where: "id = ?", whereArgs: [recipe.id]);
@@ -79,8 +76,14 @@ class RecipeDatabaseManager {
   static Future<List<Recipe>> getAllRecipes() async {
     final Database db = await RecipeDatabase.instance.database;
 
-    final List<Map<String, dynamic>> maps =
-        await db.query(RecipeDatabase.recipeTable);
+    final String recipeTable = RecipeDatabase.recipeTable;
+    final String photosTable = RecipeDatabase.photosTable;
+
+    final List<Map<String, dynamic>> maps = await db.rawQuery('' +
+        'select $recipeTable.id, $recipeTable.name, $recipeTable.color, $recipeTable.meat_content, $photosTable.value ' +
+        'from $recipeTable ' +
+        'inner join $photosTable on $photosTable.recipe_id = $recipeTable.id ' +
+        'where $photosTable.is_primary = 1');
 
     return List.generate(maps.length, (i) {
       return Recipe(
@@ -88,8 +91,8 @@ class RecipeDatabaseManager {
           name: maps[i]['name'],
           meatContent:
               Utils.cast<String>(maps[i]['meat_content']).toMeatContent(),
-          primaryImagePath: maps[i]['primaryImagePath'],
-          color: new Color(maps[i]['color']));
+          color: new Color(maps[i]['color']),
+          primaryPhotoPath: maps[i]['value']);
     });
   }
 }

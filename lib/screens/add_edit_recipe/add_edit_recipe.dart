@@ -22,6 +22,7 @@ class AddEditRecipe extends StatefulWidget {
 
 class _AddEditRecipeState extends State<AddEditRecipe> {
   List<RecipePhoto> _tempRecipePhotos = new List<RecipePhoto>();
+  List<RecipePhoto> _tempRecipePhotosToDelete = new List<RecipePhoto>();
   final _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
   final _previewScrollController = new ScrollController();
@@ -54,6 +55,7 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
     }
 
     setState(() {
+      _tempRecipePhotosToDelete.add(_tempRecipePhotos[index]);
       _activePhoto = activePhoto;
       _tempRecipePhotos.removeAt(index);
     });
@@ -63,7 +65,12 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
     final pickedFile = await _picker.getImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      RecipePhoto photo = new RecipePhoto(value: pickedFile.path);
+      RecipePhoto photo;
+      if (_tempRecipePhotos.length == 0) {
+        photo = new RecipePhoto(value: pickedFile.path, isPrimary: true);
+      } else {
+        photo = new RecipePhoto(value: pickedFile.path);
+      }
 
       setState(() {
         _tempRecipePhotos.add(photo);
@@ -80,7 +87,7 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
     }
   }
 
-  Future saveTempListOfPhotos() async {
+  Future saveRecipe() async {
     if (_formKey.currentState.validate()) {
       Recipe recipe;
 
@@ -92,6 +99,8 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
         recipe = new Recipe(
             name: _recipeNameController.text, photos: _tempRecipePhotos);
       }
+
+      RecipePhotoDatabaseManager.deletePhotos(_tempRecipePhotosToDelete);
 
       await RecipeDatabaseManager.upsertRecipe(recipe);
 
@@ -112,13 +121,11 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
             Icons.check,
             color: Theme.of(context).primaryColor,
           ),
-          saveTempListOfPhotos)
+          saveRecipe)
     ];
   }
 
   swipeActivePhoto(DragEndDetails details) {
-    var scrollPosition;
-
     if (details.primaryVelocity < 0) {
       if (_activePhoto > 2 || _previewScrollController.position.pixels != _previewScrollController.position.minScrollExtent) {
         SchedulerBinding.instance.addPostFrameCallback((_) {
@@ -142,6 +149,16 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
 
       setActivePhoto(_activePhoto - 1);
     }
+  }
+
+  setPrimaryPhoto() {
+    int oldPrimary =
+        _tempRecipePhotos.indexWhere((element) => element.isPrimary);
+
+    setState(() {
+      _tempRecipePhotos[oldPrimary].isPrimary = false;
+      _tempRecipePhotos[_activePhoto].isPrimary = true;
+    });
   }
 
   setActivePhoto(int index) {
@@ -199,12 +216,12 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
                 ),
               ),
               ActivePhoto(
-                tempRecipePhotos: _tempRecipePhotos,
-                activePhoto: _activePhoto,
-                addImageToTempListOfPhotos: addImageToTempListOfPhotos,
-                swipeActivePhoto: swipeActivePhoto,
-                deletePhoto: deletePhoto,
-              ),
+                  tempRecipePhotos: _tempRecipePhotos,
+                  activePhoto: _activePhoto,
+                  addImageToTempListOfPhotos: addImageToTempListOfPhotos,
+                  swipeActivePhoto: swipeActivePhoto,
+                  deletePhoto: deletePhoto,
+                  setPrimaryPhoto: setPrimaryPhoto),
               PhotoPreviewList(
                   scrollController: _previewScrollController,
                   tempRecipePhotos: _tempRecipePhotos,

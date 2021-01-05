@@ -51,16 +51,15 @@ class PhotoPreviewList extends StatelessWidget {
                       ))));
                 }
 
-                // TODO: add set primary photo functionality
-                // if (index == this.primaryPhoto) {
-                //   stackContents.add(Positioned(
-                //       bottom: 5,
-                //       right: 15,
-                //       child: Icon(
-                //         Icons.check_circle,
-                //         color: Colors.deepOrange,
-                //       )));
-                // }
+                if (tempRecipePhotos[index].isPrimary) {
+                  stackContents.add(Positioned(
+                      top: 0,
+                      right: 5,
+                      child: Icon(
+                        Icons.check_circle,
+                        color: Colors.blueAccent,
+                      )));
+                }
 
                 return GestureDetector(
                     onTap: () => setActivePhoto(index),

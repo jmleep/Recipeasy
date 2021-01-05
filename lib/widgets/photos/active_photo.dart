@@ -11,13 +11,39 @@ class ActivePhoto extends StatelessWidget {
   final Function addImageToTempListOfPhotos;
   final Function swipeActivePhoto;
   final Function deletePhoto;
+  final Function setPrimaryPhoto;
 
   ActivePhoto(
       {this.tempRecipePhotos,
       this.activePhoto,
       this.addImageToTempListOfPhotos,
       this.swipeActivePhoto,
-      this.deletePhoto});
+      this.deletePhoto,
+      this.setPrimaryPhoto});
+
+  Widget getPrimaryPhotoButton(RecipePhoto currentPhoto) {
+    if (currentPhoto.isPrimary) {
+      return RoundedButton(
+        buttonText: 'Make Primary Photo',
+        borderColor: Colors.blue,
+        fillColor: Colors.white70,
+        textColor: Colors.black,
+        onPressed: () {
+          print("already primary");
+        },
+      );
+    } else {
+      return RoundedButton(
+        buttonText: 'Make Primary Photo',
+        borderColor: Colors.blue,
+        fillColor: Colors.blue,
+        textColor: Colors.white,
+        onPressed: () {
+          setPrimaryPhoto();
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,15 +59,7 @@ class ActivePhoto extends StatelessWidget {
               Positioned(
                   bottom: 10,
                   left: 10,
-                  child: RoundedButton(
-                    buttonText: 'Make Primary Photo',
-                    borderColor: Colors.blue,
-                    fillColor: Colors.white70,
-                    textColor: Colors.black,
-                    onPressed: () {
-
-                    },
-                  )),
+                  child: getPrimaryPhotoButton(tempRecipePhotos[activePhoto])),
               Positioned(
                   bottom: 10,
                   right: 10,

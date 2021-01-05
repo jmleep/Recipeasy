@@ -34,7 +34,7 @@ class RecipeDatabase {
       onCreate: (db, version) {
         // Run the CREATE TABLE statement on the database.
         db.execute(
-          '''CREATE TABLE $recipeTable(id INTEGER PRIMARY KEY, name TEXT, notes TEXT, meat_content TEXT, primaryImagePath TEXT, color INTEGER)''',
+          '''CREATE TABLE $recipeTable(id INTEGER PRIMARY KEY, name TEXT, notes TEXT, meat_content TEXT, color INTEGER)''',
         );
         db.execute(
           '''CREATE TABLE $ingredientsTable(id INTEGER PRIMARY KEY, recipe_id INTEGER, value TEXT)''',
@@ -43,7 +43,7 @@ class RecipeDatabase {
           '''CREATE TABLE $stepsTable(id INTEGER PRIMARY KEY, recipe_id INTEGER, value TEXT)''',
         );
         db.execute(
-          '''CREATE TABLE $photosTable(id INTEGER PRIMARY KEY, recipe_id INTEGER, value TEXT)''',
+          '''CREATE TABLE $photosTable(id INTEGER PRIMARY KEY, recipe_id INTEGER, is_primary INTEGER, value TEXT)''',
         );
       },
       // Set the version. This executes the onCreate function and provides a

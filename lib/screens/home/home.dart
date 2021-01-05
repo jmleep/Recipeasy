@@ -4,12 +4,11 @@ import 'package:flutter/services.dart';
 import 'package:my_recipes/database/recipe_database_manager.dart';
 import 'package:my_recipes/screens/add_edit_recipe/add_edit_recipe.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
-import 'package:my_recipes/widgets/buttons/button_add_recipe_floating_action.dart';
+import 'package:my_recipes/widgets/buttons/add_recipe_floating_action_button.dart';
 import 'package:my_recipes/widgets/dismissible_background.dart';
 import 'package:my_recipes/widgets/list_items/list_item_recipe.dart';
 
 import '../../model/recipe.dart';
-import '../add_edit_recipe/add_edit_recipe_old.dart';
 
 class Home extends StatefulWidget {
   final String title;
@@ -66,31 +65,20 @@ class _HomeState extends State<Home> {
   }
 
   void navigateTo(Recipe recipe) async {
+    HapticFeedback.mediumImpact();
+
     await Navigator.push(
       context,
       MaterialPageRoute(
           builder: (context) => AddEditRecipe(
-            recipe: recipe,
-          )),
+                recipe: recipe,
+              )),
     );
 
     setState(() {
       recipes = RecipeDatabaseManager.getAllRecipes();
     });
   }
-
-  // void onPressAddRecipeFAB() async {
-  //   HapticFeedback.mediumImpact();
-  //
-  //   await Navigator.push(
-  //     context,
-  //     MaterialPageRoute(builder: (context) => AddEditRecipe()),
-  //   );
-  //
-  //   setState(() {
-  //     recipes = RecipeDatabaseManager.getAllRecipes();
-  //   });
-  // }
 
   @override
   void initState() {
