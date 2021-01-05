@@ -12,7 +12,7 @@ class AddRecipeFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () {
-        this.onPressAddRecipeFAB(context);
+        this.onPressAddRecipeFAB(null);
       },
       backgroundColor: Theme.of(context).primaryColor,
       icon: Icon(

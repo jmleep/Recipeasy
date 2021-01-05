@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_recipes/database/recipe_data_manager.dart';
+import 'package:my_recipes/database/recipe_database_manager.dart';
 import 'package:my_recipes/model/ingredient.dart';
 import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/widgets/buttons/button_primary.dart';

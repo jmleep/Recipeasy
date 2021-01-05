@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:my_recipes/model/recipe.dart';
-import 'package:my_recipes/screens/add_edit_recipe/add_edit_recipe2.dart';
 
 Future<File> _getFile(String filename) async {
   File f = new File(filename);
@@ -11,8 +10,9 @@ Future<File> _getFile(String filename) async {
 
 class RecipeListItem extends StatelessWidget {
   final Recipe recipe;
+  final Function onPressed;
 
-  const RecipeListItem({Key key, this.recipe}) : super(key: key);
+  const RecipeListItem({Key key, this.recipe, this.onPressed}) : super(key: key);
 
   Widget getImage() {
     return Expanded(
@@ -57,13 +57,7 @@ class RecipeListItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () async {
-        await Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => AddEditRecipe2(
-                    recipe: recipe,
-                  )),
-        );
+        onPressed(recipe);
       },
       child: Container(
         height: 200,

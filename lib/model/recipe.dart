@@ -8,14 +8,14 @@ import 'step.dart';
 
 class Recipe {
   final int id;
-  final String name;
-  final List<Ingredient> ingredients;
-  final List<Step> steps;
-  final List<RecipePhoto> photos;
-  final String notes;
-  final MeatContent meatContent;
-  final String primaryImagePath;
-  final Color color;
+  String name;
+  List<Ingredient> ingredients;
+  List<Step> steps;
+  List<RecipePhoto> photos;
+  String notes;
+  MeatContent meatContent;
+  String primaryImagePath;
+  Color color;
 
   Recipe(
       {this.id,
@@ -35,7 +35,7 @@ class Recipe {
       'notes': notes,
       'meat_content': meatContent.toString(),
       'primaryImagePath': primaryImagePath,
-      'color': color.value
+      'color': color != null ? color.value : 0
     });
 
     if (id != null) {

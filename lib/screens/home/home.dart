@@ -1,7 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_recipes/database/recipe_data_manager.dart';
+import 'package:my_recipes/database/recipe_database_manager.dart';
+import 'package:my_recipes/screens/add_edit_recipe/add_edit_recipe2.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/button_add_recipe_floating_action.dart';
 import 'package:my_recipes/widgets/dismissible_background.dart';
@@ -11,9 +12,9 @@ import '../../model/recipe.dart';
 import '../add_edit_recipe/add_edit_recipe.dart';
 
 class Home extends StatefulWidget {
-  Home({Key key, this.title}) : super(key: key);
-
   final String title;
+
+  Home({Key key, this.title}) : super(key: key);
 
   @override
   _HomeState createState() => _HomeState();
@@ -48,6 +49,7 @@ class _HomeState extends State<Home> {
                 child: RecipeListItem(
                   key: UniqueKey(),
                   recipe: snapshot.data[index],
+                  onPressed: navigateTo,
                 ));
           },
           separatorBuilder: (BuildContext context, int index) => SizedBox(
@@ -63,18 +65,32 @@ class _HomeState extends State<Home> {
     return view;
   }
 
-  void onPressAddRecipeFAB(BuildContext context) async {
-    HapticFeedback.mediumImpact();
-
+  void navigateTo(Recipe recipe) async {
     await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => AddEditRecipe()),
+      MaterialPageRoute(
+          builder: (context) => AddEditRecipe2(
+            recipe: recipe,
+          )),
     );
 
     setState(() {
       recipes = RecipeDatabaseManager.getAllRecipes();
     });
   }
+
+  // void onPressAddRecipeFAB() async {
+  //   HapticFeedback.mediumImpact();
+  //
+  //   await Navigator.push(
+  //     context,
+  //     MaterialPageRoute(builder: (context) => AddEditRecipe()),
+  //   );
+  //
+  //   setState(() {
+  //     recipes = RecipeDatabaseManager.getAllRecipes();
+  //   });
+  // }
 
   @override
   void initState() {
@@ -100,7 +116,7 @@ class _HomeState extends State<Home> {
             ),
             backgroundColor: Theme.of(context).accentColor,
             floatingActionButton: AddRecipeFloatingActionButton(
-              onPressAddRecipeFAB: this.onPressAddRecipeFAB,
+              onPressAddRecipeFAB: this.navigateTo,
             ));
       },
     );
