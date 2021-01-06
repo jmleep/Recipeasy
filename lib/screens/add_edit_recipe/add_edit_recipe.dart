@@ -237,7 +237,6 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
       recipeName = widget.recipe.name;
     }
 
-    print(_hasChangeBeenMade);
     if (_hasChangeBeenMade) {
       return (await showDialog(
             context: context,

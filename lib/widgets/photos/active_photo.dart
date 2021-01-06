@@ -28,9 +28,7 @@ class ActivePhoto extends StatelessWidget {
         borderColor: Colors.blue,
         fillColor: Colors.white70,
         textColor: Colors.black,
-        onPressed: () {
-          print("already primary");
-        },
+        onPressed: () => {},
       );
     } else {
       return RoundedButton(
