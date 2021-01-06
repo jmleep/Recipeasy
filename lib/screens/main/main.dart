@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_recipes/screens/home/home.dart';
+import 'package:my_recipes/screens/home/grid.dart';
 
 void main() {
   runApp(MyRecipeApp());
@@ -25,7 +25,7 @@ class MyRecipeApp extends StatelessWidget {
         accentColor: Colors.black12,
         brightness: Brightness.dark,
       ),
-      home: Home(title: 'My Recipes 🥘'),
+      home: HomeGrid(),
     );
   }
 }

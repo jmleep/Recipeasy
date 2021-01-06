@@ -2,11 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:my_recipes/model/recipe.dart';
-
-Future<File> _getFile(String filename) async {
-  File f = new File(filename);
-  return f;
-}
+import 'package:my_recipes/util/utils.dart';
 
 class RecipeListItem extends StatelessWidget {
   final Recipe recipe;
@@ -17,7 +13,7 @@ class RecipeListItem extends StatelessWidget {
   Widget getImage() {
     return Expanded(
       child: FutureBuilder(
-          future: _getFile(recipe.primaryPhotoPath),
+          future: Utils.loadFileFromPath(recipe.primaryPhotoPath),
           builder: (BuildContext context, AsyncSnapshot<File> snapshot) {
             Widget response;
 
