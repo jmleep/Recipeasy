@@ -9,10 +9,10 @@ class RoundedButton extends StatelessWidget {
   final Function onPressed;
 
   RoundedButton(
-      {this.buttonText,
-      this.fillColor,
-      this.textColor,
-      this.borderColor,
+      {this.buttonText = 'Empty text',
+      this.fillColor = Colors.white30,
+      this.textColor = Colors.black,
+      this.borderColor = Colors.blueGrey,
       this.onPressed});
 
   @override

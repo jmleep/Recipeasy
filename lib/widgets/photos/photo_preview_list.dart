@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
 
 class PhotoPreviewList extends StatelessWidget {
@@ -62,7 +63,10 @@ class PhotoPreviewList extends StatelessWidget {
                 }
 
                 return GestureDetector(
-                    onTap: () => setActivePhoto(index),
+                    onTap: () {
+                      HapticFeedback.selectionClick();
+                      setActivePhoto(index);
+                    },
                     child: Stack(
                         alignment: Alignment.center,
                         children: <Widget>[...stackContents]));

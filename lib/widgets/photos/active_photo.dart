@@ -77,7 +77,6 @@ class ActivePhoto extends StatelessWidget {
     } else {
       return Expanded(
         child: Container(
-          color: Colors.purple,
           child: GestureDetector(
             onTap: () => addImageToTempListOfPhotos(),
             child: Row(
