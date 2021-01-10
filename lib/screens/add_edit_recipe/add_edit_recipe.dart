@@ -7,13 +7,14 @@ import 'package:my_recipes/database/recipe_database_manager.dart';
 import 'package:my_recipes/database/recipe_photo_database_manager.dart';
 import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
+import 'package:my_recipes/screens/view_add_edit_recipe.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/rounded_button.dart';
 import 'package:my_recipes/widgets/inputs/name_text_form_field.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
 import 'package:my_recipes/widgets/photos/photo_preview_list.dart';
 
-class AddEditRecipe extends StatefulWidget {
+class AddEditRecipe extends ViewAddEditRecipe {
   final Recipe recipe;
 
   @override
@@ -22,15 +23,13 @@ class AddEditRecipe extends StatefulWidget {
   AddEditRecipe({this.recipe});
 }
 
-class _AddEditRecipeState extends State<AddEditRecipe> {
+class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipe> {
   List<RecipePhoto> _tempRecipePhotos = new List<RecipePhoto>();
   List<RecipePhoto> _tempRecipePhotosToDelete = new List<RecipePhoto>();
   final _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  ScrollController _previewScrollController;
   var _recipeNameController = TextEditingController();
-  var _activePhoto = 0;
   var _hasChangeBeenMade = false;
 
   setupRecipeData() async {
@@ -67,7 +66,7 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
 
     if (index != 0) {
       if (_tempRecipePhotos.length > 2) {
-        activePhoto = _activePhoto - 1;
+        activePhoto = activePhoto - 1;
       } else {
         activePhoto = 0;
       }
@@ -76,7 +75,7 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
     setState(() {
       _hasChangeBeenMade = true;
       _tempRecipePhotosToDelete.add(_tempRecipePhotos[index]);
-      _activePhoto = activePhoto;
+      activePhoto = activePhoto;
       _tempRecipePhotos.removeAt(index);
     });
   }
@@ -88,7 +87,7 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
     setState(() {
       _hasChangeBeenMade = true;
       _tempRecipePhotos[oldPrimary].isPrimary = false;
-      _tempRecipePhotos[_activePhoto].isPrimary = true;
+      _tempRecipePhotos[activePhoto].isPrimary = true;
     });
   }
 
@@ -106,12 +105,12 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
       setState(() {
         _hasChangeBeenMade = true;
         _tempRecipePhotos.add(photo);
-        _activePhoto = _tempRecipePhotos.length - 1;
+        activePhoto = _tempRecipePhotos.length - 1;
       });
 
       SchedulerBinding.instance.addPostFrameCallback((_) {
-        _previewScrollController.animateTo(
-          _previewScrollController.position.maxScrollExtent,
+        previewScrollController.animateTo(
+          previewScrollController.position.maxScrollExtent,
           duration: const Duration(milliseconds: 300),
           curve: Curves.easeOut,
         );
@@ -181,48 +180,6 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
     ];
   }
 
-  triggerScrollAnimation(double position) {
-    SchedulerBinding.instance.addPostFrameCallback((_) {
-      _previewScrollController.animateTo(
-        position,
-        duration: const Duration(milliseconds: 300),
-        curve: Curves.easeOut,
-      );
-    });
-  }
-
-  swipeActivePhoto(DragEndDetails details) {
-    HapticFeedback.selectionClick();
-
-    final double photoWidth = 75.0;
-    final double separatorWidth = 10.0;
-    final double totalWidth = photoWidth + separatorWidth;
-
-    if (details.primaryVelocity < 0) {
-      if (_activePhoto > 2 ||
-          _previewScrollController.position.pixels !=
-              _previewScrollController.position.minScrollExtent) {
-        triggerScrollAnimation((_activePhoto - 1) * totalWidth);
-      }
-
-      setActivePhoto(_activePhoto + 1);
-    } else {
-      triggerScrollAnimation((_activePhoto - 2) * totalWidth);
-
-      setActivePhoto(_activePhoto - 1);
-    }
-  }
-
-  setActivePhoto(int index) {
-    if (index < 0 || index >= _tempRecipePhotos.length) {
-      return;
-    }
-
-    setState(() {
-      _activePhoto = index;
-    });
-  }
-
   String getTitle() {
     if (widget.recipe != null) {
       return "Edit Recipe";
@@ -278,7 +235,6 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
   @override
   void initState() {
     super.initState();
-    _previewScrollController = new ScrollController();
 
     setupRecipeData();
   }
@@ -286,7 +242,6 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
   @override
   void dispose() {
     super.dispose();
-    _previewScrollController.dispose();
     _recipeNameController.dispose();
   }
 
@@ -312,17 +267,17 @@ class _AddEditRecipeState extends State<AddEditRecipe> {
                   recipeNameController: _recipeNameController,
                 ),
                 ActivePhoto(
-                    tempRecipePhotos: _tempRecipePhotos,
-                    activePhoto: _activePhoto,
+                    recipePhotos: _tempRecipePhotos,
+                    activePhoto: activePhoto,
                     addImageToTempListOfPhotos: addImageToTempListOfPhotos,
                     swipeActivePhoto: swipeActivePhoto,
                     deletePhoto: deletePhoto,
                     setPrimaryPhoto: setPrimaryPhoto),
                 PhotoPreviewList(
-                    scrollController: _previewScrollController,
-                    tempRecipePhotos: _tempRecipePhotos,
+                    scrollController: previewScrollController,
+                    recipePhotos: _tempRecipePhotos,
                     setActivePhoto: setActivePhoto,
-                    activePhoto: _activePhoto),
+                    activePhoto: activePhoto),
               ],
             ),
           ),

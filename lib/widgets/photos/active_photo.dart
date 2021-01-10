@@ -6,7 +6,7 @@ import 'package:my_recipes/model/recipe_photo.dart';
 import 'package:my_recipes/widgets/buttons/rounded_button.dart';
 
 class ActivePhoto extends StatelessWidget {
-  final List<RecipePhoto> tempRecipePhotos;
+  final List<RecipePhoto> recipePhotos;
   final int activePhoto;
   final Function addImageToTempListOfPhotos;
   final Function swipeActivePhoto;
@@ -14,62 +14,73 @@ class ActivePhoto extends StatelessWidget {
   final Function setPrimaryPhoto;
 
   ActivePhoto(
-      {this.tempRecipePhotos,
+      {this.recipePhotos,
       this.activePhoto,
       this.addImageToTempListOfPhotos,
       this.swipeActivePhoto,
       this.deletePhoto,
       this.setPrimaryPhoto});
 
-  Widget getPrimaryPhotoButton(RecipePhoto currentPhoto) {
-    if (currentPhoto.isPrimary) {
-      return RoundedButton(
-        buttonText: 'Make Primary Photo',
-        borderColor: Colors.blue,
-        fillColor: Colors.white70,
-        textColor: Colors.black,
-        onPressed: () => {},
-      );
-    } else {
-      return RoundedButton(
-        buttonText: 'Make Primary Photo',
-        borderColor: Colors.blue,
-        fillColor: Colors.blue,
-        textColor: Colors.white,
-        onPressed: () {
-          setPrimaryPhoto();
-        },
-      );
+  Widget getPrimaryPhotoButton() {
+    if (this.setPrimaryPhoto != null) {
+      var button;
+      RecipePhoto currentPhoto = recipePhotos[activePhoto];
+
+      if (currentPhoto.isPrimary) {
+        button = RoundedButton(
+          buttonText: 'Make Primary Photo',
+          borderColor: Colors.blue,
+          fillColor: Colors.white70,
+          textColor: Colors.black,
+          onPressed: () => {},
+        );
+      } else {
+        button = RoundedButton(
+          buttonText: 'Make Primary Photo',
+          borderColor: Colors.blue,
+          fillColor: Colors.blue,
+          textColor: Colors.white,
+          onPressed: () {
+            setPrimaryPhoto();
+          },
+        );
+      }
+
+      return Positioned(bottom: 10, left: 10, child: button);
     }
+    return SizedBox.shrink();
+  }
+
+  Widget getDeleteButton() {
+    if (this.deletePhoto != null) {
+      return Positioned(
+          bottom: 10,
+          right: 10,
+          child: RoundedButton(
+            buttonText: 'Delete Photo',
+            borderColor: Colors.red,
+            fillColor: Colors.red,
+            textColor: Colors.white,
+            onPressed: () {
+              deletePhoto(activePhoto);
+            },
+          ));
+    }
+    return SizedBox.shrink();
   }
 
   @override
   Widget build(BuildContext context) {
     var container;
-    if (tempRecipePhotos.length > 0) {
+    if (recipePhotos.length > 0) {
       container = Container(
           constraints: BoxConstraints.expand(),
           child: Stack(
             children: [
               Center(
-                  child: Image.file(
-                      new File(tempRecipePhotos[activePhoto].value))),
-              Positioned(
-                  bottom: 10,
-                  left: 10,
-                  child: getPrimaryPhotoButton(tempRecipePhotos[activePhoto])),
-              Positioned(
-                  bottom: 10,
-                  right: 10,
-                  child: RoundedButton(
-                    buttonText: 'Delete Photo',
-                    borderColor: Colors.red,
-                    fillColor: Colors.red,
-                    textColor: Colors.white,
-                    onPressed: () {
-                      deletePhoto(activePhoto);
-                    },
-                  )),
+                  child: Image.file(new File(recipePhotos[activePhoto].value))),
+              getPrimaryPhotoButton(),
+              getDeleteButton()
             ],
           ));
     } else {
@@ -94,7 +105,7 @@ class ActivePhoto extends StatelessWidget {
 
     return Expanded(
         child: GestureDetector(
-      onHorizontalDragEnd: (details) => swipeActivePhoto(details),
+          onHorizontalDragEnd: (details) => swipeActivePhoto(details, recipePhotos),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: container,

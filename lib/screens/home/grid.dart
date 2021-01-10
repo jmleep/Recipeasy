@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:my_recipes/database/recipe_database_manager.dart';
 import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/screens/add_edit_recipe/add_edit_recipe.dart';
+import 'package:my_recipes/screens/view_recipe/view_recipe.dart';
 import 'package:my_recipes/util/utils.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/add_recipe_floating_action_button.dart';
@@ -21,13 +22,20 @@ class _HomeGridState extends State<HomeGrid> {
   void navigateTo(Recipe recipe) async {
     HapticFeedback.mediumImpact();
 
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => AddEditRecipe(
-                recipe: recipe,
-              )),
-    );
+    if (recipe != null) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(
+            builder: (context) => ViewRecipe(
+                  recipe: recipe,
+                )),
+      );
+    } else {
+      await Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => AddEditRecipe()),
+      );
+    }
 
     setState(() {
       recipes = RecipeDatabaseManager.getAllRecipes();

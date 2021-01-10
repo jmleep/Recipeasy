@@ -95,4 +95,21 @@ class RecipeDatabaseManager {
           primaryPhotoPath: maps[i]['value']);
     });
   }
+
+  static Future<Recipe> getRecipe(int recipeId) async {
+    final Database db = await RecipeDatabase.instance.database;
+
+    final List<Map<String, dynamic>> maps = await db.query(
+        RecipeDatabase.recipeTable,
+        where: 'id = ?',
+        whereArgs: [recipeId]);
+
+    return Recipe(
+        id: maps[0]['id'],
+        name: maps[0]['name'],
+        meatContent:
+            Utils.cast<String>(maps[0]['meat_content']).toMeatContent(),
+        color: new Color(maps[0]['color']),
+        primaryPhotoPath: maps[0]['value']);
+  }
 }

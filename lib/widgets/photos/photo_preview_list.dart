@@ -2,48 +2,47 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
 
 class PhotoPreviewList extends StatelessWidget {
   final ScrollController scrollController;
-  final List<RecipePhoto> tempRecipePhotos;
+  final List<RecipePhoto> recipePhotos;
   final Function setActivePhoto;
   final int activePhoto;
 
   PhotoPreviewList(
       {this.scrollController,
-      this.tempRecipePhotos,
+      this.recipePhotos,
       this.setActivePhoto,
       this.activePhoto});
 
   @override
   Widget build(BuildContext context) {
-    if (this.tempRecipePhotos.length > 0) {
+    if (this.recipePhotos.length > 0) {
       return Container(
         width: double.infinity,
         color: Colors.black12,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ConstrainedBox(
-            constraints: new BoxConstraints(minHeight: 100, maxHeight: 100),
+            constraints: new BoxConstraints(minHeight: 75, maxHeight: 75),
             child: ListView.separated(
               controller: scrollController,
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
-              itemCount: tempRecipePhotos.length,
+              itemCount: recipePhotos.length,
               itemBuilder: (context, index) {
-                File imageFile = new File(tempRecipePhotos[index].value);
+                File imageFile = new File(recipePhotos[index].value);
                 Widget imageWidget = Image.file(
                   imageFile,
-                  height: 100,
-                  width: 75,
+                  height: 75,
+                  width: 50,
                 );
 
                 List<Widget> stackContents = List<Widget>();
                 stackContents.add(imageWidget);
 
-                if (index == this.activePhoto) {
+                if (index == activePhoto) {
                   stackContents.add(Container(
                       width: 75,
                       decoration: BoxDecoration(
@@ -52,7 +51,7 @@ class PhotoPreviewList extends StatelessWidget {
                       ))));
                 }
 
-                if (tempRecipePhotos[index].isPrimary) {
+                if (recipePhotos[index].isPrimary) {
                   stackContents.add(Positioned(
                       top: 0,
                       right: 5,
@@ -64,8 +63,7 @@ class PhotoPreviewList extends StatelessWidget {
 
                 return GestureDetector(
                     onTap: () {
-                      HapticFeedback.selectionClick();
-                      setActivePhoto(index);
+                      setActivePhoto(index, recipePhotos);
                     },
                     child: Stack(
                         alignment: Alignment.center,
