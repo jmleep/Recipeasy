@@ -62,6 +62,7 @@ class ActivePhoto extends StatelessWidget {
             fillColor: Colors.red,
             textColor: Colors.white,
             onPressed: () {
+              print("calling delete photo for $activePhoto");
               deletePhoto(activePhoto);
             },
           ));

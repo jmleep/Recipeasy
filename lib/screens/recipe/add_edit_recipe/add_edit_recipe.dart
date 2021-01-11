@@ -62,20 +62,22 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipe> {
   }
 
   deletePhoto(int index) {
-    var activePhoto = 0;
+    var tempActivePhoto = 0;
 
-    if (index != 0) {
+    if (index > 0) {
       if (_tempRecipePhotos.length > 2) {
-        activePhoto = activePhoto - 1;
-      } else {
-        activePhoto = 0;
+        tempActivePhoto = activePhoto - 1;
       }
+
+      setState(() {
+        _tempRecipePhotos[tempActivePhoto].isPrimary = true;
+      });
     }
 
     setState(() {
+      activePhoto = tempActivePhoto;
       _hasChangeBeenMade = true;
       _tempRecipePhotosToDelete.add(_tempRecipePhotos[index]);
-      activePhoto = activePhoto;
       _tempRecipePhotos.removeAt(index);
     });
   }
@@ -152,7 +154,9 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipe> {
                 child: Center(
                   child: Text(
                     'Please add a photo in order to create your recipe!',
-                    style: TextStyle(color: Colors.white,),// fontSize: 20),
+                    style: TextStyle(
+                      color: Colors.white,
+                    ), // fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
                 )));
