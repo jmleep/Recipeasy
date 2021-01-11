@@ -4,15 +4,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_recipes/database/recipe_database_manager.dart';
-import 'package:my_recipes/database/recipe_photo_database_manager.dart';
 import 'package:my_recipes/model/recipe.dart';
-import 'package:my_recipes/model/recipe_photo.dart';
 import 'package:my_recipes/screens/recipe/add_edit_recipe/add_edit_recipe.dart';
 import 'package:my_recipes/screens/recipe/view_recipe/view_recipe.dart';
 import 'package:my_recipes/util/utils.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/add_recipe_floating_action_button.dart';
-import 'package:my_recipes/widgets/buttons/rounded_button.dart';
+import 'package:my_recipes/widgets/dialogs/delete_recipe_confirmation_dialog.dart';
 
 class HomeGrid extends StatefulWidget {
   @override
@@ -64,55 +62,11 @@ class _HomeGridState extends State<HomeGrid> {
 
                   await showDialog(
                       context: context,
-                      builder: (builderContext) => new AlertDialog(
-                            title: Text("Delete ${recipe.name}"),
-                            content: Text(
-                                "Are you sure you want to delete this recipe?"),
-                            actions: [
-                              RoundedButton(
-                                buttonText: 'Cancel',
-                                textColor: Colors.grey[900],
-                                borderColor: Colors.grey[900],
-                                fillColor: Colors.grey[300],
-                                onPressed: () =>
-                                    Navigator.of(context).pop(false),
-                              ),
-                              RoundedButton(
-                                buttonText: 'Delete',
-                                borderColor: Colors.red[700],
-                                fillColor: Colors.red[700],
-                                onPressed: () async {
-                                  List<RecipePhoto> photosRefInCaseOfUndo =
-                                      await RecipePhotoDatabaseManager
-                                          .getImages(recipe.id);
-
-                                  await RecipeDatabaseManager.deleteRecipe(
-                                      recipe);
-
-                                  getRecipes();
-
-                                  Navigator.of(builderContext).pop(true);
-
-                                  final snackBar = SnackBar(
-                                    content: Text("${recipe.name} deleted"),
-                                    duration: Duration(seconds: 10),
-                                    action: SnackBarAction(
-                                      label: 'Undo',
-                                      onPressed: () async {
-                                        recipe.photos = photosRefInCaseOfUndo;
-
-                                        RecipeDatabaseManager.upsertRecipe(
-                                                recipe)
-                                            .then((value) => getRecipes());
-                                      },
-                                    ),
-                                  );
-
-                                  _scaffoldKey.currentState
-                                      .showSnackBar(snackBar);
-                                },
-                              ),
-                            ],
+                      builder: (builderContext) =>
+                          DeleteRecipeConfirmationDialog(
+                            scaffoldKey: _scaffoldKey,
+                            recipe: recipe,
+                            getRecipes: getRecipes,
                           ));
                 },
                 child: Padding(
