@@ -11,7 +11,7 @@ class RoundedButton extends StatelessWidget {
   RoundedButton(
       {this.buttonText = 'Empty text',
       this.fillColor = Colors.white30,
-      this.textColor = Colors.black,
+      this.textColor,
       this.borderColor = Colors.blueGrey,
       this.onPressed});
 
@@ -25,11 +25,11 @@ class RoundedButton extends StatelessWidget {
         child: Container(
           child: Text(
             buttonText,
-            style: TextStyle(color: textColor),
+            style: textColor != null ? TextStyle(color: textColor) : null,
           ),
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(15.0),
+          borderRadius: BorderRadius.circular(10.0),
           side: BorderSide(color: borderColor),
         ));
   }

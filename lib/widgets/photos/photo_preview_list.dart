@@ -4,6 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
 
+const miniPhotoWidth = 75.0;
+const miniPhotoHeight = 100.0;
+
 class PhotoPreviewList extends StatelessWidget {
   final ScrollController scrollController;
   final List<RecipePhoto> recipePhotos;
@@ -25,7 +28,7 @@ class PhotoPreviewList extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ConstrainedBox(
-            constraints: new BoxConstraints(minHeight: 75, maxHeight: 75),
+            constraints: new BoxConstraints(minHeight: miniPhotoHeight, maxHeight: miniPhotoHeight),
             child: ListView.separated(
               controller: scrollController,
               scrollDirection: Axis.horizontal,
@@ -35,8 +38,8 @@ class PhotoPreviewList extends StatelessWidget {
                 File imageFile = new File(recipePhotos[index].value);
                 Widget imageWidget = Image.file(
                   imageFile,
-                  height: 75,
-                  width: 50,
+                  height: 100,
+                  width: 75,
                 );
 
                 List<Widget> stackContents = List<Widget>();
@@ -44,10 +47,10 @@ class PhotoPreviewList extends StatelessWidget {
 
                 if (index == activePhoto) {
                   stackContents.add(Container(
-                      width: 75,
+                      width: miniPhotoWidth,
                       decoration: BoxDecoration(
                           border: Border(
-                        bottom: BorderSide(width: 5, color: Colors.orange),
+                        bottom: BorderSide(width: 5, color: Theme.of(context).accentColor),
                       ))));
                 }
 

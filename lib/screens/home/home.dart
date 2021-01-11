@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_recipes/database/recipe_database_manager.dart';
-import 'package:my_recipes/screens/add_edit_recipe/add_edit_recipe.dart';
+import 'package:my_recipes/screens/recipe/add_edit_recipe/add_edit_recipe.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/add_recipe_floating_action_button.dart';
 import 'package:my_recipes/widgets/dismissible_background.dart';
-import 'package:my_recipes/widgets/list_items/list_item_recipe.dart';
+import 'package:my_recipes/widgets/deprecated/list_items/list_item_recipe.dart';
 
 import '../../model/recipe.dart';
 
@@ -42,8 +42,7 @@ class _HomeState extends State<Home> {
                     recipes = RecipeDatabaseManager.getAllRecipes();
                   });
 
-                  Scaffold.of(context).showSnackBar(
-                      SnackBar(content: Text("$deletedRecipe deleted")));
+
                 },
                 child: RecipeListItem(
                   key: UniqueKey(),

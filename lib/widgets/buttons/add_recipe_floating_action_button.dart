@@ -14,6 +14,8 @@ class AddRecipeFloatingActionButton extends StatelessWidget {
       onPressed: () {
         this.onPressAddRecipeFAB(null);
       },
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(15))),
       backgroundColor: Theme.of(context).primaryColor,
       icon: Icon(
         Icons.note_add,

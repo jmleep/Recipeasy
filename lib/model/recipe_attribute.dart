@@ -1,9 +1,9 @@
-class ModelListBase {
+class RecipeAttribute {
   final int id;
   final int recipeId;
   final String value;
 
-  ModelListBase({this.id, this.recipeId, this.value});
+  RecipeAttribute({this.id, this.recipeId, this.value});
 
   Map<String, dynamic> toMap(int recipeId) {
     Map<String, dynamic> values = new Map();

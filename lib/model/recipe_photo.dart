@@ -1,6 +1,6 @@
-import 'package:my_recipes/model/model_list_base.dart';
+import 'package:my_recipes/model/recipe_attribute.dart';
 
-class RecipePhoto extends ModelListBase {
+class RecipePhoto extends RecipeAttribute {
   bool isPrimary;
 
   RecipePhoto({int id, int recipeId, String value, this.isPrimary = false})

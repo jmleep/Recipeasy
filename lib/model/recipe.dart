@@ -26,7 +26,7 @@ class Recipe {
       this.notes,
       this.meatContent,
       this.color,
-      this.primaryPhotoPath});
+      this.primaryPhotoPath,});
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> values = new Map();
@@ -34,7 +34,7 @@ class Recipe {
       'name': name,
       'notes': notes,
       'meat_content': meatContent.toString(),
-      'color': color != null ? color.value : 0
+      'color': color != null ? color.value : 0,
     });
 
     if (id != null) {
@@ -45,14 +45,11 @@ class Recipe {
   }
 }
 
-enum MeatContent {
-  meat,
-  vegetarian,
-  vegan
-}
+enum MeatContent { meat, vegetarian, vegan }
 
 extension EnumParser on String {
   MeatContent toMeatContent() {
-    return MeatContent.values.firstWhere((e) => e.toString() == this, orElse: () => null);
+    return MeatContent.values
+        .firstWhere((e) => e.toString() == this, orElse: () => null);
   }
 }

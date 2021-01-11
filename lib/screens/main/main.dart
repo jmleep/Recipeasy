@@ -14,15 +14,16 @@ class MyRecipeApp extends StatelessWidget {
     return MaterialApp(
       title: 'My Recipes',
       theme: ThemeData(
-        primaryColor: Colors.deepOrange,
-        accentColor: Colors.white,
+        primaryColor: Colors.green[500],
+        backgroundColor: Colors.white,
+        accentColor: Colors.green[700],
         brightness: Brightness.light,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       darkTheme: ThemeData(
-        primaryColor: Colors.deepOrange,
+        primaryColor: Colors.green[500],
         backgroundColor: Colors.black12,
-        accentColor: Colors.black12,
+        accentColor: Colors.green[700],
         brightness: Brightness.dark,
       ),
       home: HomeGrid(),

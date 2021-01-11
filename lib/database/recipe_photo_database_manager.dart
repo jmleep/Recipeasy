@@ -3,7 +3,6 @@ import 'package:my_recipes/model/recipe_photo.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RecipePhotoDatabaseManager {
-
   static Future<List<RecipePhoto>> getImages(int recipeId) async {
     final Database db = await RecipeDatabase.instance.database;
 
@@ -21,10 +20,26 @@ class RecipePhotoDatabaseManager {
     });
   }
 
+  // static Future<RecipePhoto> getPrimaryImage(int recipeId) async {
+  //   final Database db = await RecipeDatabase.instance.database;
+  //
+  //   final List<Map<String, dynamic>> maps = await db.query(
+  //       RecipeDatabase.photosTable,
+  //       where: 'recipe_id = ?',
+  //       whereArgs: [recipeId]);
+  //
+  //   return RecipePhoto(
+  //       id: maps[0]['id'],
+  //       recipeId: recipeId,
+  //       value: maps[0]['value'],
+  //       isPrimary: maps[0]['is_primary'] > 0 ? true : false);
+  // }
+
   static Future<void> deletePhotosForRecipe(int recipeId) async {
     final Database db = await RecipeDatabase.instance.database;
 
-    await db.delete(RecipeDatabase.photosTable, where: "recipe_id = ?", whereArgs: [recipeId]);
+    await db.delete(RecipeDatabase.photosTable,
+        where: "recipe_id = ?", whereArgs: [recipeId]);
   }
 
   static Future<void> deletePhotos(List<RecipePhoto> photos) async {

@@ -105,11 +105,10 @@ class RecipeDatabaseManager {
         whereArgs: [recipeId]);
 
     return Recipe(
-        id: maps[0]['id'],
-        name: maps[0]['name'],
-        meatContent:
-            Utils.cast<String>(maps[0]['meat_content']).toMeatContent(),
-        color: new Color(maps[0]['color']),
-        primaryPhotoPath: maps[0]['value']);
+      id: maps[0]['id'],
+      name: maps[0]['name'],
+      meatContent: Utils.cast<String>(maps[0]['meat_content']).toMeatContent(),
+      color: new Color(maps[0]['color']),
+    );
   }
 }

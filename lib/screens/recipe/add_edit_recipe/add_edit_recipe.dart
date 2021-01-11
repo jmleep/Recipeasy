@@ -7,7 +7,7 @@ import 'package:my_recipes/database/recipe_database_manager.dart';
 import 'package:my_recipes/database/recipe_photo_database_manager.dart';
 import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
-import 'package:my_recipes/screens/view_add_edit_recipe.dart';
+import 'package:my_recipes/screens/recipe/view_add_edit_recipe.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/rounded_button.dart';
 import 'package:my_recipes/widgets/inputs/name_text_form_field.dart';
@@ -146,13 +146,13 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipe> {
 
         final snackBar = SnackBar(
             duration: Duration(seconds: 2),
-            backgroundColor: Colors.red[900],
+            backgroundColor: Colors.red[700],
             content: Container(
-                height: 100,
+                height: 15,
                 child: Center(
                   child: Text(
                     'Please add a photo in order to create your recipe!',
-                    style: TextStyle(color: Colors.white, fontSize: 20),
+                    style: TextStyle(color: Colors.white,),// fontSize: 20),
                     textAlign: TextAlign.center,
                   ),
                 )));
@@ -202,25 +202,25 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipe> {
               content: new Text('You have unsaved changes.'),
               actions: <Widget>[
                 RoundedButton(
-                    buttonText: 'Cancel',
-                    onPressed: () => Navigator.of(context).pop(false),
-                    textColor: Colors.white,
-                    borderColor: Colors.white38),
+                  buttonText: 'Cancel',
+                  onPressed: () => Navigator.of(context).pop(false),
+                  textColor: Colors.grey[900],
+                  borderColor: Colors.grey[900],
+                  fillColor: Colors.grey[300],
+                ),
                 RoundedButton(
                   buttonText: 'Leave',
                   onPressed: () => Navigator.of(context).pop(true),
-                  borderColor: Colors.red,
-                  fillColor: Colors.red[200],
-                  textColor: Colors.black,
+                  borderColor: Colors.red[700],
+                  fillColor: Colors.red[700],
                 ),
                 RoundedButton(
                   buttonText: 'Save and Leave',
                   onPressed: () {
                     saveRecipe(true);
                   },
-                  borderColor: Colors.white,
-                  fillColor: Colors.green,
-                  textColor: Colors.white,
+                  borderColor: Theme.of(context).primaryColor,
+                  fillColor: Theme.of(context).primaryColor,
                 ),
               ],
             ),

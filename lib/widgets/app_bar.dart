@@ -38,7 +38,7 @@ class RecipeAppBar extends StatelessWidget implements PreferredSizeWidget {
       elevation: 0.0,
       centerTitle: true,
       brightness: Brightness.dark,
-      backgroundColor: Theme.of(context).accentColor,
+      backgroundColor: Theme.of(context).backgroundColor,
     );
   }
 

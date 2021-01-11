@@ -4,12 +4,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_recipes/database/recipe_database_manager.dart';
+import 'package:my_recipes/database/recipe_photo_database_manager.dart';
 import 'package:my_recipes/model/recipe.dart';
-import 'package:my_recipes/screens/add_edit_recipe/add_edit_recipe.dart';
-import 'package:my_recipes/screens/view_recipe/view_recipe.dart';
+import 'package:my_recipes/model/recipe_photo.dart';
+import 'package:my_recipes/screens/recipe/add_edit_recipe/add_edit_recipe.dart';
+import 'package:my_recipes/screens/recipe/view_recipe/view_recipe.dart';
 import 'package:my_recipes/util/utils.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/add_recipe_floating_action_button.dart';
+import 'package:my_recipes/widgets/buttons/rounded_button.dart';
 
 class HomeGrid extends StatefulWidget {
   @override
@@ -17,7 +20,16 @@ class HomeGrid extends StatefulWidget {
 }
 
 class _HomeGridState extends State<HomeGrid> {
-  Future<List<Recipe>> recipes;
+  List<Recipe> _recipes = new List<Recipe>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+
+  getRecipes() async {
+    List<Recipe> recipes = await RecipeDatabaseManager.getAllRecipes();
+
+    setState(() {
+      _recipes = recipes;
+    });
+  }
 
   void navigateTo(Recipe recipe) async {
     HapticFeedback.mediumImpact();
@@ -37,17 +49,71 @@ class _HomeGridState extends State<HomeGrid> {
       );
     }
 
-    setState(() {
-      recipes = RecipeDatabaseManager.getAllRecipes();
-    });
+    getRecipes();
   }
 
-  List<Widget> buildRecipeGrid(AsyncSnapshot<List<Recipe>> snapshot) {
-    if (snapshot.hasData && snapshot.data.length > 0) {
-      return snapshot.data
+  List<Widget> buildRecipeGrid() {
+    if (_recipes.length > 0) {
+      return _recipes
           .map((recipe) => GestureDetector(
                 onTap: () async {
                   navigateTo(recipe);
+                },
+                onLongPress: () async {
+                  HapticFeedback.mediumImpact();
+
+                  await showDialog(
+                      context: context,
+                      builder: (builderContext) => new AlertDialog(
+                            title: Text("Delete ${recipe.name}"),
+                            content: Text(
+                                "Are you sure you want to delete this recipe?"),
+                            actions: [
+                              RoundedButton(
+                                buttonText: 'Cancel',
+                                textColor: Colors.grey[900],
+                                borderColor: Colors.grey[900],
+                                fillColor: Colors.grey[300],
+                                onPressed: () =>
+                                    Navigator.of(context).pop(false),
+                              ),
+                              RoundedButton(
+                                buttonText: 'Delete',
+                                borderColor: Colors.red[700],
+                                fillColor: Colors.red[700],
+                                onPressed: () async {
+                                  List<RecipePhoto> photosRefInCaseOfUndo =
+                                      await RecipePhotoDatabaseManager
+                                          .getImages(recipe.id);
+
+                                  await RecipeDatabaseManager.deleteRecipe(
+                                      recipe);
+
+                                  getRecipes();
+
+                                  Navigator.of(builderContext).pop(true);
+
+                                  final snackBar = SnackBar(
+                                    content: Text("${recipe.name} deleted"),
+                                    duration: Duration(seconds: 10),
+                                    action: SnackBarAction(
+                                      label: 'Undo',
+                                      onPressed: () async {
+                                        recipe.photos = photosRefInCaseOfUndo;
+
+                                        RecipeDatabaseManager.upsertRecipe(
+                                                recipe)
+                                            .then((value) => getRecipes());
+                                      },
+                                    ),
+                                  );
+
+                                  _scaffoldKey.currentState
+                                      .showSnackBar(snackBar);
+                                },
+                              ),
+                            ],
+                          ));
                 },
                 child: Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -56,7 +122,10 @@ class _HomeGridState extends State<HomeGrid> {
                     children: <Widget>[
                       Expanded(
                         child: Container(
-                          color: Colors.grey,
+                          decoration: BoxDecoration(
+                              color: Theme.of(context).backgroundColor,
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(15))),
                           child: FutureBuilder(
                               future: Utils.loadFileFromPath(
                                   recipe.primaryPhotoPath),
@@ -73,7 +142,7 @@ class _HomeGridState extends State<HomeGrid> {
                                 }
 
                                 return ClipRRect(
-                                  borderRadius: BorderRadius.circular(4.0),
+                                  borderRadius: BorderRadius.circular(8.0),
                                   child: FittedBox(
                                     child: response,
                                     fit: BoxFit.fitWidth,
@@ -102,42 +171,39 @@ class _HomeGridState extends State<HomeGrid> {
   @override
   void initState() {
     super.initState();
-    recipes = RecipeDatabaseManager.getAllRecipes();
+
+    getRecipes();
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<List<Recipe>>(
-      future: recipes,
-      builder: (BuildContext context, AsyncSnapshot<List<Recipe>> snapshot) {
-        List<Widget> grid = buildRecipeGrid(snapshot);
-        Widget body;
+    List<Widget> grid = buildRecipeGrid();
+    Widget body;
 
-        if (grid == null) {
-          body = Center(
-              child: Text(
-            'Click "New Recipe" to add your first recipe!',
-            style: TextStyle(fontSize: 16),
-          ));
-        } else {
-          body = GridView.count(
-            crossAxisCount: 2,
-            mainAxisSpacing: 10,
-            children: <Widget>[...grid],
-          );
-        }
+    if (grid == null) {
+      body = Center(
+          child: Text(
+        'Click "New Recipe" to add your first recipe!',
+        style: TextStyle(fontSize: 16),
+      ));
+    } else {
+      body = GridView.count(
+        crossAxisCount: 2,
+        mainAxisSpacing: 10,
+        children: <Widget>[...grid],
+      );
+    }
 
-        return Scaffold(
-            appBar: RecipeAppBar(
-              title: 'My Recipes 🥘',
-              allowBack: false,
-            ),
-            body: body,
-            backgroundColor: Theme.of(context).accentColor,
-            floatingActionButton: AddRecipeFloatingActionButton(
-              onPressAddRecipeFAB: this.navigateTo,
-            ));
-      },
-    );
+    return Scaffold(
+        key: _scaffoldKey,
+        appBar: RecipeAppBar(
+          title: 'My Recipes', //'My Recipes 🥘',
+          allowBack: false,
+        ),
+        body: body,
+        backgroundColor: Theme.of(context).backgroundColor,
+        floatingActionButton: AddRecipeFloatingActionButton(
+          onPressAddRecipeFAB: this.navigateTo,
+        ));
   }
 }

@@ -1,6 +1,6 @@
-import 'package:my_recipes/model/model_list_base.dart';
+import 'package:my_recipes/model/recipe_attribute.dart';
 
-class Step extends ModelListBase {
+class Step extends RecipeAttribute {
   Step({int id, int recipeId, String value})
       : super(id: id, recipeId: recipeId, value: value);
 }
