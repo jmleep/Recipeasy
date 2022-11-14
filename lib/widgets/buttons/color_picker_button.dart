@@ -19,7 +19,7 @@ class ColorPickerButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return FlatButton(
+    return TextButton(
       child: CircleAvatar(
         backgroundColor: _recipeColor,
         radius: 25.0,
@@ -31,7 +31,7 @@ class ColorPickerButton extends StatelessWidget {
       onPressed: () {
         showDialog(
             context: context,
-            child: AlertDialog(
+            builder: (_) => new AlertDialog(
               contentPadding: const EdgeInsets.all(8.0),
               content: Container(
                 child: MaterialColorPicker(
@@ -44,11 +44,11 @@ class ColorPickerButton extends StatelessWidget {
                 ),
               ),
               actions: [
-                FlatButton(
+                TextButton(
                   child: Text('Cancel'),
                   onPressed: Navigator.of(context).pop,
                 ),
-                FlatButton(
+                TextButton(
                   child: Text('Select'),
                   onPressed: () {
                     setColor(context);

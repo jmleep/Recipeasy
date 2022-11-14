@@ -62,8 +62,7 @@ class DeleteRecipeConfirmationDialog extends StatelessWidget {
               ),
             );
 
-            scaffoldKey.currentState
-                .showSnackBar(snackBar);
+            ScaffoldMessenger.of(context).showSnackBar(snackBar);
           },
         ),
       ],

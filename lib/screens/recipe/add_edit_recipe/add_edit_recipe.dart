@@ -161,8 +161,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipe> {
                   ),
                 )));
 
-        // Find the Scaffold in the widget tree and use it to show a SnackBar.
-        _scaffoldKey.currentState.showSnackBar(snackBar);
+        ScaffoldMessenger.of(context).showSnackBar(snackBar);
       }
     }
   }
