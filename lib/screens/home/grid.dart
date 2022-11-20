@@ -141,7 +141,7 @@ class _HomeGridState extends State<HomeGrid> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: RecipeAppBar(
-          title: 'My Recipes', //'My Recipes 🥘',
+          title: 'Recipeasy', //'My Recipes 🥘',
           allowBack: false,
         ),
         body: body,
