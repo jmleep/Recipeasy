@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>838541964109-bjcqk9rm2ln5609mfu0njticlobssvqi.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.838541964109-bjcqk9rm2ln5609mfu0njticlobssvqi</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBbYpa_oQ8jZx6oLRwtwzq6wWLXiKwSLbU</string>
+	<key>GCM_SENDER_ID</key>
+	<string>838541964109</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>dev.jordanleeper.myRecipes</string>
+	<key>PROJECT_ID</key>
+	<string>recipeasy-43551</string>
+	<key>STORAGE_BUCKET</key>
+	<string>recipeasy-43551.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:838541964109:ios:90cfe32adcaaa28f6a3d04</string>
+</dict>
+</plist>

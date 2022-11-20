@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "838541964109",
+    "project_id": "recipeasy-43551",
+    "storage_bucket": "recipeasy-43551.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:838541964109:android:7579c213f4612e946a3d04",
+        "android_client_info": {
+          "package_name": "dev.jordanleeper.my_recipes"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "838541964109-23tejfnl6laqenk1330f55v9ac2skpl9.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAocs2Xt_YamKgwJ1FnTuewrQdfIwiq_sM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "838541964109-23tejfnl6laqenk1330f55v9ac2skpl9.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
