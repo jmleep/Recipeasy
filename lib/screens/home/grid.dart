@@ -1,16 +1,14 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_recipes/database/recipe_database_manager.dart';
 import 'package:my_recipes/model/recipe.dart';
-import 'package:my_recipes/screens/recipe/add_edit_recipe/add_edit_recipe.dart';
-import 'package:my_recipes/screens/recipe/view_recipe/view_recipe.dart';
-import 'package:my_recipes/util/utils.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/add_recipe_floating_action_button.dart';
 import 'package:my_recipes/widgets/dialogs/dialog_delete_recipe_confirmation.dart';
+
+import '../add_edit_recipe/add_edit_recipe.dart';
+import '../view_recipe/view_recipe.dart';
 
 class HomeGrid extends StatefulWidget {
   @override
