@@ -20,21 +20,19 @@ class ViewRecipe extends ViewAddEditRecipe {
 }
 
 class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipe> {
-  List<RecipePhoto> _recipePhotos = new List<RecipePhoto>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   var _recipe;
+  var _isLoading = false;
+  var _recipeImages = <RecipePhoto>[];
 
-  setupRecipeData() async {
-    _recipe = widget.recipe;
+  getRecipeImages() async {
+    setState(() => _isLoading = true);
 
-    getRecipePhotos();
-  }
+    var recipeImages = await RecipePhotoDatabaseManager.getImages(_recipe.id);
 
-  getRecipePhotos() async {
-    RecipePhotoDatabaseManager.getImages(_recipe.id).then((value) {
-      setState(() {
-        _recipePhotos = value;
-      });
+    setState(() {
+      _recipeImages.addAll(recipeImages);
+      _isLoading = false;
     });
   }
 
@@ -47,9 +45,11 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipe> {
               )),
     );
 
-    getRecipePhotos();
+    // await getRecipePhotos();
 
     Recipe updatedRecipe = await RecipeDatabaseManager.getRecipe(_recipe.id);
+
+    getRecipeImages();
 
     // Get updated recipe after edit
     setState(() {
@@ -72,38 +72,45 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipe> {
   void initState() {
     super.initState();
 
-    setupRecipeData();
+    this._recipe = widget.recipe;
+    getRecipeImages();
+  }
+
+  Widget getBody() {
+    if (this._isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+
+    return Container(
+      child: Center(
+          child: Column(
+        mainAxisSize: MainAxisSize.max,
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: <Widget>[
+          ActivePhoto(
+            recipePhotos: _recipeImages,
+            activePhoto: this.activePhoto,
+            swipeActivePhoto: swipeActivePhoto,
+          ),
+          PhotoPreviewList(
+              scrollController: previewScrollController,
+              recipePhotos: _recipeImages,
+              setActivePhoto: setActivePhoto,
+              activePhoto: this.activePhoto),
+        ],
+      )),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: _scaffoldKey,
-      appBar: RecipeAppBar(
-        title: _recipe.name,
-        actions: getAppBarActions(),
-      ),
-      body: Container(
-        child: Center(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              ActivePhoto(
-                recipePhotos: _recipePhotos,
-                activePhoto: this.activePhoto,
-                swipeActivePhoto: swipeActivePhoto,
-              ),
-              PhotoPreviewList(
-                  scrollController: previewScrollController,
-                  recipePhotos: _recipePhotos,
-                  setActivePhoto: setActivePhoto,
-                  activePhoto: activePhoto),
-            ],
-          ),
+        key: _scaffoldKey,
+        appBar: RecipeAppBar(
+          title: _recipe?.name ?? 'Loading...',
+          actions: getAppBarActions(),
         ),
-      ),
-    );
+        body: getBody());
   }
 }

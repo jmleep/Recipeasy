@@ -35,14 +35,14 @@ class PhotoPreviewList extends StatelessWidget {
               shrinkWrap: true,
               itemCount: recipePhotos.length,
               itemBuilder: (context, index) {
-                File imageFile = new File(recipePhotos[index].value);
-                Widget imageWidget = Image.file(
-                  imageFile,
+
+                Widget imageWidget = Image.memory(
+                  recipePhotos[index].image,
                   height: 100,
                   width: 75,
                 );
 
-                List<Widget> stackContents = List<Widget>();
+                List<Widget> stackContents = [];
                 stackContents.add(imageWidget);
 
                 if (index == activePhoto) {

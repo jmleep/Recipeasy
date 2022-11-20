@@ -11,8 +11,8 @@ class DeleteRecipeConfirmationDialog extends StatelessWidget {
   final GlobalKey<ScaffoldState> scaffoldKey;
   final Function getRecipes;
 
-  DeleteRecipeConfirmationDialog({this.recipe, this.scaffoldKey,
-      this.getRecipes});
+  DeleteRecipeConfirmationDialog({ this.recipe, this.scaffoldKey,
+      this.getRecipes });
 
   @override
   Widget build(BuildContext context) {
@@ -31,6 +31,7 @@ class DeleteRecipeConfirmationDialog extends StatelessWidget {
         ),
         RoundedButton(
           buttonText: 'Delete',
+          textColor: Colors.white,
           borderColor: Colors.red[700],
           fillColor: Colors.red[700],
           onPressed: () async {

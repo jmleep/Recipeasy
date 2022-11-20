@@ -1,9 +1,9 @@
+import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:my_recipes/model/ingredient.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
 
-import 'ingredient.dart';
 import 'step.dart';
 
 class Recipe {
@@ -15,7 +15,7 @@ class Recipe {
   String notes;
   MeatContent meatContent;
   Color color;
-  String primaryPhotoPath;
+  Uint8List primaryImage;
 
   Recipe(
       {this.id,
@@ -26,7 +26,7 @@ class Recipe {
       this.notes,
       this.meatContent,
       this.color,
-      this.primaryPhotoPath,});
+      this.primaryImage,});
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> values = new Map();

@@ -8,11 +8,12 @@ import 'package:my_recipes/database/recipe_photo_database_manager.dart';
 import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
 import 'package:my_recipes/screens/recipe/view_add_edit_recipe.dart';
-import 'package:my_recipes/widgets/app_bar.dart';
-import 'package:my_recipes/widgets/buttons/rounded_button.dart';
+import 'package:my_recipes/widgets/dialogs/dialog_keep_editing.dart';
 import 'package:my_recipes/widgets/inputs/name_text_form_field.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
-import 'package:my_recipes/widgets/photos/photo_preview_list.dart';
+
+import '../../../widgets/app_bar.dart';
+import '../../../widgets/photos/photo_preview_list.dart';
 
 class AddEditRecipe extends ViewAddEditRecipe {
   final Recipe recipe;
@@ -24,8 +25,8 @@ class AddEditRecipe extends ViewAddEditRecipe {
 }
 
 class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipe> {
-  List<RecipePhoto> _tempRecipePhotos = new List<RecipePhoto>();
-  List<RecipePhoto> _tempRecipePhotosToDelete = new List<RecipePhoto>();
+  List<RecipePhoto> _tempRecipePhotos = [];
+  List<RecipePhoto> _tempRecipePhotosToDelete = [];
   final _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -38,10 +39,10 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipe> {
         _recipeNameController = TextEditingController(text: widget.recipe.name);
       });
 
-      RecipePhotoDatabaseManager.getImages(widget.recipe.id).then((value) {
-        setState(() {
-          _tempRecipePhotos = value;
-        });
+      var images = await RecipePhotoDatabaseManager.getImages(widget.recipe.id);
+
+      setState(() {
+        _tempRecipePhotos = images;
       });
     }
 
@@ -94,15 +95,14 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipe> {
   }
 
   Future addImageToTempListOfPhotos() async {
-    final pickedFile = await _picker.getImage(source: ImageSource.gallery);
+    final pickedFile =
+        await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
 
     if (pickedFile != null) {
-      RecipePhoto photo;
-      if (_tempRecipePhotos.length == 0) {
-        photo = new RecipePhoto(value: pickedFile.path, isPrimary: true);
-      } else {
-        photo = new RecipePhoto(value: pickedFile.path);
-      }
+      var imageBytes = await pickedFile.readAsBytes();
+
+      var photo = new RecipePhoto(
+          image: imageBytes, isPrimary: _tempRecipePhotos.length == 0);
 
       setState(() {
         _hasChangeBeenMade = true;
@@ -134,9 +134,12 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipe> {
               name: _recipeNameController.text, photos: _tempRecipePhotos);
         }
 
-        RecipePhotoDatabaseManager.deletePhotos(_tempRecipePhotosToDelete);
+        var recipeId = await RecipeDatabaseManager.upsertRecipe(recipe);
 
-        await RecipeDatabaseManager.upsertRecipe(recipe);
+        await RecipePhotoDatabaseManager.savePhotos(
+            recipeId, _tempRecipePhotos);
+
+        RecipePhotoDatabaseManager.deletePhotos(_tempRecipePhotosToDelete);
 
         HapticFeedback.heavyImpact();
 
@@ -200,33 +203,8 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipe> {
     if (_hasChangeBeenMade) {
       return (await showDialog(
             context: context,
-            builder: (context) => new AlertDialog(
-              title: new Text('Leave $recipeName without saving?'),
-              content: new Text('You have unsaved changes.'),
-              actions: <Widget>[
-                RoundedButton(
-                  buttonText: 'Cancel',
-                  onPressed: () => Navigator.of(context).pop(false),
-                  textColor: Colors.grey[900],
-                  borderColor: Colors.grey[900],
-                  fillColor: Colors.grey[300],
-                ),
-                RoundedButton(
-                  buttonText: 'Leave',
-                  onPressed: () => Navigator.of(context).pop(true),
-                  borderColor: Colors.red[700],
-                  fillColor: Colors.red[700],
-                ),
-                RoundedButton(
-                  buttonText: 'Save and Leave',
-                  onPressed: () {
-                    saveRecipe(true);
-                  },
-                  borderColor: Theme.of(context).primaryColor,
-                  fillColor: Theme.of(context).primaryColor,
-                ),
-              ],
-            ),
+            builder: (context) => KeepEditingDialog(
+                recipeName: recipeName, saveRecipe: saveRecipe),
           )) ??
           false;
     }

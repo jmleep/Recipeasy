@@ -43,7 +43,7 @@ class RecipeDatabase {
           '''CREATE TABLE $stepsTable(id INTEGER PRIMARY KEY, recipe_id INTEGER, value TEXT)''',
         );
         db.execute(
-          '''CREATE TABLE $photosTable(id INTEGER PRIMARY KEY, recipe_id INTEGER, is_primary INTEGER, value TEXT)''',
+          '''CREATE TABLE $photosTable(id INTEGER PRIMARY KEY, recipe_id INTEGER, is_primary INTEGER, image TEXT)''',
         );
       },
       // Set the version. This executes the onCreate function and provides a

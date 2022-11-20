@@ -1,16 +1,28 @@
-import 'package:my_recipes/model/recipe_attribute.dart';
+import 'dart:convert';
+import 'dart:typed_data';
 
-class RecipePhoto extends RecipeAttribute {
+class RecipePhoto {
+  final int id;
+  final int recipeId;
+  final Uint8List image;
   bool isPrimary;
 
-  RecipePhoto({int id, int recipeId, String value, this.isPrimary = false})
-      : super(id: id, recipeId: recipeId, value: value);
+  RecipePhoto({this.id, this.recipeId, this.image, this.isPrimary = false});
 
-  @override
   Map<String, dynamic> toMap(int recipeId) {
-    Map<String, dynamic> values = super.toMap(recipeId);
+    Map<String, dynamic> values = new Map();
 
-    values.addAll({'is_primary': isPrimary ? 1 : 0});
+    if (this.image == null) throw "NULL IMAGE EXCEPTION";
+
+    values.addAll({
+      'recipe_id': recipeId,
+      'image': base64.encode(this.image),
+      'is_primary': this.isPrimary ? 1 : 0
+    });
+
+    if (this.id != null) {
+      values['id'] = this.id;
+    }
 
     return values;
   }

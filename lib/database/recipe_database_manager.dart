@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:my_recipes/database/recipe_photo_database_manager.dart';
 import 'package:my_recipes/model/ingredient.dart';
@@ -32,15 +34,17 @@ class RecipeDatabaseManager {
       });
     }
 
-    if (recipe.photos != null && recipe.photos.length > 0) {
-      recipe.photos.forEach((element) {
-        upsertFutures.add(db.insert(
-            RecipeDatabase.photosTable, element.toMap(recipeId),
-            conflictAlgorithm: ConflictAlgorithm.replace));
-      });
-    }
+    // if (recipe.photos != null && recipe.photos.length > 0) {
+    //   recipe.photos.forEach((element) {
+    //     var img = element.image;
+    //     Future insertPhotoFuture = db.insert(
+    //         RecipeDatabase.photosTable, element.toMap(recipeId),
+    //         conflictAlgorithm: ConflictAlgorithm.replace);
+    //     upsertFutures.add(insertPhotoFuture);
+    //   });
+    // }
 
-    Future.wait(upsertFutures);
+    await Future.wait(upsertFutures);
 
     return recipeId;
   }
@@ -80,7 +84,7 @@ class RecipeDatabaseManager {
     final String photosTable = RecipeDatabase.photosTable;
 
     final List<Map<String, dynamic>> maps = await db.rawQuery('' +
-        'select $recipeTable.id, $recipeTable.name, $recipeTable.color, $recipeTable.meat_content, $photosTable.value ' +
+        'select $recipeTable.id, $recipeTable.name, $recipeTable.color, $recipeTable.meat_content, $photosTable.image ' +
         'from $recipeTable ' +
         'inner join $photosTable on $photosTable.recipe_id = $recipeTable.id ' +
         'where $photosTable.is_primary = 1');
@@ -92,7 +96,9 @@ class RecipeDatabaseManager {
           meatContent:
               Utils.cast<String>(maps[i]['meat_content']).toMeatContent(),
           color: new Color(maps[i]['color']),
-          primaryPhotoPath: maps[i]['value']);
+          primaryImage: maps[i]['image'] != null
+              ? base64.decode(maps[i]['image'])
+              : null);
     });
   }
 

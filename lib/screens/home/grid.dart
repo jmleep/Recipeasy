@@ -10,7 +10,7 @@ import 'package:my_recipes/screens/recipe/view_recipe/view_recipe.dart';
 import 'package:my_recipes/util/utils.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/add_recipe_floating_action_button.dart';
-import 'package:my_recipes/widgets/dialogs/delete_recipe_confirmation_dialog.dart';
+import 'package:my_recipes/widgets/dialogs/dialog_delete_recipe_confirmation.dart';
 
 class HomeGrid extends StatefulWidget {
   @override
@@ -18,14 +18,17 @@ class HomeGrid extends StatefulWidget {
 }
 
 class _HomeGridState extends State<HomeGrid> {
-  List<Recipe> _recipes = new List<Recipe>();
+  List<Recipe> _recipes = [];
+  bool _isLoading = false;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
 
   getRecipes() async {
+    setState(() => _isLoading = true);
     List<Recipe> recipes = await RecipeDatabaseManager.getAllRecipes();
 
     setState(() {
       _recipes = recipes;
+      _isLoading = false;
     });
   }
 
@@ -76,34 +79,19 @@ class _HomeGridState extends State<HomeGrid> {
                     children: <Widget>[
                       Expanded(
                         child: Container(
-                          decoration: BoxDecoration(
-                              color: Theme.of(context).backgroundColor,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(15))),
-                          child: FutureBuilder(
-                              future: Utils.loadFileFromPath(
-                                  recipe.primaryPhotoPath),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<File> imageFile) {
-                                Widget response;
-
-                                if (imageFile.data != null) {
-                                  response = Image(
-                                    image: FileImage(imageFile.data),
-                                  );
-                                } else {
-                                  response = Icon(Icons.photo);
-                                }
-
-                                return ClipRRect(
-                                  borderRadius: BorderRadius.circular(8.0),
-                                  child: FittedBox(
-                                    child: response,
-                                    fit: BoxFit.fitWidth,
-                                  ),
-                                );
-                              }),
-                        ),
+                            decoration: BoxDecoration(
+                                color: Theme.of(context).backgroundColor,
+                                borderRadius:
+                                    BorderRadius.all(Radius.circular(15))),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(8.0),
+                              child: FittedBox(
+                                child: recipe.primaryImage != null
+                                    ? Image.memory(recipe.primaryImage)
+                                    : Icon(Icons.photo),
+                                fit: BoxFit.fitWidth,
+                              ),
+                            )),
                       ),
                       Container(
                           color: recipe.color != null
@@ -131,6 +119,10 @@ class _HomeGridState extends State<HomeGrid> {
 
   @override
   Widget build(BuildContext context) {
+    if (_isLoading) {
+      return Center(child: CircularProgressIndicator());
+    }
+
     List<Widget> grid = buildRecipeGrid();
     Widget body;
 

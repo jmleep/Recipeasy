@@ -79,7 +79,7 @@ class ActivePhoto extends StatelessWidget {
           child: Stack(
             children: [
               Center(
-                  child: Image.file(new File(recipePhotos[activePhoto].value))),
+                  child: Image.memory(recipePhotos[activePhoto].image)),// Image.file(new File(recipePhotos[activePhoto].value))),
               getPrimaryPhotoButton(),
               getDeleteButton()
             ],
