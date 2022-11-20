@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
+import 'package:my_recipes/widgets/icons/icon_filled.dart';
 
 const miniPhotoWidth = 75.0;
 const miniPhotoHeight = 100.0;
@@ -28,14 +29,14 @@ class PhotoPreviewList extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(8.0),
           child: ConstrainedBox(
-            constraints: new BoxConstraints(minHeight: miniPhotoHeight, maxHeight: miniPhotoHeight),
+            constraints: new BoxConstraints(
+                minHeight: miniPhotoHeight, maxHeight: miniPhotoHeight),
             child: ListView.separated(
               controller: scrollController,
               scrollDirection: Axis.horizontal,
               shrinkWrap: true,
               itemCount: recipePhotos.length,
               itemBuilder: (context, index) {
-
                 Widget imageWidget = Image.memory(
                   recipePhotos[index].image,
                   height: 100,
@@ -50,7 +51,9 @@ class PhotoPreviewList extends StatelessWidget {
                       width: miniPhotoWidth,
                       decoration: BoxDecoration(
                           border: Border(
-                        bottom: BorderSide(width: 5, color: Theme.of(context).accentColor),
+                        bottom: BorderSide(
+                            width: 5,
+                            color: Theme.of(context).colorScheme.secondary),
                       ))));
                 }
 
@@ -58,10 +61,10 @@ class PhotoPreviewList extends StatelessWidget {
                   stackContents.add(Positioned(
                       top: 0,
                       right: 5,
-                      child: Icon(
-                        Icons.check_circle,
-                        color: Colors.blueAccent,
-                      )));
+                      child: FilledIcon(
+                          icon: Icons.check_circle,
+                          fillColor: Colors.white,
+                          iconColor: Colors.blueAccent)));
                 }
 
                 return GestureDetector(
