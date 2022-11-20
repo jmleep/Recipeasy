@@ -49,12 +49,12 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipe> {
 
     Recipe updatedRecipe = await RecipeDatabaseManager.getRecipe(_recipe.id);
 
-    getRecipeImages();
-
-    // Get updated recipe after edit
     setState(() {
       _recipe = updatedRecipe;
+      _recipeImages = [];
     });
+
+    getRecipeImages();
   }
 
   List<AppBarAction> getAppBarActions() {
