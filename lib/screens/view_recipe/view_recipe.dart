@@ -4,11 +4,12 @@ import 'package:my_recipes/database/recipe_database_manager.dart';
 import 'package:my_recipes/database/recipe_photo_database_manager.dart';
 import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
-import 'package:my_recipes/screens/recipe/add_edit_recipe/add_edit_recipe.dart';
-import 'package:my_recipes/screens/recipe/view_add_edit_recipe.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
 import 'package:my_recipes/widgets/photos/photo_preview_list.dart';
+
+import '../add_edit_recipe/add_edit_recipe.dart';
+import '../common/view_add_edit_recipe.dart';
 
 class ViewRecipe extends ViewAddEditRecipe {
   final Recipe recipe;
