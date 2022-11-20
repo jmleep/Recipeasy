@@ -3,19 +3,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:my_recipes/database/recipe_database_manager.dart';
 import 'package:my_recipes/model/recipe.dart';
+import 'package:my_recipes/screens/screen_settings.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/add_recipe_floating_action_button.dart';
 import 'package:my_recipes/widgets/dialogs/dialog_delete_recipe_confirmation.dart';
 
-import '../add_edit_recipe/add_edit_recipe.dart';
-import '../view_recipe/view_recipe.dart';
+import 'screen_add_edit_recipe.dart';
+import 'screen_view_recipe_details.dart';
 
-class HomeGrid extends StatefulWidget {
+class HomeScreen extends StatefulWidget {
   @override
-  _HomeGridState createState() => _HomeGridState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
-class _HomeGridState extends State<HomeGrid> {
+class _HomeScreenState extends State<HomeScreen> {
   List<Recipe> _recipes = [];
   bool _isLoading = false;
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -37,18 +38,27 @@ class _HomeGridState extends State<HomeGrid> {
       await Navigator.push(
         context,
         MaterialPageRoute(
-            builder: (context) => ViewRecipe(
+            builder: (context) => ViewRecipeDetailsScreen(
                   recipe: recipe,
                 )),
       );
     } else {
       await Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AddEditRecipe()),
+        MaterialPageRoute(builder: (context) => AddEditRecipeScreen()),
       );
     }
 
     getRecipes();
+  }
+
+  navigateToSettings() async {
+    // Navigator.pushNamed(context, '/profile');
+
+    await Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => SettingsScreen()),
+    );
   }
 
   List<Widget> buildRecipeGrid() {
@@ -143,6 +153,7 @@ class _HomeGridState extends State<HomeGrid> {
         appBar: RecipeAppBar(
           title: 'Recipeasy', //'My Recipes 🥘',
           allowBack: false,
+          actions: [AppBarAction(Icon(Icons.settings), navigateToSettings)],
         ),
         body: body,
         backgroundColor: Theme.of(context).backgroundColor,

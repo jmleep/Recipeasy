@@ -11,20 +11,20 @@ import 'package:my_recipes/widgets/dialogs/dialog_keep_editing.dart';
 import 'package:my_recipes/widgets/inputs/name_text_form_field.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
 
-import '../../../widgets/app_bar.dart';
-import '../../../widgets/photos/photo_preview_list.dart';
-import '../common/view_add_edit_recipe.dart';
+import '../../widgets/app_bar.dart';
+import '../../widgets/photos/photo_preview_list.dart';
+import 'common/view_add_edit_recipe.dart';
 
-class AddEditRecipe extends ViewAddEditRecipe {
+class AddEditRecipeScreen extends ViewAddEditRecipe {
   final Recipe recipe;
 
   @override
   _AddEditRecipeState createState() => _AddEditRecipeState();
 
-  AddEditRecipe({this.recipe});
+  AddEditRecipeScreen({this.recipe});
 }
 
-class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipe> {
+class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
   List<RecipePhoto> _tempRecipePhotos = [];
   List<RecipePhoto> _tempRecipePhotosToDelete = [];
   final _picker = ImagePicker();

@@ -8,19 +8,19 @@ import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
 import 'package:my_recipes/widgets/photos/photo_preview_list.dart';
 
-import '../add_edit_recipe/add_edit_recipe.dart';
-import '../common/view_add_edit_recipe.dart';
+import 'screen_add_edit_recipe.dart';
+import 'common/view_add_edit_recipe.dart';
 
-class ViewRecipe extends ViewAddEditRecipe {
+class ViewRecipeDetailsScreen extends ViewAddEditRecipe {
   final Recipe recipe;
 
   @override
   _ViewRecipeState createState() => _ViewRecipeState();
 
-  ViewRecipe({this.recipe});
+  ViewRecipeDetailsScreen({this.recipe});
 }
 
-class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipe> {
+class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   var _recipe;
   var _isLoading = false;
@@ -41,7 +41,7 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipe> {
     await Navigator.push(
       context,
       MaterialPageRoute(
-          builder: (context) => AddEditRecipe(
+          builder: (context) => AddEditRecipeScreen(
                 recipe: _recipe,
               )),
     );
