@@ -39,21 +39,6 @@ class RecipePhotoDatabaseManager {
     await batch.commit(noResult: true);
   }
 
-  // static Future<RecipePhoto> getPrimaryImage(int recipeId) async {
-  //   final Database db = await RecipeDatabase.instance.database;
-  //
-  //   final List<Map<String, dynamic>> maps = await db.query(
-  //       RecipeDatabase.photosTable,
-  //       where: 'recipe_id = ?',
-  //       whereArgs: [recipeId]);
-  //
-  //   return RecipePhoto(
-  //       id: maps[0]['id'],
-  //       recipeId: recipeId,
-  //       value: maps[0]['value'],
-  //       isPrimary: maps[0]['is_primary'] > 0 ? true : false);
-  // }
-
   static Future<void> deletePhotosForRecipe(int recipeId) async {
     final Database db = await RecipeDatabase.instance.database;
 

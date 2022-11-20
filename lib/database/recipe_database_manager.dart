@@ -34,16 +34,6 @@ class RecipeDatabaseManager {
       });
     }
 
-    // if (recipe.photos != null && recipe.photos.length > 0) {
-    //   recipe.photos.forEach((element) {
-    //     var img = element.image;
-    //     Future insertPhotoFuture = db.insert(
-    //         RecipeDatabase.photosTable, element.toMap(recipeId),
-    //         conflictAlgorithm: ConflictAlgorithm.replace);
-    //     upsertFutures.add(insertPhotoFuture);
-    //   });
-    // }
-
     await Future.wait(upsertFutures);
 
     return recipeId;
@@ -84,15 +74,17 @@ class RecipeDatabaseManager {
     final String photosTable = RecipeDatabase.photosTable;
 
     final List<Map<String, dynamic>> maps = await db.rawQuery('' +
-        'select $recipeTable.id, $recipeTable.name, $recipeTable.color, $recipeTable.meat_content, $photosTable.image ' +
-        'from $recipeTable ' +
-        'inner join $photosTable on $photosTable.recipe_id = $recipeTable.id ' +
-        'where $photosTable.is_primary = 1');
+        'SELECT $recipeTable.id, $recipeTable.name, $recipeTable.list_order, $recipeTable.color, $recipeTable.meat_content, $photosTable.image ' +
+        'FROM $recipeTable ' +
+        'INNER JOIN $photosTable ON $photosTable.recipe_id = $recipeTable.id ' +
+        'WHERE $photosTable.is_primary = 1 ' +
+        'ORDER BY $recipeTable.list_order DESC');
 
     return List.generate(maps.length, (i) {
       return Recipe(
           id: maps[i]['id'],
           name: maps[i]['name'],
+          order: maps[i]['order'],
           meatContent:
               Utils.cast<String>(maps[i]['meat_content']).toMeatContent(),
           color: new Color(maps[i]['color']),
