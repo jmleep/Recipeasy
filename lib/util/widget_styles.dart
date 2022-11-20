@@ -2,16 +2,18 @@ import 'package:flutter/material.dart';
 
 class ReusableStyleWidget {
   static InputDecoration inputDecoration(BuildContext context, String hint) {
+    var primaryColor = Theme.of(context).primaryColor;
+
     return InputDecoration(
         //hintText: hint,
         labelText: hint,
-        labelStyle: TextStyle(color: Theme.of(context).primaryColor),
+        labelStyle: TextStyle(color: primaryColor),
         floatingLabelBehavior: FloatingLabelBehavior.auto,
-        focusColor: Theme.of(context).primaryColor,
+        focusColor: primaryColor,
         //hintStyle: TextStyle(color: Colors.deepOrange),
-        focusedBorder: const OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.deepOrange)),
-        enabledBorder: const OutlineInputBorder(
-            borderSide: const BorderSide(color: Colors.grey)));
+        focusedBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: primaryColor)),
+        enabledBorder:
+            OutlineInputBorder(borderSide: BorderSide(color: primaryColor)));
   }
 }
