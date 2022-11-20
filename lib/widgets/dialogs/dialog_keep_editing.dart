@@ -1,14 +1,13 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
-import '../buttons/rounded_button.dart';
+import '../buttons/button_recipeasy.dart';
 
 class KeepEditingDialog extends StatelessWidget {
   final String recipeName;
   final ValueSetter<bool> saveRecipe;
 
-  KeepEditingDialog({ this.recipeName, this.saveRecipe }) : super();
+  KeepEditingDialog({this.recipeName, this.saveRecipe}) : super();
 
   @override
   Widget build(BuildContext context) {

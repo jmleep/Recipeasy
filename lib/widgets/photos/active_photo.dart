@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
-import 'package:my_recipes/widgets/buttons/rounded_button.dart';
+import 'package:my_recipes/widgets/buttons/button_recipeasy.dart';
 
 class ActivePhoto extends StatelessWidget {
   final List<RecipePhoto> recipePhotos;
@@ -79,7 +79,8 @@ class ActivePhoto extends StatelessWidget {
           child: Stack(
             children: [
               Center(
-                  child: Image.memory(recipePhotos[activePhoto].image)),// Image.file(new File(recipePhotos[activePhoto].value))),
+                  child: Image.memory(recipePhotos[activePhoto]
+                      .image)), // Image.file(new File(recipePhotos[activePhoto].value))),
               getPrimaryPhotoButton(),
               getDeleteButton()
             ],
@@ -106,7 +107,7 @@ class ActivePhoto extends StatelessWidget {
 
     return Expanded(
         child: GestureDetector(
-          onHorizontalDragEnd: (details) => swipeActivePhoto(details, recipePhotos),
+      onHorizontalDragEnd: (details) => swipeActivePhoto(details, recipePhotos),
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: container,

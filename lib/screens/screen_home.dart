@@ -5,7 +5,7 @@ import 'package:my_recipes/database/recipe_database_manager.dart';
 import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/screens/screen_settings.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
-import 'package:my_recipes/widgets/buttons/add_recipe_floating_action_button.dart';
+import 'package:my_recipes/widgets/buttons/button_add_recipe_floating_action.dart';
 import 'package:my_recipes/widgets/dialogs/dialog_delete_recipe_confirmation.dart';
 
 import 'screen_add_edit_recipe.dart';

@@ -4,30 +4,28 @@ import 'package:my_recipes/database/recipe_database_manager.dart';
 import 'package:my_recipes/database/recipe_photo_database_manager.dart';
 import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
-import 'package:my_recipes/widgets/buttons/rounded_button.dart';
+import 'package:my_recipes/widgets/buttons/button_recipeasy.dart';
 
 class DeleteRecipeConfirmationDialog extends StatelessWidget {
   final Recipe recipe;
   final GlobalKey<ScaffoldState> scaffoldKey;
   final Function getRecipes;
 
-  DeleteRecipeConfirmationDialog({ this.recipe, this.scaffoldKey,
-      this.getRecipes });
+  DeleteRecipeConfirmationDialog(
+      {this.recipe, this.scaffoldKey, this.getRecipes});
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text("Delete ${recipe.name}"),
-      content: Text(
-          "Are you sure you want to delete this recipe?"),
+      content: Text("Are you sure you want to delete this recipe?"),
       actions: [
         RoundedButton(
           buttonText: 'Cancel',
           textColor: Colors.grey[900],
           borderColor: Colors.grey[900],
           fillColor: Colors.grey[300],
-          onPressed: () =>
-              Navigator.of(context).pop(false),
+          onPressed: () => Navigator.of(context).pop(false),
         ),
         RoundedButton(
           buttonText: 'Delete',
@@ -36,11 +34,9 @@ class DeleteRecipeConfirmationDialog extends StatelessWidget {
           fillColor: Colors.red[700],
           onPressed: () async {
             List<RecipePhoto> photosRefInCaseOfUndo =
-            await RecipePhotoDatabaseManager
-                .getImages(recipe.id);
+                await RecipePhotoDatabaseManager.getImages(recipe.id);
 
-            await RecipeDatabaseManager.deleteRecipe(
-                recipe);
+            await RecipeDatabaseManager.deleteRecipe(recipe);
 
             getRecipes();
 
@@ -56,8 +52,7 @@ class DeleteRecipeConfirmationDialog extends StatelessWidget {
                 onPressed: () async {
                   recipe.photos = photosRefInCaseOfUndo;
 
-                  RecipeDatabaseManager.upsertRecipe(
-                      recipe)
+                  RecipeDatabaseManager.upsertRecipe(recipe)
                       .then((value) => getRecipes());
                 },
               ),

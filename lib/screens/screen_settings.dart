@@ -3,7 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
-import 'package:my_recipes/widgets/buttons/rounded_button.dart';
+import 'package:my_recipes/widgets/buttons/button_recipeasy.dart';
 
 class SettingsScreen extends StatelessWidget {
   signOut(BuildContext context) async {
