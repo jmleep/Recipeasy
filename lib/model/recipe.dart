@@ -9,6 +9,7 @@ import 'step.dart';
 class Recipe {
   final int id;
   String name;
+  int order;
   List<Ingredient> ingredients;
   List<Step> steps;
   List<RecipePhoto> photos;
@@ -17,16 +18,18 @@ class Recipe {
   Color color;
   Uint8List primaryImage;
 
-  Recipe(
-      {this.id,
-      this.name,
-      this.ingredients,
-      this.steps,
-      this.photos,
-      this.notes,
-      this.meatContent,
-      this.color,
-      this.primaryImage,});
+  Recipe({
+    this.id,
+    this.name,
+    this.order,
+    this.ingredients,
+    this.steps,
+    this.photos,
+    this.notes,
+    this.meatContent,
+    this.color,
+    this.primaryImage,
+  });
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> values = new Map();
@@ -39,6 +42,10 @@ class Recipe {
 
     if (id != null) {
       values['id'] = id;
+    }
+
+    if (order != null) {
+      values['list_order'] = order;
     }
 
     return values;
