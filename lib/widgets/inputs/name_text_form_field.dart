@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_recipes/util/widget_styles.dart';
+import 'package:my_recipes/theme/widget_styles.dart';
 
 class NameTextFormField extends StatelessWidget {
   final GlobalKey formKey;

@@ -43,7 +43,7 @@ class DeleteRecipeConfirmationDialog extends StatelessWidget {
             Navigator.of(context).pop(true);
 
             final snackBar = SnackBar(
-              backgroundColor: Theme.of(context).accentColor,
+              backgroundColor: Theme.of(context).colorScheme.secondary,
               content: Text("${recipe.name} deleted"),
               duration: Duration(seconds: 10),
               action: SnackBarAction(

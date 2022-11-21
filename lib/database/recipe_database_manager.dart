@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:my_recipes/database/recipe_photo_database_manager.dart';
 import 'package:my_recipes/model/ingredient.dart';
 import 'package:my_recipes/model/recipe.dart';
-import 'package:my_recipes/util/utils.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'recipe_database.dart';
@@ -85,8 +84,7 @@ class RecipeDatabaseManager {
           id: maps[i]['id'],
           name: maps[i]['name'],
           order: maps[i]['order'],
-          meatContent:
-              Utils.cast<String>(maps[i]['meat_content']).toMeatContent(),
+          meatContent: cast<String>(maps[i]['meat_content']).toMeatContent(),
           color: new Color(maps[i]['color']),
           primaryImage: maps[i]['image'] != null
               ? base64.decode(maps[i]['image'])
@@ -105,8 +103,10 @@ class RecipeDatabaseManager {
     return Recipe(
       id: maps[0]['id'],
       name: maps[0]['name'],
-      meatContent: Utils.cast<String>(maps[0]['meat_content']).toMeatContent(),
+      meatContent: cast<String>(maps[0]['meat_content']).toMeatContent(),
       color: new Color(maps[0]['color']),
     );
   }
+
+  static T cast<T>(x) => x is T ? x : null;
 }

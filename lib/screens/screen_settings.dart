@@ -21,7 +21,7 @@ class SettingsScreen extends StatelessWidget {
           Spacer(),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
             RoundedButton(
-              borderColor: Theme.of(context).accentColor,
+              borderColor: Theme.of(context).colorScheme.secondary,
               textColor: Colors.white,
               fillColor: Colors.grey[800],
               onPressed: () => signOut(context),

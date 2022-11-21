@@ -63,7 +63,7 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
       new AppBarAction(
           Icon(
             Icons.edit,
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.primary,
           ),
           editRecipe),
     ];

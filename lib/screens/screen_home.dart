@@ -88,7 +88,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       Expanded(
                         child: Container(
                             decoration: BoxDecoration(
-                                color: Theme.of(context).backgroundColor,
+                                color: Theme.of(context).colorScheme.background,
                                 borderRadius:
                                     BorderRadius.all(Radius.circular(15))),
                             child: ClipRRect(
@@ -153,10 +153,17 @@ class _HomeScreenState extends State<HomeScreen> {
         appBar: RecipeAppBar(
           title: 'Recipeasy', //'My Recipes 🥘',
           allowBack: false,
-          actions: [AppBarAction(Icon(Icons.settings), navigateToSettings)],
+          actions: [
+            AppBarAction(
+                Icon(
+                  Icons.settings,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+                navigateToSettings)
+          ],
         ),
         body: body,
-        backgroundColor: Theme.of(context).backgroundColor,
+        backgroundColor: Theme.of(context).colorScheme.background,
         floatingActionButton: AddRecipeFloatingActionButton(
           onPressAddRecipeFAB: this.navigateTo,
         ));

@@ -174,13 +174,13 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
       new AppBarAction(
           Icon(
             Icons.add_a_photo,
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.primary,
           ),
           addImageToTempListOfPhotos),
       new AppBarAction(
           Icon(
             Icons.check,
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.primary,
           ),
           () => saveRecipe(false))
     ];

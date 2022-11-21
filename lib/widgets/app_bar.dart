@@ -26,19 +26,20 @@ class RecipeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      leading:
-          allowBack ? BackButton(color: Theme.of(context).primaryColor) : null,
+      leading: allowBack
+          ? BackButton(color: Theme.of(context).colorScheme.primary)
+          : null,
       actions: <Widget>[...getActions()],
       title: Text(title,
           style: GoogleFonts.pacifico(
-            color: Theme.of(context).primaryColor,
+            color: Theme.of(context).colorScheme.primary,
             fontSize: 30,
             fontWeight: FontWeight.bold,
           )),
       elevation: 0.0,
       centerTitle: true,
       brightness: Brightness.dark,
-      backgroundColor: Theme.of(context).backgroundColor,
+      backgroundColor: Theme.of(context).colorScheme.background,
     );
   }
 

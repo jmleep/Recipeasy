@@ -34,8 +34,8 @@ class KeepEditingDialog extends StatelessWidget {
           onPressed: () {
             saveRecipe(true);
           },
-          borderColor: Theme.of(context).primaryColor,
-          fillColor: Theme.of(context).primaryColor,
+          borderColor: Theme.of(context).colorScheme.primary,
+          fillColor: Theme.of(context).colorScheme.primary,
           textColor: Colors.white,
         ),
       ],

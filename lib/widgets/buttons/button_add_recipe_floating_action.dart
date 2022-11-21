@@ -16,7 +16,7 @@ class AddRecipeFloatingActionButton extends StatelessWidget {
       },
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15))),
-      backgroundColor: Theme.of(context).primaryColor,
+      backgroundColor: Theme.of(context).colorScheme.primary,
       icon: Icon(
         Icons.note_add,
         color: Colors.white,
