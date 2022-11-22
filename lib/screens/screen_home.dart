@@ -9,7 +9,7 @@ import 'package:my_recipes/widgets/buttons/button_add_recipe_floating_action.dar
 import 'package:my_recipes/widgets/dialogs/dialog_delete_recipe_confirmation.dart';
 
 import 'screen_add_edit_recipe.dart';
-import 'screen_view_recipe_details.dart';
+import 'view_recipe/screen_view_recipe_details.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
