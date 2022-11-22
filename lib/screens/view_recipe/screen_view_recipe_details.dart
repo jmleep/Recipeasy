@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/database/recipe_database_manager.dart';
 import 'package:my_recipes/database/recipe_photo_database_manager.dart';
+import 'package:my_recipes/model/ingredient.dart';
 import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
@@ -26,14 +27,19 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
   var _recipe;
   var _isLoading = false;
   var _recipeImages = <RecipePhoto>[];
+  var _recipeIngredients = <Ingredient>[];
 
-  getRecipeImages() async {
+  getRecipeData() async {
     setState(() => _isLoading = true);
 
-    var recipeImages = await RecipePhotoDatabaseManager.getImages(_recipe.id);
+    var recipeImages = RecipePhotoDatabaseManager.getImages(_recipe.id);
+    var recipeIngredients = RecipeDatabaseManager.getIngredients(_recipe.id);
+
+    var results = await Future.wait([recipeImages, recipeIngredients]);
 
     setState(() {
-      _recipeImages.addAll(recipeImages);
+      _recipeImages.addAll(results[0] as List<RecipePhoto>);
+      _recipeIngredients.addAll(results[1] as List<Ingredient>);
       _isLoading = false;
     });
   }
@@ -56,7 +62,7 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
       _recipeImages = [];
     });
 
-    getRecipeImages();
+    getRecipeData();
   }
 
   List<AppBarAction> getAppBarActions() {
@@ -75,7 +81,7 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
     super.initState();
 
     this._recipe = widget.recipe;
-    getRecipeImages();
+    getRecipeData();
   }
 
   Widget getBody() {
@@ -105,18 +111,22 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
               activePhoto: this.activePhoto),
           ExpansionTile(
             title: Text('Ingredients', style: TextStyle(fontSize: 25)),
-            initiallyExpanded: true,
+            initiallyExpanded: _recipeIngredients.length != 0,
             children: [
-              ListView.builder(
-                  padding: EdgeInsets.only(bottom: 10),
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: items.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return IngredientListItem(
-                        item: items[index],
-                        showDivider: index != items.length - 1);
-                  })
+              _recipeIngredients.length == 0
+                  ? Container(
+                      padding: EdgeInsets.all(10),
+                      child: Text("No ingredients added"))
+                  : ListView.builder(
+                      padding: EdgeInsets.only(bottom: 10),
+                      shrinkWrap: true,
+                      physics: NeverScrollableScrollPhysics(),
+                      itemCount: _recipeIngredients.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return IngredientListItem(
+                            item: _recipeIngredients[index],
+                            showDivider: index != items.length - 1);
+                      })
             ],
           )
         ],
