@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:my_recipes/theme/widget_styles.dart';
 
 class RecipeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -30,15 +30,9 @@ class RecipeAppBar extends StatelessWidget implements PreferredSizeWidget {
           ? BackButton(color: Theme.of(context).colorScheme.primary)
           : null,
       actions: <Widget>[...getActions()],
-      title: Text(title,
-          style: GoogleFonts.pacifico(
-            color: Theme.of(context).colorScheme.primary,
-            fontSize: 30,
-            fontWeight: FontWeight.bold,
-          )),
+      title: Text(title, style: ReusableStyleWidget.appBarTextStyle(context)),
       elevation: 0.0,
       centerTitle: true,
-      brightness: Brightness.dark,
       backgroundColor: Theme.of(context).colorScheme.background,
     );
   }

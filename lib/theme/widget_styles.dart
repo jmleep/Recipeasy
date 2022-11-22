@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ReusableStyleWidget {
   static InputDecoration inputDecoration(BuildContext context, String hint) {
@@ -54,5 +55,11 @@ class ReusableStyleWidget {
         cursorColor: isDark ? Colors.green[500] : Colors.green[800],
         selectionColor: Colors.green[300],
         selectionHandleColor: Colors.green[800],
+      );
+
+  static appBarTextStyle(BuildContext context) => GoogleFonts.pacifico(
+        color: Theme.of(context).colorScheme.primary,
+        fontSize: 30,
+        fontWeight: FontWeight.bold,
       );
 }

@@ -43,6 +43,10 @@ class MyRecipeApp extends StatelessWidget {
       routes: {
         '/sign-in': (context) {
           return SignInScreen(
+            headerBuilder: (context, constraints, shrinkOffset) => Container(
+                alignment: Alignment.topCenter,
+                child: Text("Recipeasy",
+                    style: ReusableStyleWidget.appBarTextStyle(context))),
             actions: [
               AuthStateChangeAction<SignedIn>((context, state) {
                 Navigator.pushReplacementNamed(context, '/home');
