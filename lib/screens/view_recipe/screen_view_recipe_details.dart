@@ -8,8 +8,9 @@ import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
 import 'package:my_recipes/widgets/photos/photo_preview_list.dart';
 
-import 'screen_add_edit_recipe.dart';
-import 'common/view_add_edit_recipe.dart';
+import '../screen_add_edit_recipe.dart';
+import '../common/view_add_edit_recipe.dart';
+import 'list_item_ingredient.dart';
 
 class ViewRecipeDetailsScreen extends ViewAddEditRecipe {
   final Recipe recipe;
@@ -82,7 +83,10 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
       return Center(child: CircularProgressIndicator());
     }
 
+    var items = ['123', '123', '123'];
+
     return Container(
+      height: 900,
       child: Center(
           child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -99,6 +103,22 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
               recipePhotos: _recipeImages,
               setActivePhoto: setActivePhoto,
               activePhoto: this.activePhoto),
+          ExpansionTile(
+            title: Text('Ingredients', style: TextStyle(fontSize: 25)),
+            initiallyExpanded: true,
+            children: [
+              ListView.builder(
+                  padding: EdgeInsets.only(bottom: 10),
+                  shrinkWrap: true,
+                  physics: NeverScrollableScrollPhysics(),
+                  itemCount: items.length,
+                  itemBuilder: (BuildContext context, int index) {
+                    return IngredientListItem(
+                        item: items[index],
+                        showDivider: index != items.length - 1);
+                  })
+            ],
+          )
         ],
       )),
     );
@@ -112,6 +132,6 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
           title: _recipe?.name ?? 'Loading...',
           actions: getAppBarActions(),
         ),
-        body: getBody());
+        body: SingleChildScrollView(child: getBody()));
   }
 }
