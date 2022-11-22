@@ -1,8 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_recipes/model/ingredient.dart';
 
 class IngredientListItem extends StatelessWidget {
-  final String item;
+  final Ingredient item;
   final bool showDivider;
 
   const IngredientListItem(
@@ -16,7 +17,7 @@ class IngredientListItem extends StatelessWidget {
       children: [
         Container(
             padding: EdgeInsets.only(left: 30, bottom: 5, top: 5),
-            child: Text(item)),
+            child: Text(item.value)),
         if (showDivider) ...[Divider()]
       ],
     );
