@@ -229,41 +229,42 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-      onWillPop: onPressBackButton,
-      child: Scaffold(
-        key: _scaffoldKey,
-        appBar: RecipeAppBar(
-          title: getTitle(),
-          actions: getAppBarActions(),
-        ),
-        body: Container(
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: <Widget>[
-                NameTextFormField(
-                  formKey: _formKey,
-                  recipeNameController: _recipeNameController,
+        onWillPop: onPressBackButton,
+        child: Scaffold(
+          key: _scaffoldKey,
+          appBar: RecipeAppBar(
+            title: getTitle(),
+            actions: getAppBarActions(),
+          ),
+          body: SingleChildScrollView(
+            child: Container(
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    NameTextFormField(
+                      formKey: _formKey,
+                      recipeNameController: _recipeNameController,
+                    ),
+                    ActivePhoto(
+                        recipePhotos: _tempRecipePhotos,
+                        activePhoto: activePhoto,
+                        addImageToTempListOfPhotos: addImageToTempListOfPhotos,
+                        swipeActivePhoto: swipeActivePhoto,
+                        deletePhoto: deletePhoto,
+                        setPrimaryPhoto: setPrimaryPhoto),
+                    PhotoPreviewList(
+                        scrollController: previewScrollController,
+                        recipePhotos: _tempRecipePhotos,
+                        setActivePhoto: setActivePhoto,
+                        activePhoto: activePhoto),
+                  ],
                 ),
-                ActivePhoto(
-                    recipePhotos: _tempRecipePhotos,
-                    activePhoto: activePhoto,
-                    addImageToTempListOfPhotos: addImageToTempListOfPhotos,
-                    swipeActivePhoto: swipeActivePhoto,
-                    deletePhoto: deletePhoto,
-                    setPrimaryPhoto: setPrimaryPhoto),
-                PhotoPreviewList(
-                    scrollController: previewScrollController,
-                    recipePhotos: _tempRecipePhotos,
-                    setActivePhoto: setActivePhoto,
-                    activePhoto: activePhoto),
-              ],
+              ),
             ),
           ),
-        ),
-      ),
-    );
+        ));
   }
 }
