@@ -23,16 +23,20 @@ class RecipeasyTheme {
     var themeData = ThemeData();
 
     return themeData.copyWith(
-      colorScheme: themeData.colorScheme.copyWith(
-          secondary: Colors.green[500],
-          primary: Colors.green[500],
-          background: Colors.black12,
-          brightness: Brightness.dark),
-      inputDecorationTheme: ReusableStyleWidget.inputTheme(isDark: true),
-      outlinedButtonTheme:
-          ReusableStyleWidget.outlinedButtonTheme(isDark: true),
-      textButtonTheme: ReusableStyleWidget.textButtonTheme(isDark: true),
-      textSelectionTheme: ReusableStyleWidget.textSelectionTheme(isDark: true),
-    );
+        colorScheme: themeData.colorScheme.copyWith(
+            secondary: Colors.green[500],
+            primary: Colors.green[500],
+            brightness: Brightness.dark,
+            background: Colors.grey[900]),
+        inputDecorationTheme: ReusableStyleWidget.inputTheme(isDark: true),
+        outlinedButtonTheme:
+            ReusableStyleWidget.outlinedButtonTheme(isDark: true),
+        textButtonTheme: ReusableStyleWidget.textButtonTheme(isDark: true),
+        textSelectionTheme:
+            ReusableStyleWidget.textSelectionTheme(isDark: true),
+        scaffoldBackgroundColor: Colors.grey[900],
+        textTheme: TextTheme()
+            .apply(bodyColor: Colors.white, displayColor: Colors.white),
+        unselectedWidgetColor: Colors.white);
   }
 }

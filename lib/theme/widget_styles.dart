@@ -39,6 +39,10 @@ class ReusableStyleWidget {
       border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
+              color: isDark ? Colors.green[500] : Colors.green[800])),
+      enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8),
+          borderSide: BorderSide(
               color: isDark ? Colors.green[500] : Colors.green[800])));
 
   static textButtonTheme({bool isDark = false}) => TextButtonThemeData(
