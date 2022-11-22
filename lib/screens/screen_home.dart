@@ -97,7 +97,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                 child: recipe.primaryImage != null
                                     ? Image.memory(recipe.primaryImage)
                                     : Icon(Icons.photo),
-                                fit: BoxFit.fitWidth,
+                                fit: BoxFit.cover,
                               ),
                             )),
                       ),
