@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   getRecipes() async {
     setState(() => _isLoading = true);
-    List<Recipe> recipes = await RecipeDatabaseManager.getAllRecipes();
+    List<Recipe> recipes = await RecipeDatabaseManager.getHomeGridRecipes();
 
     setState(() {
       _recipes = recipes;
