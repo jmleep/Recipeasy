@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
@@ -75,7 +73,7 @@ class ActivePhoto extends StatelessWidget {
     var container;
     if (recipePhotos.length > 0) {
       container = Container(
-          constraints: BoxConstraints.expand(),
+          height: 500,
           child: Stack(
             children: [
               Center(
@@ -86,26 +84,24 @@ class ActivePhoto extends StatelessWidget {
             ],
           ));
     } else {
-      return Expanded(
-        child: Container(
-          child: GestureDetector(
-            onTap: () => addImageToTempListOfPhotos(),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text('Click '),
-                Icon(
-                  Icons.add_a_photo,
-                ),
-                Text(' to add photos!')
-              ],
-            ),
+      return Container(
+        child: GestureDetector(
+          onTap: () => addImageToTempListOfPhotos(),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text('Click '),
+              Icon(
+                Icons.add_a_photo,
+              ),
+              Text(' to add photos!')
+            ],
           ),
         ),
       );
     }
 
-    return Expanded(
+    return Container(
         child: GestureDetector(
       onHorizontalDragEnd: (details) => swipeActivePhoto(details, recipePhotos),
       child: Padding(
