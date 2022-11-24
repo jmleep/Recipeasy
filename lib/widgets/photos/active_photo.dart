@@ -84,21 +84,7 @@ class ActivePhoto extends StatelessWidget {
             ],
           ));
     } else {
-      return Container(
-        child: GestureDetector(
-          onTap: () => addImageToTempListOfPhotos(),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text('Click '),
-              Icon(
-                Icons.add_a_photo,
-              ),
-              Text(' to add photos!')
-            ],
-          ),
-        ),
-      );
+      return Container();
     }
 
     return Container(
