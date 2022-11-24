@@ -9,7 +9,7 @@ import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
 import 'package:my_recipes/widgets/photos/photo_preview_list.dart';
 
-import '../screen_add_edit_recipe.dart';
+import '../add_edit_recipe/screen_add_edit_recipe.dart';
 import '../common/view_add_edit_recipe.dart';
 import 'list_item_ingredient.dart';
 
@@ -53,13 +53,12 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
               )),
     );
 
-    // await getRecipePhotos();
-
     Recipe updatedRecipe = await RecipeDatabaseManager.getRecipe(_recipe.id);
 
     setState(() {
       _recipe = updatedRecipe;
       _recipeImages = [];
+      _recipeIngredients = [];
     });
 
     getRecipeData();
