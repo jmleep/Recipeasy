@@ -12,6 +12,7 @@ class KeepEditingDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Theme.of(context).colorScheme.background,
       title: new Text('Leave $recipeName without saving?'),
       content: new Text('You have unsaved changes.'),
       actions: <Widget>[
