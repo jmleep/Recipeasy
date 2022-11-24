@@ -31,6 +31,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
   List<RecipePhoto> _tempRecipePhotos = [];
   List<RecipePhoto> _tempRecipePhotosToDelete = [];
   var _recipeIngredients = <Ingredient>[];
+  var _recipeIngredientsToDelete = <Ingredient>[];
   final _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
@@ -114,6 +115,14 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
         duration: Duration(milliseconds: 10), curve: Curves.ease);
   }
 
+  removeIngredient(Ingredient i) {
+    var ingredientIndex = _recipeIngredients.indexOf(i);
+    setState(() {
+      _recipeIngredientsToDelete.add(i);
+      _recipeIngredients.removeAt(ingredientIndex);
+    });
+  }
+
   Future addImageToTempListOfPhotos() async {
     final pickedFile =
         await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
@@ -142,54 +151,53 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
 
   Future saveRecipe(bool isFromBackAttempt) async {
     if (_formKey.currentState.validate()) {
-      if (_tempRecipePhotos.length > 0) {
-        Recipe recipe;
+      Recipe recipe;
 
-        if (widget.recipe != null) {
-          recipe = widget.recipe;
-          recipe.name = _recipeNameController.text;
-          recipe.photos = _tempRecipePhotos;
-          recipe.ingredients = _recipeIngredients;
-        } else {
-          recipe = new Recipe(
-              name: _recipeNameController.text,
-              photos: _tempRecipePhotos,
-              ingredients: _recipeIngredients);
-        }
-
-        var recipeId = await RecipeDatabaseManager.upsertRecipe(recipe);
-
-        await RecipePhotoDatabaseManager.savePhotos(
-            recipeId, _tempRecipePhotos);
-
-        RecipePhotoDatabaseManager.deletePhotos(_tempRecipePhotosToDelete);
-
-        HapticFeedback.heavyImpact();
-
-        Navigator.of(context).pop(true);
+      if (widget.recipe != null) {
+        recipe = widget.recipe;
+        recipe.name = _recipeNameController.text;
+        recipe.photos = _tempRecipePhotos;
+        recipe.ingredients = _recipeIngredients;
       } else {
-        if (isFromBackAttempt) {
-          Navigator.of(context).pop(false);
-        }
-
-        final snackBar = SnackBar(
-            duration: Duration(seconds: 2),
-            backgroundColor: Colors.red[700],
-            content: Container(
-                height: 15,
-                child: Center(
-                  child: Text(
-                    'Please add a photo in order to create your recipe!',
-                    style: TextStyle(
-                      color: Colors.white,
-                    ), // fontSize: 20),
-                    textAlign: TextAlign.center,
-                  ),
-                )));
-
-        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+        recipe = new Recipe(
+            name: _recipeNameController.text,
+            photos: _tempRecipePhotos,
+            ingredients: _recipeIngredients);
       }
-    }
+
+      RecipeDatabaseManager.deleteIngredients(_recipeIngredientsToDelete);
+
+      var recipeId = await RecipeDatabaseManager.upsertRecipe(recipe);
+
+      await RecipePhotoDatabaseManager.savePhotos(recipeId, _tempRecipePhotos);
+
+      RecipePhotoDatabaseManager.deletePhotos(_tempRecipePhotosToDelete);
+
+      HapticFeedback.heavyImpact();
+
+      Navigator.of(context).pop(true);
+    } //else {
+    // if (isFromBackAttempt) {
+    //   Navigator.of(context).pop(false);
+    // }
+    //
+    // final snackBar = SnackBar(
+    //     duration: Duration(seconds: 2),
+    //     backgroundColor: Colors.red[700],
+    //     content: Container(
+    //         height: 15,
+    //         child: Center(
+    //           child: Text(
+    //             'Please add a photo in order to create your recipe!',
+    //             style: TextStyle(
+    //               color: Colors.white,
+    //             ), // fontSize: 20),
+    //             textAlign: TextAlign.center,
+    //           ),
+    //         )));
+    //
+    // ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    // }
   }
 
   List<AppBarAction> getAppBarActions() {
@@ -287,7 +295,10 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
-                    IngredientListViewBuilder(ingredients: _recipeIngredients),
+                    IngredientListViewBuilder(
+                        ingredients: _recipeIngredients,
+                        removeIngredient: (Ingredient i) =>
+                            removeIngredient(i)),
                     IngredientInput(
                         addIngredient: (Ingredient i) => addIngredient(i)),
                     Container(

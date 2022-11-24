@@ -16,18 +16,15 @@ class IngredientListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
+      mainAxisSize: MainAxisSize.max,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (showTopDivider) ...[
-          Divider(
-            color: Theme.of(context).colorScheme.secondary,
-          )
-        ],
         Container(
-            padding: EdgeInsets.only(left: 15, bottom: 5, top: 5),
+            padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
             child: Text(item.value)),
         Divider(
-          color: Theme.of(context).colorScheme.secondary,
+          height: 1,
+          color: Colors.grey[800],
         )
       ],
     );

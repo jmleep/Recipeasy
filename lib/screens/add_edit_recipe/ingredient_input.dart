@@ -38,7 +38,9 @@ class _IngredientInputState extends State<IngredientInput> {
                   padding: EdgeInsets.only(left: 10, right: 10),
                   child: TextField(
                       controller: _textFieldController,
-                      //onSubmitted: () {},
+                      onSubmitted: (value) {
+                        addIngredient();
+                      },
                       decoration: InputDecoration(
                           focusedBorder: UnderlineInputBorder(
                               borderSide: BorderSide(

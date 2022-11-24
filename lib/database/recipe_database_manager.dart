@@ -110,5 +110,18 @@ class RecipeDatabaseManager {
     );
   }
 
+  static Future<void> deleteIngredients(List<Ingredient> ingredients) async {
+    final Database db = await RecipeDatabase.instance.database;
+
+    Batch batch = db.batch();
+
+    ingredients.forEach((element) {
+      batch.delete(RecipeDatabase.ingredientsTable,
+          where: 'id = ?', whereArgs: [element.id]);
+    });
+
+    batch.apply();
+  }
+
   static T cast<T>(x) => x is T ? x : null;
 }
