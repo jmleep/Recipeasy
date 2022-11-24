@@ -20,21 +20,21 @@ class ActivePhoto extends StatelessWidget {
       this.setPrimaryPhoto});
 
   Widget getPrimaryPhotoButton() {
-    if (this.setPrimaryPhoto != null) {
+    if (this.setPrimaryPhoto != null && recipePhotos.length > 1) {
       var button;
       RecipePhoto currentPhoto = recipePhotos[activePhoto];
 
       if (currentPhoto.isPrimary) {
         button = RoundedButton(
-          buttonText: 'Make Primary Photo',
-          borderColor: Colors.blue,
-          fillColor: Colors.white70,
-          textColor: Colors.black,
+          buttonText: 'Set cover photo',
+          borderColor: Colors.grey[700],
+          fillColor: Colors.grey[400],
+          textColor: Colors.grey[700],
           onPressed: () => {},
         );
       } else {
         button = RoundedButton(
-          buttonText: 'Make Primary Photo',
+          buttonText: 'Set cover photo',
           borderColor: Colors.blue,
           fillColor: Colors.blue,
           textColor: Colors.white,
@@ -55,12 +55,11 @@ class ActivePhoto extends StatelessWidget {
           bottom: 10,
           right: 10,
           child: RoundedButton(
-            buttonText: 'Delete Photo',
+            buttonText: 'Delete photo',
             borderColor: Colors.red,
             fillColor: Colors.red,
             textColor: Colors.white,
             onPressed: () {
-              print("calling delete photo for $activePhoto");
               deletePhoto(activePhoto);
             },
           ));
