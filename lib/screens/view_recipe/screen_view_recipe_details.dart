@@ -88,8 +88,6 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
       return Center(child: CircularProgressIndicator());
     }
 
-    var items = ['123', '123', '123'];
-
     return Container(
       height: 900,
       child: Center(
@@ -124,7 +122,8 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
                       itemBuilder: (BuildContext context, int index) {
                         return IngredientListItem(
                             item: _recipeIngredients[index],
-                            showDivider: index != items.length - 1);
+                            showDivider:
+                                index != _recipeIngredients.length - 1);
                       })
             ],
           )

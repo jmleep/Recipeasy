@@ -38,16 +38,21 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
   var _recipeNameController = TextEditingController();
   var _hasChangeBeenMade = false;
 
-  setupRecipeData() async {
+  getRecipeData() async {
     if (widget.recipe != null) {
       setState(() {
         _recipeNameController = TextEditingController(text: widget.recipe.name);
       });
 
-      var images = await RecipePhotoDatabaseManager.getImages(widget.recipe.id);
+      var recipeImages = RecipePhotoDatabaseManager.getImages(widget.recipe.id);
+      var recipeIngredients =
+          RecipeDatabaseManager.getIngredients(widget.recipe.id);
+
+      var results = await Future.wait([recipeImages, recipeIngredients]);
 
       setState(() {
-        _tempRecipePhotos = images;
+        _tempRecipePhotos.addAll(results[0] as List<RecipePhoto>);
+        _recipeIngredients.addAll(results[1] as List<Ingredient>);
       });
     }
 
@@ -229,7 +234,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
   void initState() {
     super.initState();
 
-    setupRecipeData();
+    getRecipeData();
   }
 
   @override
