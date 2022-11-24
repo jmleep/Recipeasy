@@ -5,15 +5,18 @@ import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_recipes/database/recipe_database_manager.dart';
 import 'package:my_recipes/database/recipe_photo_database_manager.dart';
+import 'package:my_recipes/model/ingredient.dart';
 import 'package:my_recipes/model/recipe.dart';
 import 'package:my_recipes/model/recipe_photo.dart';
+import 'package:my_recipes/screens/add_edit_recipe/ingredient_list_view_builder.dart';
 import 'package:my_recipes/widgets/dialogs/dialog_keep_editing.dart';
 import 'package:my_recipes/widgets/inputs/name_text_form_field.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
 
-import '../../widgets/app_bar.dart';
-import '../../widgets/photos/photo_preview_list.dart';
-import 'common/view_add_edit_recipe.dart';
+import '../../../widgets/app_bar.dart';
+import '../../../widgets/photos/photo_preview_list.dart';
+import '../common/view_add_edit_recipe.dart';
+import 'ingredient_input.dart';
 
 class AddEditRecipeScreen extends ViewAddEditRecipe {
   final Recipe recipe;
@@ -27,9 +30,11 @@ class AddEditRecipeScreen extends ViewAddEditRecipe {
 class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
   List<RecipePhoto> _tempRecipePhotos = [];
   List<RecipePhoto> _tempRecipePhotosToDelete = [];
+  var _recipeIngredients = <Ingredient>[];
   final _picker = ImagePicker();
   final _formKey = GlobalKey<FormState>();
   final _scaffoldKey = GlobalKey<ScaffoldState>();
+  var _scrollController = ScrollController();
   var _recipeNameController = TextEditingController();
   var _hasChangeBeenMade = false;
 
@@ -94,6 +99,16 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
     });
   }
 
+  addIngredient(Ingredient ingredient) {
+    setState(() {
+      _recipeIngredients.add(ingredient);
+      _hasChangeBeenMade = true;
+    });
+
+    _scrollController.animateTo(_scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 10), curve: Curves.ease);
+  }
+
   Future addImageToTempListOfPhotos() async {
     final pickedFile =
         await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
@@ -129,9 +144,12 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
           recipe = widget.recipe;
           recipe.name = _recipeNameController.text;
           recipe.photos = _tempRecipePhotos;
+          recipe.ingredients = _recipeIngredients;
         } else {
           recipe = new Recipe(
-              name: _recipeNameController.text, photos: _tempRecipePhotos);
+              name: _recipeNameController.text,
+              photos: _tempRecipePhotos,
+              ingredients: _recipeIngredients);
         }
 
         var recipeId = await RecipeDatabaseManager.upsertRecipe(recipe);
@@ -171,12 +189,6 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
 
   List<AppBarAction> getAppBarActions() {
     return [
-      new AppBarAction(
-          Icon(
-            Icons.add_a_photo,
-            color: Theme.of(context).colorScheme.primary,
-          ),
-          addImageToTempListOfPhotos),
       new AppBarAction(
           Icon(
             Icons.check,
@@ -237,10 +249,11 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
             actions: getAppBarActions(),
           ),
           body: SingleChildScrollView(
+            controller: _scrollController,
             child: Container(
               child: Center(
                 child: Column(
-                  mainAxisSize: MainAxisSize.max,
+                  mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
@@ -259,7 +272,22 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                         scrollController: previewScrollController,
                         recipePhotos: _tempRecipePhotos,
                         setActivePhoto: setActivePhoto,
-                        activePhoto: activePhoto),
+                        activePhoto: activePhoto,
+                        addPhoto: addImageToTempListOfPhotos),
+                    Container(
+                      padding: EdgeInsets.all(5),
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        'Ingredients',
+                        style: TextStyle(fontSize: 30),
+                      ),
+                    ),
+                    IngredientListViewBuilder(ingredients: _recipeIngredients),
+                    IngredientInput(
+                        addIngredient: (Ingredient i) => addIngredient(i)),
+                    Container(
+                      padding: EdgeInsets.all(40),
+                    )
                   ],
                 ),
               ),
