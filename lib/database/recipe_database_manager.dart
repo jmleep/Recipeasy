@@ -17,11 +17,12 @@ class RecipeDatabaseManager {
 
     var upsertFutures = <Future>[];
 
+    Batch ingredientsBatch = db.batch();
     if (recipe.ingredients != null && recipe.ingredients.length > 0) {
       recipe.ingredients.forEach((element) {
-        upsertFutures.add(db.insert(
+        ingredientsBatch.insert(
             RecipeDatabase.ingredientsTable, element.toMap(recipeId),
-            conflictAlgorithm: ConflictAlgorithm.replace));
+            conflictAlgorithm: ConflictAlgorithm.replace);
       });
     }
 
@@ -33,6 +34,7 @@ class RecipeDatabaseManager {
       });
     }
 
+    await ingredientsBatch.commit(noResult: true);
     await Future.wait(upsertFutures);
 
     return recipeId;
