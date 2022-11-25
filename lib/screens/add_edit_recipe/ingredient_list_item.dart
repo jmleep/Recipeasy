@@ -24,7 +24,7 @@ class IngredientListItem extends StatelessWidget {
             child: Text(item.value)),
         Divider(
           height: 1,
-          color: Colors.grey[800],
+          color: Theme.of(context).colorScheme.primary,
         )
       ],
     );
