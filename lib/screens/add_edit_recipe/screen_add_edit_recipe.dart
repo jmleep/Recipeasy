@@ -115,11 +115,10 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
         duration: Duration(milliseconds: 10), curve: Curves.ease);
   }
 
-  removeIngredient(Ingredient i) {
-    var ingredientIndex = _recipeIngredients.indexOf(i);
+  removeIngredient(int index) {
     setState(() {
-      _recipeIngredientsToDelete.add(i);
-      _recipeIngredients.removeAt(ingredientIndex);
+      _recipeIngredientsToDelete.add(_recipeIngredients[index]);
+      _recipeIngredients.removeAt(index);
     });
   }
 
@@ -297,8 +296,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                     ),
                     IngredientListViewBuilder(
                         ingredients: _recipeIngredients,
-                        removeIngredient: (Ingredient i) =>
-                            removeIngredient(i)),
+                        removeIngredient: (int i) => removeIngredient(i)),
                     IngredientInput(
                         addIngredient: (Ingredient i) => addIngredient(i)),
                     Container(

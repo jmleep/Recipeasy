@@ -6,7 +6,7 @@ import '../../model/ingredient.dart';
 
 class IngredientListViewBuilder extends StatelessWidget {
   final List<Ingredient> ingredients;
-  final Function(Ingredient) removeIngredient;
+  final Function(int) removeIngredient;
 
   const IngredientListViewBuilder(
       {Key key, this.ingredients, this.removeIngredient})
@@ -32,10 +32,10 @@ class IngredientListViewBuilder extends StatelessWidget {
                       padding: EdgeInsets.only(right: 16.0),
                       child: Icon(Icons.delete, color: Colors.white),
                     ))),
-            key: ValueKey<int>(index),
             onDismissed: (DismissDirection direction) {
-              removeIngredient(ingredients[index]);
+              removeIngredient(index);
             },
+            key: UniqueKey(),
             child: IngredientListItem(
               item: ingredients[index],
               showTopDivider: index == 0,
