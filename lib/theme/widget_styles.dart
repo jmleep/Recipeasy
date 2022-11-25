@@ -42,7 +42,8 @@ class ReusableStyleWidget {
               borderSide:
                   BorderSide(color: Theme.of(context).colorScheme.primary)),
           label: label,
-          hintText: hint);
+          hintText: hint,
+          hintStyle: TextStyle(color: Colors.grey));
 
   static inputThemeBordered({bool isDark = false}) => InputDecorationTheme(
       labelStyle:

@@ -12,9 +12,9 @@ class RoundedButton extends StatelessWidget {
 
   RoundedButton(
       {this.buttonText = 'Empty text',
-      this.fillColor = Colors.white30,
+      this.fillColor,
       this.textColor,
-      this.borderColor = Colors.blueGrey,
+      this.borderColor = Colors.green,
       this.onPressed,
       this.leftPadding = 0,
       this.rightPadding = 0});
@@ -33,8 +33,8 @@ class RoundedButton extends StatelessWidget {
           ),
         ),
         style: ButtonStyle(
-            backgroundColor:
-                MaterialStateColor.resolveWith((states) => fillColor),
+            backgroundColor: MaterialStateColor.resolveWith((states) =>
+                fillColor ?? Theme.of(context).colorScheme.background),
             shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),

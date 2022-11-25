@@ -45,7 +45,7 @@ class _IngredientInputState extends State<IngredientInput> {
                       decoration: ReusableStyleWidget.inputThemeUnderlineBorder(
                           context, null, 'Enter an ingredient')))),
           Container(
-              padding: EdgeInsets.only(right: 10),
+              padding: EdgeInsets.only(right: 10, top: 5),
               child: RoundedButton(
                   buttonText: 'Add', onPressed: () => addIngredient()))
         ]);
