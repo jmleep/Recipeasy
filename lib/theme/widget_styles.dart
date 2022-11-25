@@ -29,7 +29,22 @@ class ReusableStyleWidget {
         ),
       );
 
-  static inputTheme({bool isDark = false}) => InputDecorationTheme(
+  static inputThemeUnderlineBorder(
+          BuildContext context, Widget label, String hint) =>
+      InputDecoration(
+          focusedBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.primary)),
+          enabledBorder: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.primary)),
+          border: UnderlineInputBorder(
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.primary)),
+          label: label,
+          hintText: hint);
+
+  static inputThemeBordered({bool isDark = false}) => InputDecorationTheme(
       labelStyle:
           TextStyle(color: isDark ? Colors.green[500] : Colors.green[800]),
       focusColor: isDark ? Colors.green[500] : Colors.green[800],

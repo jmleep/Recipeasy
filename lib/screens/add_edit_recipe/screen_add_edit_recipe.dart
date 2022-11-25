@@ -122,6 +122,16 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
     });
   }
 
+  updateIngredient(String text, Ingredient i) {
+    var index = _recipeIngredients.indexOf(i);
+    var ingredient = _recipeIngredients[index];
+
+    setState(() {
+      _recipeIngredients[index] = ingredient.copyWith(null, null, text);
+      _hasChangeBeenMade = true;
+    });
+  }
+
   Future addImageToTempListOfPhotos() async {
     final pickedFile =
         await _picker.pickImage(source: ImageSource.gallery, imageQuality: 50);
@@ -295,8 +305,11 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                       ),
                     ),
                     IngredientListViewBuilder(
-                        ingredients: _recipeIngredients,
-                        removeIngredient: (int i) => removeIngredient(i)),
+                      ingredients: _recipeIngredients,
+                      removeIngredient: (int i) => removeIngredient(i),
+                      updateIngredient: (String text, Ingredient i) =>
+                          updateIngredient(text, i),
+                    ),
                     IngredientInput(
                         addIngredient: (Ingredient i) => addIngredient(i)),
                     Container(

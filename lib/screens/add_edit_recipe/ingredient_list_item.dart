@@ -1,17 +1,22 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_recipes/theme/widget_styles.dart';
 
 import '../../model/ingredient.dart';
 
 class IngredientListItem extends StatelessWidget {
   final Ingredient item;
   final bool showTopDivider;
+  final TextEditingController controller;
+  final Function(String, Ingredient) updateIngredient;
 
-  const IngredientListItem({
-    Key key,
-    this.item,
-    this.showTopDivider = false,
-  }) : super(key: key);
+  const IngredientListItem(
+      {Key key,
+      this.item,
+      this.showTopDivider = false,
+      this.controller,
+      this.updateIngredient})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,12 +25,16 @@ class IngredientListItem extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-            padding: EdgeInsets.only(left: 10, bottom: 10, top: 10),
-            child: Text(item.value)),
-        Divider(
-          height: 1,
-          color: Theme.of(context).colorScheme.primary,
-        )
+            padding: EdgeInsets.only(left: 10, right: 10),
+            child: TextField(
+              textInputAction: TextInputAction.done,
+              controller: controller,
+              onSubmitted: (value) {
+                updateIngredient(controller.value.text, item);
+              },
+              decoration: ReusableStyleWidget.inputThemeUnderlineBorder(
+                  context, null, ''),
+            )),
       ],
     );
   }

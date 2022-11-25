@@ -7,9 +7,10 @@ import '../../model/ingredient.dart';
 class IngredientListViewBuilder extends StatelessWidget {
   final List<Ingredient> ingredients;
   final Function(int) removeIngredient;
+  final Function(String, Ingredient) updateIngredient;
 
   const IngredientListViewBuilder(
-      {Key key, this.ingredients, this.removeIngredient})
+      {Key key, this.ingredients, this.removeIngredient, this.updateIngredient})
       : super(key: key);
 
   @override
@@ -20,6 +21,9 @@ class IngredientListViewBuilder extends StatelessWidget {
       physics: NeverScrollableScrollPhysics(),
       itemCount: ingredients.length,
       itemBuilder: (context, index) {
+        var textController = TextEditingController();
+        textController.value = TextEditingValue(text: ingredients[index].value);
+
         return Dismissible(
             direction: DismissDirection.endToStart,
             background: Container(
@@ -38,6 +42,8 @@ class IngredientListViewBuilder extends StatelessWidget {
             key: UniqueKey(),
             child: IngredientListItem(
               item: ingredients[index],
+              updateIngredient: updateIngredient,
+              controller: textController,
               showTopDivider: index == 0,
             ));
       },
