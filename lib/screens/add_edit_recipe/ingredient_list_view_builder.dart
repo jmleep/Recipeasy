@@ -17,7 +17,7 @@ class IngredientListViewBuilder extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListView.builder(
       shrinkWrap: true,
-      padding: EdgeInsets.only(bottom: 5, top: 5),
+      padding: EdgeInsets.only(bottom: 5),
       physics: NeverScrollableScrollPhysics(),
       itemCount: ingredients.length,
       itemBuilder: (context, index) {
