@@ -30,6 +30,7 @@ class AddEditRecipeScreen extends ViewAddEditRecipe {
 class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
   List<RecipePhoto> _tempRecipePhotos = [];
   List<RecipePhoto> _tempRecipePhotosToDelete = [];
+  var _recipeIngredientControllers = <TextEditingController>[];
   var _recipeIngredients = <Ingredient>[];
   var _recipeIngredientsToDelete = <Ingredient>[];
   final _picker = ImagePicker();
@@ -162,6 +163,11 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
     if (_formKey.currentState.validate()) {
       Recipe recipe;
 
+      for (var i = 0; i < _recipeIngredients.length; i += 1) {
+        _recipeIngredients[i].value =
+            _recipeIngredientControllers[i].value.text;
+      }
+
       if (widget.recipe != null) {
         recipe = widget.recipe;
         recipe.name = _recipeNameController.text;
@@ -262,6 +268,13 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    _recipeIngredientControllers = [];
+    _recipeIngredients.forEach((element) {
+      var controller = new TextEditingController();
+      controller.value = TextEditingValue(text: element.value);
+      _recipeIngredientControllers.add(controller);
+    });
+
     return WillPopScope(
         onWillPop: onPressBackButton,
         child: Scaffold(
@@ -306,6 +319,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                     ),
                     IngredientListViewBuilder(
                       ingredients: _recipeIngredients,
+                      controllers: _recipeIngredientControllers,
                       removeIngredient: (int i) => removeIngredient(i),
                       updateIngredient: (String text, Ingredient i) =>
                           updateIngredient(text, i),
