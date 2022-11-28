@@ -1,16 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_recipes/data/repository/recipe_repository.dart';
-import 'package:my_recipes/data/repository/recipe_photo_repository.dart';
-import 'package:my_recipes/data/model/ingredient.dart';
 import 'package:my_recipes/data/model/recipe.dart';
-import 'package:my_recipes/data/model/recipe_photo.dart';
 import 'package:my_recipes/screens/view_recipe/view_model_view_recipe.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
 import 'package:my_recipes/widgets/photos/photo_preview_list.dart';
+import 'package:provider/provider.dart';
 
-import '../add_edit_recipe/screen_add_edit_recipe.dart';
 import '../common/view_add_edit_recipe.dart';
 import 'list_item_ingredient.dart';
 
@@ -25,46 +21,6 @@ class ViewRecipeDetailsScreen extends ViewAddEditRecipe {
 
 class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  late final ViewRecipeViewModel _vm;
-  var _isLoading = false;
-  var _recipeImages = <RecipePhoto>[];
-  var _recipeIngredients = <Ingredient>[];
-
-  getRecipeData() async {
-    setState(() => _isLoading = true);
-
-    var recipeImages = RecipePhotoDatabaseManager.getImages(_vm.recipe.id);
-    var recipeIngredients = RecipeDatabaseManager.getIngredients(_vm.recipe.id);
-
-    var results = await Future.wait([recipeImages, recipeIngredients]);
-
-    setState(() {
-      _recipeImages.addAll(results[0] as List<RecipePhoto>);
-      _recipeIngredients.addAll(results[1] as List<Ingredient>);
-      _isLoading = false;
-    });
-  }
-
-  editRecipe() async {
-    await Navigator.push(
-      context,
-      MaterialPageRoute(
-          builder: (context) => AddEditRecipeScreen(
-                recipe: _vm.recipe,
-              )),
-    );
-
-    Recipe updatedRecipe =
-        await RecipeDatabaseManager.getRecipe(_vm.recipe.id!);
-
-    setState(() {
-      _vm.recipe = updatedRecipe;
-      _recipeImages = [];
-      _recipeIngredients = [];
-    });
-
-    getRecipeData();
-  }
 
   List<AppBarAction> getAppBarActions() {
     return [
@@ -73,21 +29,20 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
             Icons.edit,
             color: Theme.of(context).colorScheme.primary,
           ),
-          editRecipe),
+          () => Provider.of<ViewRecipeViewModel>(context, listen: false)
+              .editRecipe(context)),
     ];
   }
 
   @override
   void initState() {
     super.initState();
-
-    _vm = ViewRecipeViewModel(widget.recipe);
-
-    getRecipeData();
+    Provider.of<ViewRecipeViewModel>(context, listen: false)
+        .init(widget.recipe);
   }
 
-  Widget getBody() {
-    if (this._isLoading) {
+  Widget getBody(ViewRecipeViewModel vm) {
+    if (vm.isLoading) {
       return Center(child: CircularProgressIndicator());
     }
 
@@ -100,20 +55,20 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           ActivePhoto(
-            recipePhotos: _recipeImages,
-            activePhoto: this.activePhoto,
+            recipePhotos: vm.recipeImages,
+            activePhoto: activePhoto,
             swipeActivePhoto: swipeActivePhoto,
           ),
           PhotoPreviewList(
               scrollController: previewScrollController,
-              recipePhotos: _recipeImages,
+              recipePhotos: vm.recipeImages,
               setActivePhoto: setActivePhoto,
-              activePhoto: this.activePhoto),
+              activePhoto: activePhoto),
           ExpansionTile(
             title: Text('Ingredients', style: TextStyle(fontSize: 25)),
-            initiallyExpanded: _recipeIngredients.length != 0,
+            initiallyExpanded: vm.recipeIngredients.length != 0,
             children: [
-              _recipeIngredients.length == 0
+              vm.recipeIngredients.length == 0
                   ? Container(
                       padding: EdgeInsets.all(10),
                       child: Text("No ingredients added"))
@@ -121,13 +76,13 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
                       padding: EdgeInsets.only(bottom: 10),
                       shrinkWrap: true,
                       physics: NeverScrollableScrollPhysics(),
-                      itemCount: _recipeIngredients.length,
+                      itemCount: vm.recipeIngredients.length,
                       itemBuilder: (BuildContext context, int index) {
                         return IngredientListItem(
                             key: UniqueKey(),
-                            item: _recipeIngredients[index],
+                            item: vm.recipeIngredients[index],
                             showDivider:
-                                index != _recipeIngredients.length - 1);
+                                index != vm.recipeIngredients.length - 1);
                       })
             ],
           )
@@ -138,12 +93,13 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        key: _scaffoldKey,
-        appBar: RecipeAppBar(
-          title: _vm.recipe.name ?? 'Loading...',
-          actions: getAppBarActions(),
-        ),
-        body: SingleChildScrollView(child: getBody()));
+    return Consumer<ViewRecipeViewModel>(
+        builder: (context, vm, child) => Scaffold(
+            key: _scaffoldKey,
+            appBar: RecipeAppBar(
+              title: vm.recipe.name,
+              actions: getAppBarActions(),
+            ),
+            body: SingleChildScrollView(child: getBody(vm))));
   }
 }

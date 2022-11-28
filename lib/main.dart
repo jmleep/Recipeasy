@@ -4,8 +4,10 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/screens/screen_home.dart';
+import 'package:my_recipes/screens/view_recipe/view_model_view_recipe.dart';
 import 'package:my_recipes/theme/theme.dart';
 import 'package:my_recipes/theme/widget_styles.dart';
+import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
@@ -35,41 +37,49 @@ class MyRecipeApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Recipeasy',
-      theme: RecipeasyTheme.getLightThemeData(),
-      darkTheme: RecipeasyTheme.getDarkThemeData(),
-      initialRoute: initialRoute,
-      routes: {
-        '/sign-in': (context) {
-          return SignInScreen(
-            headerBuilder: (context, constraints, shrinkOffset) => Container(
-                alignment: Alignment.topCenter,
-                child: Text("Recipeasy",
-                    style: ReusableStyleWidget.appBarTextStyle(context))),
-            actions: [
-              AuthStateChangeAction<SignedIn>((context, state) {
-                Navigator.pushReplacementNamed(context, '/home');
-              }),
-              AuthStateChangeAction<UserCreated>((context, state) {
-                Navigator.pushReplacementNamed(context, '/home');
-              })
-            ],
-          );
-        },
-        '/home': (context) {
-          return HomeScreen();
-        },
-        '/profile': (context) {
-          return ProfileScreen(
-            actions: [
-              SignedOutAction((context) {
-                Navigator.pushReplacementNamed(context, '/sign-in');
-              }),
-            ],
-          );
-        },
-      },
-    );
+    return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(
+            create: (context) => ViewRecipeViewModel(),
+          )
+        ],
+        child: MaterialApp(
+          title: 'Recipeasy',
+          theme: RecipeasyTheme.getLightThemeData(),
+          darkTheme: RecipeasyTheme.getDarkThemeData(),
+          initialRoute: initialRoute,
+          routes: {
+            '/sign-in': (context) {
+              return SignInScreen(
+                headerBuilder: (context, constraints, shrinkOffset) =>
+                    Container(
+                        alignment: Alignment.topCenter,
+                        child: Text("Recipeasy",
+                            style:
+                                ReusableStyleWidget.appBarTextStyle(context))),
+                actions: [
+                  AuthStateChangeAction<SignedIn>((context, state) {
+                    Navigator.pushReplacementNamed(context, '/home');
+                  }),
+                  AuthStateChangeAction<UserCreated>((context, state) {
+                    Navigator.pushReplacementNamed(context, '/home');
+                  })
+                ],
+              );
+            },
+            '/home': (context) {
+              return HomeScreen();
+            },
+            '/profile': (context) {
+              return ProfileScreen(
+                actions: [
+                  SignedOutAction((context) {
+                    Navigator.pushReplacementNamed(context, '/sign-in');
+                  }),
+                ],
+              );
+            },
+          },
+        ));
   }
 }
