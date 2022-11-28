@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/screens/add_edit_recipe/ingredient_list_item.dart';
 
-import '../../model/ingredient.dart';
+import '../../data/model/ingredient.dart';
 
 class IngredientListViewBuilder extends StatelessWidget {
   final List<Ingredient> ingredients;

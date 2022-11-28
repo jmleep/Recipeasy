@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_recipes/model/recipe_photo.dart';
+import 'package:my_recipes/data/model/recipe_photo.dart';
 import 'package:my_recipes/widgets/buttons/button_recipeasy.dart';
 
 class ActivePhoto extends StatelessWidget {

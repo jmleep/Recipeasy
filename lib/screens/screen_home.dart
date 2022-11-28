@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:my_recipes/database/recipe_database_manager.dart';
-import 'package:my_recipes/model/recipe.dart';
+import 'package:my_recipes/data/repository/recipe_repository.dart';
+import 'package:my_recipes/data/model/recipe.dart';
 import 'package:my_recipes/screens/screen_settings.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/button_add_recipe_floating_action.dart';

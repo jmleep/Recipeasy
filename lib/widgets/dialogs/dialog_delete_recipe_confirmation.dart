@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_recipes/database/recipe_database_manager.dart';
-import 'package:my_recipes/database/recipe_photo_database_manager.dart';
-import 'package:my_recipes/model/recipe.dart';
-import 'package:my_recipes/model/recipe_photo.dart';
+import 'package:my_recipes/data/repository/recipe_repository.dart';
+import 'package:my_recipes/data/repository/recipe_photo_repository.dart';
+import 'package:my_recipes/data/model/recipe.dart';
+import 'package:my_recipes/data/model/recipe_photo.dart';
 import 'package:my_recipes/widgets/buttons/button_recipeasy.dart';
 
 class DeleteRecipeConfirmationDialog extends StatelessWidget {

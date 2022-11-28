@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:core';
 
-import 'package:my_recipes/database/recipe_database.dart';
-import 'package:my_recipes/model/recipe_photo.dart';
+import 'package:my_recipes/data/recipe_database.dart';
+import 'package:my_recipes/data/model/recipe_photo.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RecipePhotoDatabaseManager {

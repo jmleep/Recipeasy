@@ -1,4 +1,4 @@
-import 'package:my_recipes/model/recipe_attribute.dart';
+import 'package:my_recipes/data/model/recipe_attribute.dart';
 
 class Ingredient extends RecipeAttribute {
   Ingredient({int id, int recipeId, String value})

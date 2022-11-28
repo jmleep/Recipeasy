@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:my_recipes/database/recipe_photo_database_manager.dart';
-import 'package:my_recipes/model/ingredient.dart';
-import 'package:my_recipes/model/recipe.dart';
+import 'package:my_recipes/data/repository/recipe_photo_repository.dart';
+import 'package:my_recipes/data/model/ingredient.dart';
+import 'package:my_recipes/data/model/recipe.dart';
 import 'package:sqflite/sqflite.dart';
 
-import 'recipe_database.dart';
+import '../recipe_database.dart';
 
 class RecipeDatabaseManager {
   static Future<int> upsertRecipe(Recipe recipe) async {

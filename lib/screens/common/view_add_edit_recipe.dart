@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
-import 'package:my_recipes/model/recipe_photo.dart';
+import 'package:my_recipes/data/model/recipe_photo.dart';
 
 class ViewAddEditRecipe extends StatefulWidget {
   @override

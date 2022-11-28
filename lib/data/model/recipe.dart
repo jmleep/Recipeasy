@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 import 'dart:ui';
+import 'package:my_recipes/data/model/recipe_photo.dart';
 
-import 'package:my_recipes/model/ingredient.dart';
-import 'package:my_recipes/model/recipe_photo.dart';
+import 'ingredient.dart';
 
 import 'step.dart';
 

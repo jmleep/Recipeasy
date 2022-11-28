@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_recipes/model/ingredient.dart';
+import 'package:my_recipes/data/model/ingredient.dart';
 
 class IngredientListItem extends StatelessWidget {
   final Ingredient item;

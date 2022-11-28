@@ -1,7 +1,7 @@
 // import 'dart:io';
 //
 // import 'package:flutter/material.dart';
-// import 'package:my_recipes/model/recipe.dart';
+// import 'package:my_recipes/data/model/recipe.dart';
 // import 'package:my_recipes/util/utils.dart';
 //
 // class RecipeListItem extends StatelessWidget {

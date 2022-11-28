@@ -1,9 +1,9 @@
 // import 'package:flutter/cupertino.dart';
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
-// import 'package:my_recipes/database/recipe_database_manager.dart';
-// import 'package:my_recipes/model/ingredient.dart';
-// import 'package:my_recipes/model/recipe.dart';
+// import 'package:my_recipes/database/recipe_repository.dart';
+// import 'package:my_recipes/data/model/ingredient.dart';
+// import 'package:my_recipes/data/model/recipe.dart';
 // import 'file:///C:/Users/Jordan/dev/my_recipes/lib/widgets/deprecated/button_primary.dart';
 //
 // class SaveRecipeButton extends StatelessWidget {

@@ -4,9 +4,9 @@
 // import 'package:flutter/material.dart';
 // import 'package:flutter/services.dart';
 // import 'package:image_picker/image_picker.dart';
-// import 'package:my_recipes/database/recipe_database_manager.dart';
-// import 'package:my_recipes/model/ingredient.dart';
-// import 'package:my_recipes/model/recipe.dart';
+// import 'package:my_recipes/database/recipe_repository.dart';
+// import 'package:my_recipes/data/model/ingredient.dart';
+// import 'package:my_recipes/data/model/recipe.dart';
 // import 'package:my_recipes/util/widget_styles.dart';
 // import 'package:my_recipes/widgets/app_bar.dart';
 // import 'package:my_recipes/widgets/buttons/button_color_picker.dart';
