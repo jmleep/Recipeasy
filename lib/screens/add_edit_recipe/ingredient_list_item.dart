@@ -11,11 +11,11 @@ class IngredientListItem extends StatelessWidget {
   final Function(String, Ingredient) updateIngredient;
 
   const IngredientListItem(
-      {Key key,
-      this.item,
+      {required Key key,
+      required this.item,
       this.showTopDivider = false,
-      this.controller,
-      this.updateIngredient})
+      required this.controller,
+      required this.updateIngredient})
       : super(key: key);
 
   @override

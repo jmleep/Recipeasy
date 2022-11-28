@@ -6,18 +6,19 @@ class FilledIcon extends StatelessWidget {
   final Color fillColor;
   final Color iconColor;
 
-  FilledIcon({this.icon, this.fillColor, this.iconColor});
+  FilledIcon(
+      {required this.icon, required this.fillColor, required this.iconColor});
 
   @override
   Widget build(BuildContext context) {
     return Stack(children: [
       Positioned.fill(
           child: Container(
-        color: this.fillColor,
+        color: fillColor,
         margin: EdgeInsets.all(5),
       )),
       Icon(
-        this.icon,
+        icon,
         color: iconColor,
       )
     ]);

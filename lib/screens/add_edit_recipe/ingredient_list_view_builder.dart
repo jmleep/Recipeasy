@@ -11,11 +11,11 @@ class IngredientListViewBuilder extends StatelessWidget {
   final Function(String, Ingredient) updateIngredient;
 
   const IngredientListViewBuilder(
-      {Key key,
-      this.ingredients,
-      this.controllers,
-      this.removeIngredient,
-      this.updateIngredient})
+      {required Key key,
+      required this.ingredients,
+      required this.controllers,
+      required this.removeIngredient,
+      required this.updateIngredient})
       : super(key: key);
 
   @override
@@ -47,6 +47,7 @@ class IngredientListViewBuilder extends StatelessWidget {
               updateIngredient: updateIngredient,
               controller: controllers[index],
               showTopDivider: index == 0,
+              key: UniqueKey(),
             ));
       },
     );

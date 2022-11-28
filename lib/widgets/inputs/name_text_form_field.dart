@@ -6,7 +6,8 @@ class NameTextFormField extends StatelessWidget {
   final GlobalKey formKey;
   final TextEditingController recipeNameController;
 
-  NameTextFormField({this.formKey, this.recipeNameController});
+  NameTextFormField(
+      {required this.formKey, required this.recipeNameController});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,7 @@ class NameTextFormField extends StatelessWidget {
           decoration:
               ReusableStyleWidget.inputDecoration(context, 'Recipe Name'),
           validator: (value) {
-            if (value.isEmpty) {
+            if (value != null && value.isEmpty) {
               return 'Please a recipe name!';
             }
             return null;

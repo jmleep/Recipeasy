@@ -24,13 +24,13 @@ class ReusableStyleWidget {
             const EdgeInsets.all(20),
           ),
           backgroundColor: MaterialStateProperty.all<Color>(
-              isDark ? Colors.green[500] : Colors.green[800]),
+              isDark ? Colors.green[500]! : Colors.green[800]!),
           foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
         ),
       );
 
   static inputThemeUnderlineBorder(
-          BuildContext context, Widget label, String hint) =>
+          BuildContext context, Widget? label, String hint) =>
       InputDecoration(
           focusedBorder: UnderlineInputBorder(
               borderSide:
@@ -52,20 +52,20 @@ class ReusableStyleWidget {
       focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-              color: isDark ? Colors.green[500] : Colors.green[800])),
+              color: isDark ? Colors.green[500]! : Colors.green[800]!)),
       border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-              color: isDark ? Colors.green[500] : Colors.green[800])),
+              color: isDark ? Colors.green[500]! : Colors.green[800]!)),
       enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8),
           borderSide: BorderSide(
-              color: isDark ? Colors.green[500] : Colors.green[800])));
+              color: isDark ? Colors.green[500]! : Colors.green[800]!)));
 
   static textButtonTheme({bool isDark = false}) => TextButtonThemeData(
       style: ButtonStyle(
           foregroundColor: MaterialStateProperty.all<Color>(
-              isDark ? Colors.green[500] : Colors.green[800])));
+              isDark ? Colors.green[500]! : Colors.green[800]!)));
 
   static textSelectionTheme({bool isDark = false}) => TextSelectionThemeData(
         cursorColor: isDark ? Colors.green[500] : Colors.green[800],

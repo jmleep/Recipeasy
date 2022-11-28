@@ -12,7 +12,9 @@ class DeleteRecipeConfirmationDialog extends StatelessWidget {
   final Function getRecipes;
 
   DeleteRecipeConfirmationDialog(
-      {this.recipe, this.scaffoldKey, this.getRecipes});
+      {required this.recipe,
+      required this.scaffoldKey,
+      required this.getRecipes});
 
   @override
   Widget build(BuildContext context) {
@@ -23,18 +25,18 @@ class DeleteRecipeConfirmationDialog extends StatelessWidget {
         RoundedButton(
           buttonText: 'Cancel',
           textColor: Colors.grey[900],
-          borderColor: Colors.grey[900],
+          borderColor: Colors.grey[900]!,
           fillColor: Colors.grey[300],
           onPressed: () => Navigator.of(context).pop(false),
         ),
         RoundedButton(
           buttonText: 'Delete',
           textColor: Colors.white,
-          borderColor: Colors.red[700],
+          borderColor: Colors.red[700]!,
           fillColor: Colors.red[700],
           onPressed: () async {
             List<RecipePhoto> photosRefInCaseOfUndo =
-                await RecipePhotoDatabaseManager.getImages(recipe.id);
+                await RecipePhotoDatabaseManager.getImages(recipe.id!);
 
             await RecipeDatabaseManager.deleteRecipe(recipe);
 

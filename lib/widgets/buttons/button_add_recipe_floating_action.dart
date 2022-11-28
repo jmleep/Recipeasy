@@ -5,7 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 class AddRecipeFloatingActionButton extends StatelessWidget {
   final Function onPressAddRecipeFAB;
 
-  const AddRecipeFloatingActionButton({Key key, this.onPressAddRecipeFAB})
+  const AddRecipeFloatingActionButton(
+      {required Key key, required this.onPressAddRecipeFAB})
       : super(key: key);
 
   @override

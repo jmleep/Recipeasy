@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 class RoundedButton extends StatelessWidget {
   final String buttonText;
-  final Color fillColor;
-  final Color textColor;
+  final Color? fillColor;
+  final Color? textColor;
   final Color borderColor;
   final Function onPressed;
   final double leftPadding;
@@ -15,7 +15,7 @@ class RoundedButton extends StatelessWidget {
       this.fillColor,
       this.textColor,
       this.borderColor = Colors.green,
-      this.onPressed,
+      required this.onPressed,
       this.leftPadding = 0,
       this.rightPadding = 0});
 

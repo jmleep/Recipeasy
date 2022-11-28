@@ -4,10 +4,10 @@ import 'package:flutter_material_color_picker/flutter_material_color_picker.dart
 
 class ColorPickerButton extends StatelessWidget {
   const ColorPickerButton(
-      {Key key,
-      @required MaterialColor recipeColor,
-      @required Function setTempColor,
-      @required Function setColor})
+      {required Key key,
+      required MaterialColor recipeColor,
+      required Function setTempColor,
+      required Function setColor})
       : _recipeColor = recipeColor,
         setTempColor = setTempColor,
         setColor = setColor,
@@ -32,30 +32,28 @@ class ColorPickerButton extends StatelessWidget {
         showDialog(
             context: context,
             builder: (_) => new AlertDialog(
-              contentPadding: const EdgeInsets.all(8.0),
-              content: Container(
-                child: MaterialColorPicker(
-                  onMainColorChange: (Color color) {
-                    setTempColor(color);
-                  },
-                  selectedColor: _recipeColor,
-                  allowShades: false,
-                  shrinkWrap: true,
-                ),
-              ),
-              actions: [
-                TextButton(
-                  child: Text('Cancel'),
-                  onPressed: Navigator.of(context).pop,
-                ),
-                TextButton(
-                  child: Text('Select'),
-                  onPressed: () {
-                    setColor(context);
-                  },
-                ),
-              ],
-            ));
+                  contentPadding: const EdgeInsets.all(8.0),
+                  content: Container(
+                    child: MaterialColorPicker(
+                      onMainColorChange: (value) => setTempColor(value),
+                      selectedColor: _recipeColor,
+                      allowShades: false,
+                      shrinkWrap: true,
+                    ),
+                  ),
+                  actions: [
+                    TextButton(
+                      child: Text('Cancel'),
+                      onPressed: Navigator.of(context).pop,
+                    ),
+                    TextButton(
+                      child: Text('Select'),
+                      onPressed: () {
+                        setColor(context);
+                      },
+                    ),
+                  ],
+                ));
       },
     );
   }

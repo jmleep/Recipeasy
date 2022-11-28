@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class DismissibleBackground extends StatelessWidget {
   const DismissibleBackground({
-    Key key,
+    required Key key,
   }) : super(key: key);
 
   @override

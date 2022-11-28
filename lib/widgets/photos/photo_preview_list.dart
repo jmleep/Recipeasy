@@ -10,15 +10,15 @@ class PhotoPreviewList extends StatelessWidget {
   final ScrollController scrollController;
   final List<RecipePhoto> recipePhotos;
   final Function setActivePhoto;
-  final int activePhoto;
-  final Function addPhoto;
+  final int? activePhoto;
+  final Function? addPhoto;
 
   PhotoPreviewList(
-      {this.scrollController,
-      this.recipePhotos,
-      this.setActivePhoto,
+      {required this.scrollController,
+      required this.recipePhotos,
+      required this.setActivePhoto,
       this.activePhoto,
-      this.addPhoto = null});
+      this.addPhoto});
 
   @override
   Widget build(BuildContext context) {
@@ -55,14 +55,14 @@ class PhotoPreviewList extends StatelessWidget {
                         Icons.add_a_photo,
                         color: Theme.of(context).colorScheme.primary,
                       ),
-                      onPressed: () => {addPhoto()},
+                      onPressed: () => {addPhoto!()},
                     ),
                   );
                 }
 
                 if (index < recipePhotos.length) {
                   Widget imageWidget = Image.memory(
-                    recipePhotos[index].image,
+                    recipePhotos[index].image!,
                     height: 100,
                     width: 75,
                   );

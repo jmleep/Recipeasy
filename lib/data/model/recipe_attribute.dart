@@ -1,7 +1,7 @@
 class RecipeAttribute {
-  final int id;
-  final int recipeId;
-  String value;
+  final int? id;
+  final int? recipeId;
+  String? value;
 
   RecipeAttribute({this.id, this.recipeId, this.value});
 

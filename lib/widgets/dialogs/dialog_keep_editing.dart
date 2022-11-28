@@ -7,7 +7,8 @@ class KeepEditingDialog extends StatelessWidget {
   final String recipeName;
   final ValueSetter<bool> saveRecipe;
 
-  KeepEditingDialog({this.recipeName, this.saveRecipe}) : super();
+  KeepEditingDialog({required this.recipeName, required this.saveRecipe})
+      : super();
 
   @override
   Widget build(BuildContext context) {
@@ -20,13 +21,13 @@ class KeepEditingDialog extends StatelessWidget {
           buttonText: 'Cancel',
           onPressed: () => Navigator.of(context).pop(false),
           textColor: Colors.grey[900],
-          borderColor: Colors.grey[900],
+          borderColor: Colors.grey[900]!,
           fillColor: Colors.grey[300],
         ),
         RoundedButton(
           buttonText: 'Leave',
           onPressed: () => Navigator.of(context).pop(true),
-          borderColor: Colors.red[700],
+          borderColor: Colors.red[700]!,
           fillColor: Colors.red[700],
           textColor: Colors.white,
         ),

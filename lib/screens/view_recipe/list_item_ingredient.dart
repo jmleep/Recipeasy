@@ -7,7 +7,7 @@ class IngredientListItem extends StatelessWidget {
   final bool showDivider;
 
   const IngredientListItem(
-      {Key key, @required this.item, @required this.showDivider})
+      {required Key key, required this.item, required this.showDivider})
       : super(key: key);
 
   @override
@@ -17,7 +17,7 @@ class IngredientListItem extends StatelessWidget {
       children: [
         Container(
             padding: EdgeInsets.only(left: 30, bottom: 5, top: 5),
-            child: Text(item.value)),
+            child: Text(item.value ?? '')),
         if (showDivider) ...[Divider()]
       ],
     );

@@ -5,6 +5,7 @@ import 'package:my_recipes/data/repository/recipe_photo_repository.dart';
 import 'package:my_recipes/data/model/ingredient.dart';
 import 'package:my_recipes/data/model/recipe.dart';
 import 'package:my_recipes/data/model/recipe_photo.dart';
+import 'package:my_recipes/screens/view_recipe/view_model_view_recipe.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
 import 'package:my_recipes/widgets/photos/photo_preview_list.dart';
@@ -19,12 +20,12 @@ class ViewRecipeDetailsScreen extends ViewAddEditRecipe {
   @override
   _ViewRecipeState createState() => _ViewRecipeState();
 
-  ViewRecipeDetailsScreen({this.recipe});
+  ViewRecipeDetailsScreen({required this.recipe});
 }
 
 class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
-  var _recipe;
+  late final ViewRecipeViewModel _vm;
   var _isLoading = false;
   var _recipeImages = <RecipePhoto>[];
   var _recipeIngredients = <Ingredient>[];
@@ -32,8 +33,8 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
   getRecipeData() async {
     setState(() => _isLoading = true);
 
-    var recipeImages = RecipePhotoDatabaseManager.getImages(_recipe.id);
-    var recipeIngredients = RecipeDatabaseManager.getIngredients(_recipe.id);
+    var recipeImages = RecipePhotoDatabaseManager.getImages(_vm.recipe.id);
+    var recipeIngredients = RecipeDatabaseManager.getIngredients(_vm.recipe.id);
 
     var results = await Future.wait([recipeImages, recipeIngredients]);
 
@@ -49,14 +50,15 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
       context,
       MaterialPageRoute(
           builder: (context) => AddEditRecipeScreen(
-                recipe: _recipe,
+                recipe: _vm.recipe,
               )),
     );
 
-    Recipe updatedRecipe = await RecipeDatabaseManager.getRecipe(_recipe.id);
+    Recipe updatedRecipe =
+        await RecipeDatabaseManager.getRecipe(_vm.recipe.id!);
 
     setState(() {
-      _recipe = updatedRecipe;
+      _vm.recipe = updatedRecipe;
       _recipeImages = [];
       _recipeIngredients = [];
     });
@@ -79,7 +81,8 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
   void initState() {
     super.initState();
 
-    this._recipe = widget.recipe;
+    _vm = ViewRecipeViewModel(widget.recipe);
+
     getRecipeData();
   }
 
@@ -121,6 +124,7 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
                       itemCount: _recipeIngredients.length,
                       itemBuilder: (BuildContext context, int index) {
                         return IngredientListItem(
+                            key: UniqueKey(),
                             item: _recipeIngredients[index],
                             showDivider:
                                 index != _recipeIngredients.length - 1);
@@ -137,7 +141,7 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
     return Scaffold(
         key: _scaffoldKey,
         appBar: RecipeAppBar(
-          title: _recipe?.name ?? 'Loading...',
+          title: _vm.recipe.name ?? 'Loading...',
           actions: getAppBarActions(),
         ),
         body: SingleChildScrollView(child: getBody()));

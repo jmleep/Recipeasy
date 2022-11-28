@@ -19,7 +19,7 @@ import '../common/view_add_edit_recipe.dart';
 import 'ingredient_input.dart';
 
 class AddEditRecipeScreen extends ViewAddEditRecipe {
-  final Recipe recipe;
+  final Recipe? recipe;
 
   @override
   _AddEditRecipeState createState() => _AddEditRecipeState();
@@ -43,12 +43,14 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
   getRecipeData() async {
     if (widget.recipe != null) {
       setState(() {
-        _recipeNameController = TextEditingController(text: widget.recipe.name);
+        _recipeNameController =
+            TextEditingController(text: widget.recipe!.name);
       });
 
-      var recipeImages = RecipePhotoDatabaseManager.getImages(widget.recipe.id);
+      var recipeImages =
+          RecipePhotoDatabaseManager.getImages(widget.recipe!.id!);
       var recipeIngredients =
-          RecipeDatabaseManager.getIngredients(widget.recipe.id);
+          RecipeDatabaseManager.getIngredients(widget.recipe!.id!);
 
       var results = await Future.wait([recipeImages, recipeIngredients]);
 
@@ -61,7 +63,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
     setState(() {
       _recipeNameController.addListener(() {
         if (widget.recipe != null &&
-            _recipeNameController.text != widget.recipe.name) {
+            _recipeNameController.text != widget.recipe!.name) {
           setState(() {
             _hasChangeBeenMade = true;
           });
@@ -106,9 +108,9 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
     });
   }
 
-  addIngredient(Ingredient ingredient) {
+  addIngredient(String text) {
     setState(() {
-      _recipeIngredients.add(ingredient);
+      _recipeIngredients.add(Ingredient(value: text));
       _hasChangeBeenMade = true;
     });
 
@@ -160,7 +162,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
   }
 
   Future saveRecipe(bool isFromBackAttempt) async {
-    if (_formKey.currentState.validate()) {
+    if (_formKey.currentState != null && _formKey.currentState!.validate()) {
       Recipe recipe;
 
       for (var i = 0; i < _recipeIngredients.length; i += 1) {
@@ -169,7 +171,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
       }
 
       if (widget.recipe != null) {
-        recipe = widget.recipe;
+        recipe = widget.recipe!;
         recipe.name = _recipeNameController.text;
         recipe.photos = _tempRecipePhotos;
         recipe.ingredients = _recipeIngredients;
@@ -237,7 +239,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
     String recipeName = 'this recipe';
 
     if (widget.recipe != null) {
-      recipeName = widget.recipe.name;
+      recipeName = widget.recipe!.name;
     }
 
     if (_hasChangeBeenMade) {
@@ -271,7 +273,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
     _recipeIngredientControllers = [];
     _recipeIngredients.forEach((element) {
       var controller = new TextEditingController();
-      controller.value = TextEditingValue(text: element.value);
+      controller.value = TextEditingValue(text: element.value ?? '');
       _recipeIngredientControllers.add(controller);
     });
 
@@ -318,6 +320,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                       ),
                     ),
                     IngredientListViewBuilder(
+                      key: UniqueKey(),
                       ingredients: _recipeIngredients,
                       controllers: _recipeIngredientControllers,
                       removeIngredient: (int i) => removeIngredient(i),
@@ -325,7 +328,9 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                           updateIngredient(text, i),
                     ),
                     IngredientInput(
-                        addIngredient: (Ingredient i) => addIngredient(i)),
+                      addIngredient: (String i) => addIngredient(i),
+                      key: UniqueKey(),
+                    ),
                     Container(
                       padding: EdgeInsets.all(40),
                     )

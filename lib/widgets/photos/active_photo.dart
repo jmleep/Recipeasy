@@ -5,43 +5,47 @@ import 'package:my_recipes/widgets/buttons/button_recipeasy.dart';
 
 class ActivePhoto extends StatelessWidget {
   final List<RecipePhoto> recipePhotos;
-  final int activePhoto;
-  final Function addImageToTempListOfPhotos;
+  final int? activePhoto;
+  final Function? addImageToTempListOfPhotos;
   final Function swipeActivePhoto;
-  final Function deletePhoto;
-  final Function setPrimaryPhoto;
+  final Function? deletePhoto;
+  final Function? setPrimaryPhoto;
 
   ActivePhoto(
-      {this.recipePhotos,
+      {required this.recipePhotos,
       this.activePhoto,
       this.addImageToTempListOfPhotos,
-      this.swipeActivePhoto,
+      required this.swipeActivePhoto,
       this.deletePhoto,
       this.setPrimaryPhoto});
 
   Widget getPrimaryPhotoButton() {
-    if (this.setPrimaryPhoto != null && recipePhotos.length > 1) {
+    if (recipePhotos.length > 1 && activePhoto != null) {
       var button;
-      RecipePhoto currentPhoto = recipePhotos[activePhoto];
+      RecipePhoto currentPhoto = recipePhotos[activePhoto!];
 
-      if (currentPhoto.isPrimary) {
-        button = RoundedButton(
-          buttonText: 'Set cover photo',
-          borderColor: Colors.grey[700],
-          fillColor: Colors.grey[400],
-          textColor: Colors.grey[700],
-          onPressed: () => {},
-        );
-      } else {
-        button = RoundedButton(
-          buttonText: 'Set cover photo',
-          borderColor: Colors.blue,
-          fillColor: Colors.blue,
-          textColor: Colors.white,
-          onPressed: () {
-            setPrimaryPhoto();
-          },
-        );
+      button = Container();
+
+      if (setPrimaryPhoto != null) {
+        if (currentPhoto.isPrimary) {
+          button = RoundedButton(
+            buttonText: 'Set cover photo',
+            borderColor: Colors.grey[700]!,
+            fillColor: Colors.grey[400],
+            textColor: Colors.grey[700],
+            onPressed: () => {},
+          );
+        } else {
+          button = RoundedButton(
+            buttonText: 'Set cover photo',
+            borderColor: Colors.blue,
+            fillColor: Colors.blue,
+            textColor: Colors.white,
+            onPressed: () {
+              setPrimaryPhoto!();
+            },
+          );
+        }
       }
 
       return Positioned(bottom: 10, left: 10, child: button);
@@ -50,7 +54,7 @@ class ActivePhoto extends StatelessWidget {
   }
 
   Widget getDeleteButton() {
-    if (this.deletePhoto != null) {
+    if (deletePhoto != null) {
       return Positioned(
           bottom: 10,
           right: 10,
@@ -60,11 +64,11 @@ class ActivePhoto extends StatelessWidget {
             fillColor: Colors.red,
             textColor: Colors.white,
             onPressed: () {
-              deletePhoto(activePhoto);
+              deletePhoto!(activePhoto);
             },
           ));
     }
-    return SizedBox.shrink();
+    return Container();
   }
 
   @override
@@ -76,8 +80,9 @@ class ActivePhoto extends StatelessWidget {
           child: Stack(
             children: [
               Center(
-                  child: Image.memory(recipePhotos[activePhoto]
-                      .image)), // Image.file(new File(recipePhotos[activePhoto].value))),
+                  child: activePhoto != null
+                      ? Image.memory(recipePhotos[activePhoto!].image!)
+                      : Container()), // Image.file(new File(recipePhotos[activePhoto].value))),
               getPrimaryPhotoButton(),
               getDeleteButton()
             ],

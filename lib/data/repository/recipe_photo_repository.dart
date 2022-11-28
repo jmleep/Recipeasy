@@ -6,10 +6,10 @@ import 'package:my_recipes/data/model/recipe_photo.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RecipePhotoDatabaseManager {
-  static Future<List<RecipePhoto>> getImages(int recipeId) async {
-    final Database db = await RecipeDatabase.instance.database;
+  static Future<List<RecipePhoto>> getImages(int? recipeId) async {
+    final Database? db = await RecipeDatabase.instance.database;
 
-    final List<Map<String, dynamic>> maps = await db.query(
+    final List<Map<String, dynamic>> maps = await db!.query(
         RecipeDatabase.photosTable,
         where: 'recipe_id = ?',
         whereArgs: [recipeId]);
@@ -25,34 +25,34 @@ class RecipePhotoDatabaseManager {
   }
 
   static Future<void> savePhotos(int recipeId, List<RecipePhoto> photos) async {
-    final Database db = await RecipeDatabase.instance.database;
+    final Database? db = await RecipeDatabase.instance.database;
 
-    Batch batch = db.batch();
+    Batch? batch = db?.batch();
 
     photos.forEach((element) {
       Map<String, dynamic> elements = element.toMap(recipeId);
 
-      batch.insert(RecipeDatabase.photosTable, elements,
+      batch?.insert(RecipeDatabase.photosTable, elements,
           conflictAlgorithm: ConflictAlgorithm.replace);
     });
 
-    await batch.commit(noResult: true);
+    await batch?.commit(noResult: true);
   }
 
-  static Future<void> deletePhotosForRecipe(int recipeId) async {
-    final Database db = await RecipeDatabase.instance.database;
+  static Future<void> deletePhotosForRecipe(int? recipeId) async {
+    final Database? db = await RecipeDatabase.instance.database;
 
-    await db.delete(RecipeDatabase.photosTable,
+    await db?.delete(RecipeDatabase.photosTable,
         where: "recipe_id = ?", whereArgs: [recipeId]);
   }
 
   static Future<void> deletePhotos(List<RecipePhoto> photos) async {
-    final Database db = await RecipeDatabase.instance.database;
+    final Database? db = await RecipeDatabase.instance.database;
 
-    List<int> ids = photos.map((e) => e.id).toList();
+    List<int?> ids = photos.map((e) => e.id).toList();
 
     if (ids.isNotEmpty) {
-      await db.delete(RecipeDatabase.photosTable,
+      await db?.delete(RecipeDatabase.photosTable,
           where: "id IN (${ids.join(', ')})");
     }
   }

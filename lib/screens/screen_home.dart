@@ -31,7 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void navigateTo(Recipe recipe) async {
+  void navigateTo(Recipe? recipe) async {
     HapticFeedback.mediumImpact();
 
     if (recipe != null) {
@@ -95,7 +95,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               borderRadius: BorderRadius.circular(8.0),
                               child: FittedBox(
                                 child: recipe.primaryImage != null
-                                    ? Image.memory(recipe.primaryImage)
+                                    ? Image.memory(recipe.primaryImage!)
                                     : Icon(Icons.photo),
                                 fit: BoxFit.cover,
                               ),
@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ))
           .toList();
     }
-    return null;
+    return [Container()];
   }
 
   @override
@@ -165,6 +165,7 @@ class _HomeScreenState extends State<HomeScreen> {
         body: body,
         backgroundColor: Theme.of(context).colorScheme.background,
         floatingActionButton: AddRecipeFloatingActionButton(
+          key: UniqueKey(),
           onPressAddRecipeFAB: this.navigateTo,
         ));
   }

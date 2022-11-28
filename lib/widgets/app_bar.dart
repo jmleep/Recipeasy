@@ -4,15 +4,15 @@ import 'package:my_recipes/theme/widget_styles.dart';
 class RecipeAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
   final bool allowBack;
-  final List<AppBarAction> actions;
+  final List<AppBarAction>? actions;
 
-  RecipeAppBar({this.title, this.allowBack = true, this.actions});
+  RecipeAppBar({required this.title, this.allowBack = true, this.actions});
 
   List<Widget> getActions() {
     List<Widget> actionButtons = [];
 
     if (this.actions != null) {
-      this.actions.forEach((element) {
+      this.actions?.forEach((element) {
         actionButtons.add(Padding(
           padding: EdgeInsets.only(right: 20.0),
           child: GestureDetector(onTap: element.callback, child: element.icon),
@@ -43,7 +43,7 @@ class RecipeAppBar extends StatelessWidget implements PreferredSizeWidget {
 
 class AppBarAction {
   Icon icon;
-  Function callback;
+  Function()? callback;
 
   AppBarAction(this.icon, this.callback);
 }

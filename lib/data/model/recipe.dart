@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'dart:ui';
+
 import 'package:my_recipes/data/model/recipe_photo.dart';
 
 import 'ingredient.dart';
@@ -7,20 +8,20 @@ import 'ingredient.dart';
 import 'step.dart';
 
 class Recipe {
-  final int id;
+  final int? id;
   String name;
-  int order;
-  List<Ingredient> ingredients;
-  List<Step> steps;
-  List<RecipePhoto> photos;
-  String notes;
-  MeatContent meatContent;
-  Color color;
-  Uint8List primaryImage;
+  int? order;
+  List<Ingredient>? ingredients;
+  List<Step>? steps;
+  List<RecipePhoto>? photos;
+  String? notes;
+  MeatContent? meatContent;
+  Color? color;
+  Uint8List? primaryImage;
 
   Recipe({
     this.id,
-    this.name,
+    required this.name,
     this.order,
     this.ingredients,
     this.steps,
@@ -37,7 +38,7 @@ class Recipe {
       'name': name,
       'notes': notes,
       'meat_content': meatContent.toString(),
-      'color': color != null ? color.value : 0,
+      'color': color != null ? color?.value : 0,
     });
 
     if (id != null) {
@@ -56,7 +57,7 @@ enum MeatContent { meat, vegetarian, vegan }
 
 extension EnumParser on String {
   MeatContent toMeatContent() {
-    return MeatContent.values
-        .firstWhere((e) => e.toString() == this, orElse: () => null);
+    return MeatContent.values.firstWhere((e) => e.toString() == this,
+        orElse: () => MeatContent.meat);
   }
 }

@@ -2,21 +2,20 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 class RecipePhoto {
-  final int id;
-  final int recipeId;
-  final Uint8List image;
+  final int? id;
+  final int? recipeId;
+  final Uint8List? image;
   bool isPrimary;
 
-  RecipePhoto({this.id, this.recipeId, this.image, this.isPrimary = false});
+  RecipePhoto(
+      {this.id, this.recipeId, required this.image, this.isPrimary = false});
 
   Map<String, dynamic> toMap(int recipeId) {
     Map<String, dynamic> values = new Map();
 
-    if (this.image == null) throw "NULL IMAGE EXCEPTION";
-
     values.addAll({
       'recipe_id': recipeId,
-      'image': base64.encode(this.image),
+      'image': this.image != null ? base64.encode(this.image!) : '',
       'is_primary': this.isPrimary ? 1 : 0
     });
 

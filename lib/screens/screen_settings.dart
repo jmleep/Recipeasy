@@ -1,5 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
@@ -23,7 +23,7 @@ class SettingsScreen extends StatelessWidget {
             RoundedButton(
               borderColor: Theme.of(context).colorScheme.secondary,
               textColor: Colors.white,
-              fillColor: Colors.grey[800],
+              fillColor: Colors.grey[800]!,
               onPressed: () => signOut(context),
               buttonText: 'Sign out',
               leftPadding: 50,

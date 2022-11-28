@@ -10,7 +10,7 @@ class ViewAddEditRecipe extends StatefulWidget {
 
 class ViewAddEditRecipeState<T extends ViewAddEditRecipe> extends State<T> {
   var activePhoto = 0;
-  ScrollController previewScrollController;
+  late ScrollController previewScrollController;
 
   setActivePhoto(int index, List<RecipePhoto> recipePhotos) {
     if (index < 0 || index >= recipePhotos.length) {
@@ -38,7 +38,7 @@ class ViewAddEditRecipeState<T extends ViewAddEditRecipe> extends State<T> {
     final double separatorWidth = 10.0;
     final double totalWidth = photoWidth + separatorWidth;
 
-    if (details.primaryVelocity < 0) {
+    if (details.primaryVelocity != null && details.primaryVelocity! < 0) {
       if (activePhoto > 2 ||
           previewScrollController.position.pixels !=
               previewScrollController.position.minScrollExtent) {
