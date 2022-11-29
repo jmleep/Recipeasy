@@ -3,6 +3,7 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_recipes/extensions/extension_list.dart';
 import '../../../data/model/ingredient.dart';
 import '../../../data/model/recipe.dart';
 import '../../../data/model/recipe_photo.dart';
@@ -101,7 +102,10 @@ class AddEditRecipeViewModel extends ChangeNotifier {
         tempRecipePhotos.indexWhere((element) => element.isPrimary);
 
     hasChangeBeenMade = true;
-    tempRecipePhotos[oldPrimary].isPrimary = false;
+
+    if (oldPrimary >= 0) {
+      tempRecipePhotos[oldPrimary].isPrimary = false;
+    }
     tempRecipePhotos[activePhoto].isPrimary = true;
   }
 
@@ -126,6 +130,18 @@ class AddEditRecipeViewModel extends ChangeNotifier {
 
     recipeIngredients[index] = ingredient.copyWith(null, null, text);
     hasChangeBeenMade = true;
+    notifyListeners();
+  }
+
+  swapIngredients(int oldIndex, int newIndex) {
+    var updatedIndex = newIndex;
+
+    // have to do this due to a bug in reorderable list where moving a value down
+    // incorrectly increments the new index by + 1
+    if (newIndex > recipeIngredients.length - 1) {
+      updatedIndex -= 1;
+    }
+    recipeIngredients.swap(oldIndex, updatedIndex);
     notifyListeners();
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/screens/add_edit_recipe/view_model/view_model_add_edit_recipe.dart';
 import 'package:my_recipes/screens/home/screen_home.dart';
+import 'package:my_recipes/screens/home/view_model/view_model_home.dart';
 import 'package:my_recipes/screens/view_recipe_details/view_model/view_model_view_recipe_details.dart';
 
 import 'package:my_recipes/theme/theme.dart';
@@ -44,7 +45,10 @@ class MyRecipeApp extends StatelessWidget {
           ChangeNotifierProvider(
             create: (context) => ViewRecipeViewModel(),
           ),
-          ChangeNotifierProvider(create: (context) => AddEditRecipeViewModel())
+          ChangeNotifierProvider(create: (context) => AddEditRecipeViewModel()),
+          ChangeNotifierProvider(
+            create: (context) => HomeViewModel(),
+          )
         ],
         child: MaterialApp(
           title: 'Recipeasy',

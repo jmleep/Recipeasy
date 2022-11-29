@@ -19,17 +19,17 @@ class RecipeDatabaseManager {
 
     Batch ingredientsBatch = db.batch();
     if (recipe.ingredients != null && recipe.ingredients!.length > 0) {
-      recipe.ingredients?.forEach((element) {
+      recipe.ingredients?.asMap().forEach((index, value) {
         ingredientsBatch.insert(
-            RecipeDatabase.ingredientsTable, element.toMap(recipeId),
+            RecipeDatabase.ingredientsTable, value.toMap(recipeId, index),
             conflictAlgorithm: ConflictAlgorithm.replace);
       });
     }
 
     if (recipe.steps != null && recipe.steps!.length > 0) {
-      recipe.steps?.forEach((element) {
+      recipe.steps?.asMap().forEach((index, element) {
         upsertFutures.add(db.insert(
-            RecipeDatabase.stepsTable, element.toMap(recipeId),
+            RecipeDatabase.stepsTable, element.toMap(recipeId, index),
             conflictAlgorithm: ConflictAlgorithm.replace));
       });
     }
@@ -60,7 +60,8 @@ class RecipeDatabaseManager {
     final List<Map<String, dynamic>> maps = await db!.query(
         RecipeDatabase.ingredientsTable,
         where: 'recipe_id = ?',
-        whereArgs: [recipeId]);
+        whereArgs: [recipeId],
+        orderBy: 'list_order');
 
     return List.generate(maps.length, (i) {
       return Ingredient(

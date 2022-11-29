@@ -57,95 +57,86 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
     });
 
     return WillPopScope(
-        onWillPop: () =>
-            context.read<AddEditRecipeViewModel>().onPressBackButton(context),
-        child: Scaffold(
-          key: _scaffoldKey,
-          appBar: RecipeAppBar(
-            title: context.watch<AddEditRecipeViewModel>().getTitle(),
-            actions: getAppBarActions(),
-          ),
-          body: SingleChildScrollView(
-            controller:
-                context.watch<AddEditRecipeViewModel>().scrollController,
-            child: Container(
-              child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    RecipeNameTextFormField(
-                      formKey: context.watch<AddEditRecipeViewModel>().formKey,
-                      recipeNameController: context
-                          .watch<AddEditRecipeViewModel>()
-                          .recipeNameController,
-                    ),
-                    ActivePhoto(
-                        recipePhotos: context
-                            .watch<AddEditRecipeViewModel>()
-                            .tempRecipePhotos,
-                        activePhoto: activePhoto,
-                        addImageToTempListOfPhotos: context
-                            .read<AddEditRecipeViewModel>()
-                            .addImageToTempListOfPhotos,
-                        swipeActivePhoto: swipeActivePhoto,
-                        deletePhoto: (int? index) => context
-                            .read<AddEditRecipeViewModel>()
-                            .deletePhoto(index, activePhoto),
-                        setPrimaryPhoto: () => context
-                            .read<AddEditRecipeViewModel>()
-                            .setPrimaryPhoto(activePhoto)),
-                    PhotoPreviewList(
-                        scrollController: previewScrollController,
-                        recipePhotos: context
-                            .watch<AddEditRecipeViewModel>()
-                            .tempRecipePhotos,
-                        setActivePhoto: () => context
-                            .read<AddEditRecipeViewModel>()
-                            .setPrimaryPhoto(activePhoto),
-                        activePhoto: activePhoto,
-                        addPhoto: () => context
-                            .read<AddEditRecipeViewModel>()
-                            .addImageToTempListOfPhotos(
-                                previewScrollController, setActivePhoto)),
-                    Container(
-                      padding: EdgeInsets.only(top: 10, left: 10, right: 10),
-                      alignment: Alignment.centerLeft,
-                      child: Text(
-                        'Ingredients',
-                        style: TextStyle(fontSize: 30),
-                      ),
-                    ),
-                    EditIngredientsListView(
-                      key: UniqueKey(),
-                      ingredients: context
-                          .watch<AddEditRecipeViewModel>()
-                          .recipeIngredients,
-                      controllers: context
-                          .watch<AddEditRecipeViewModel>()
-                          .recipeIngredientControllers,
-                      removeIngredient: (int i) => context
-                          .read<AddEditRecipeViewModel>()
-                          .removeIngredient(i),
-                      updateIngredient: (String text, Ingredient i) => context
-                          .read<AddEditRecipeViewModel>()
-                          .updateIngredient(text, i),
-                    ),
-                    NewIngredientInput(
-                      addIngredient: (String i) => context
-                          .read<AddEditRecipeViewModel>()
-                          .addIngredient(i),
-                      key: UniqueKey(),
-                    ),
-                    SizedBox(
-                      height: 60,
-                    )
-                  ],
+      onWillPop: () =>
+          context.read<AddEditRecipeViewModel>().onPressBackButton(context),
+      child: Scaffold(
+        key: _scaffoldKey,
+        appBar: RecipeAppBar(
+          title: context.watch<AddEditRecipeViewModel>().getTitle(),
+          actions: getAppBarActions(),
+        ),
+        body: SingleChildScrollView(
+          controller: context.watch<AddEditRecipeViewModel>().scrollController,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              RecipeNameTextFormField(
+                formKey: context.watch<AddEditRecipeViewModel>().formKey,
+                recipeNameController: context
+                    .watch<AddEditRecipeViewModel>()
+                    .recipeNameController,
+              ),
+              ActivePhoto(
+                  recipePhotos:
+                      context.watch<AddEditRecipeViewModel>().tempRecipePhotos,
+                  activePhoto: activePhoto,
+                  addImageToTempListOfPhotos: context
+                      .read<AddEditRecipeViewModel>()
+                      .addImageToTempListOfPhotos,
+                  swipeActivePhoto: swipeActivePhoto,
+                  deletePhoto: (int? index) => context
+                      .read<AddEditRecipeViewModel>()
+                      .deletePhoto(index, activePhoto),
+                  setPrimaryPhoto: () => context
+                      .read<AddEditRecipeViewModel>()
+                      .setPrimaryPhoto(activePhoto)),
+              PhotoPreviewList(
+                  scrollController: previewScrollController,
+                  recipePhotos:
+                      context.watch<AddEditRecipeViewModel>().tempRecipePhotos,
+                  setActivePhoto: () => context
+                      .read<AddEditRecipeViewModel>()
+                      .setPrimaryPhoto(activePhoto),
+                  activePhoto: activePhoto,
+                  addPhoto: () => context
+                      .read<AddEditRecipeViewModel>()
+                      .addImageToTempListOfPhotos(
+                          previewScrollController, setActivePhoto)),
+              Container(
+                padding: EdgeInsets.only(top: 10, left: 10, right: 10),
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  'Ingredients',
+                  style: TextStyle(fontSize: 30),
                 ),
               ),
-            ),
+              EditIngredientsListView(
+                key: UniqueKey(),
+                ingredients:
+                    context.watch<AddEditRecipeViewModel>().recipeIngredients,
+                controllers: context
+                    .watch<AddEditRecipeViewModel>()
+                    .recipeIngredientControllers,
+                removeIngredient: (int i) =>
+                    context.read<AddEditRecipeViewModel>().removeIngredient(i),
+                updateIngredient: (String text, Ingredient i) => context
+                    .read<AddEditRecipeViewModel>()
+                    .updateIngredient(text, i),
+              ),
+              NewIngredientInput(
+                addIngredient: (String i) =>
+                    context.read<AddEditRecipeViewModel>().addIngredient(i),
+                key: UniqueKey(),
+              ),
+              SizedBox(
+                height: 60,
+              )
+            ],
           ),
-        ));
+        ),
+      ),
+    );
   }
 }

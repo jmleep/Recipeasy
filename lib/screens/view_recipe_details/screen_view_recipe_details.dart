@@ -41,45 +41,46 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
         .init(widget.recipe);
   }
 
-  Widget getBody() {
-    if (context.watch<ViewRecipeViewModel>().isLoading) {
-      return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [CircularProgressIndicator()]);
-    }
-
-    return Container(
-      child: Center(
-          child: Column(
-        mainAxisSize: MainAxisSize.max,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: <Widget>[
-          ActivePhoto(
-            recipePhotos: context.watch<ViewRecipeViewModel>().recipeImages,
-            activePhoto: activePhoto,
-            swipeActivePhoto: swipeActivePhoto,
-          ),
-          PhotoPreviewList(
-              scrollController: previewScrollController,
-              recipePhotos: context.watch<ViewRecipeViewModel>().recipeImages,
-              setActivePhoto: setActivePhoto,
-              activePhoto: activePhoto),
-          IngredientsExpansionTile()
-        ],
-      )),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
+    Widget body;
+
+    if (context.watch<ViewRecipeViewModel>().isLoading) {
+      body = Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisSize: MainAxisSize.max,
+          children: [Center(child: CircularProgressIndicator())]);
+    } else {
+      body = SingleChildScrollView(
+          child: Container(
+        child: Center(
+            child: Column(
+          mainAxisSize: MainAxisSize.max,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            ActivePhoto(
+              recipePhotos: context.watch<ViewRecipeViewModel>().recipeImages,
+              activePhoto: activePhoto,
+              swipeActivePhoto: swipeActivePhoto,
+            ),
+            PhotoPreviewList(
+                scrollController: previewScrollController,
+                recipePhotos: context.watch<ViewRecipeViewModel>().recipeImages,
+                setActivePhoto: setActivePhoto,
+                activePhoto: activePhoto),
+            IngredientsExpansionTile()
+          ],
+        )),
+      ));
+    }
     return Scaffold(
         key: _scaffoldKey,
         appBar: RecipeAppBar(
           title: context.watch<ViewRecipeViewModel>().recipe.name,
           actions: getAppBarActions(),
         ),
-        body: SingleChildScrollView(child: getBody()));
+        body: body);
   }
 }
