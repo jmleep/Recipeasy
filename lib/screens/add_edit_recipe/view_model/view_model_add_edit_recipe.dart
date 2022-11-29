@@ -92,7 +92,7 @@ class AddEditRecipeViewModel extends ChangeNotifier {
     }
   }
 
-  setPrimaryPhoto(int activePhoto) {
+  setPrimaryPhoto(int photoIndex) {
     int oldPrimary =
         tempRecipePhotos.indexWhere((element) => element.isPrimary);
 
@@ -101,7 +101,7 @@ class AddEditRecipeViewModel extends ChangeNotifier {
     if (oldPrimary >= 0) {
       tempRecipePhotos[oldPrimary].isPrimary = false;
     }
-    tempRecipePhotos[activePhoto].isPrimary = true;
+    tempRecipePhotos[photoIndex].isPrimary = true;
     notifyListeners();
   }
 
