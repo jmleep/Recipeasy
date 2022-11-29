@@ -88,7 +88,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                   swipeActivePhoto: swipeActivePhoto,
                   deletePhoto: (int? index) => context
                       .read<AddEditRecipeViewModel>()
-                      .deletePhoto(index, activePhoto),
+                      .deletePhoto(index, activePhoto, setActivePhoto),
                   setPrimaryPhoto: () => context
                       .read<AddEditRecipeViewModel>()
                       .setPrimaryPhoto(activePhoto)),

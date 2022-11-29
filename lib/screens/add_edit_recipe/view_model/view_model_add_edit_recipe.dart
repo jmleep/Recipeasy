@@ -77,22 +77,17 @@ class AddEditRecipeViewModel extends ChangeNotifier {
     return "Add Recipe";
   }
 
-  deletePhoto(int? index, int activePhoto) {
-    var tempActivePhoto = 0;
-
+  deletePhoto(int? index, int activePhoto,
+      Function(int, List<RecipePhoto>) setActivePhoto) {
     if (index != null) {
-      if (index > 0) {
-        if (tempRecipePhotos.length > 2) {
-          tempActivePhoto = activePhoto - 1;
-        }
-
-        tempRecipePhotos[tempActivePhoto].isPrimary = true;
-      }
-
-      activePhoto = tempActivePhoto;
+      var imageIndexBeforeDeletedPhoto = index - 1;
       hasChangeBeenMade = true;
       tempRecipePhotosToDelete.add(tempRecipePhotos[index]);
       tempRecipePhotos.removeAt(index);
+      if (imageIndexBeforeDeletedPhoto >= 0) {
+        tempRecipePhotos[imageIndexBeforeDeletedPhoto].isPrimary = true;
+        setActivePhoto(imageIndexBeforeDeletedPhoto, tempRecipePhotos);
+      }
       notifyListeners();
     }
   }

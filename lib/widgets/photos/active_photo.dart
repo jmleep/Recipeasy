@@ -80,7 +80,8 @@ class ActivePhoto extends StatelessWidget {
           child: Stack(
             children: [
               Center(
-                  child: activePhoto != null
+                  child: activePhoto != null &&
+                          activePhoto! <= recipePhotos.length - 1
                       ? Image.memory(recipePhotos[activePhoto!].image!)
                       : SizedBox
                           .shrink()), // Image.file(new File(recipePhotos[activePhoto].value))),
