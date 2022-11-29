@@ -8,7 +8,7 @@ class ActivePhoto extends StatelessWidget {
   final int? activePhoto;
   final Function? addImageToTempListOfPhotos;
   final Function swipeActivePhoto;
-  final Function? deletePhoto;
+  final Function(int?)? deletePhoto;
   final Function? setPrimaryPhoto;
 
   ActivePhoto(

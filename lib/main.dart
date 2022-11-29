@@ -3,6 +3,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_recipes/screens/add_edit_recipe/view_model/view_model_add_edit_recipe.dart';
 import 'package:my_recipes/screens/screen_home.dart';
 import 'package:my_recipes/screens/view_recipe_details/view_model/view_model_view_recipe_details.dart';
 
@@ -42,7 +43,8 @@ class MyRecipeApp extends StatelessWidget {
         providers: [
           ChangeNotifierProvider(
             create: (context) => ViewRecipeViewModel(),
-          )
+          ),
+          ChangeNotifierProvider(create: (context) => AddEditRecipeViewModel())
         ],
         child: MaterialApp(
           title: 'Recipeasy',
