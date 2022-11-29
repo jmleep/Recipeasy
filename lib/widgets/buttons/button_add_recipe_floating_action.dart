@@ -2,8 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../../data/model/recipe.dart';
+
 class AddRecipeFloatingActionButton extends StatelessWidget {
-  final Function onPressAddRecipeFAB;
+  final Function(BuildContext, Recipe?) onPressAddRecipeFAB;
 
   const AddRecipeFloatingActionButton(
       {required Key key, required this.onPressAddRecipeFAB})
@@ -13,7 +15,7 @@ class AddRecipeFloatingActionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
       onPressed: () {
-        this.onPressAddRecipeFAB(null);
+        this.onPressAddRecipeFAB(context, null);
       },
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15))),

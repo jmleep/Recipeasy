@@ -68,7 +68,7 @@ class RecipeDatabaseManager {
     });
   }
 
-  static Future<List<Recipe>> getHomeGridRecipes() async {
+  static Future<List<Recipe>> getAllRecipes() async {
     final Database? db = await RecipeDatabase.instance.database;
 
     final String recipeTable = RecipeDatabase.recipeTable;
