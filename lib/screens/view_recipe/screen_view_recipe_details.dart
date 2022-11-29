@@ -8,7 +8,8 @@ import 'package:my_recipes/widgets/photos/photo_preview_list.dart';
 import 'package:provider/provider.dart';
 
 import '../common/view_add_edit_recipe.dart';
-import 'list_item_ingredient.dart';
+import 'ingredients_view.dart';
+import 'view_list_item_ingredient.dart';
 
 class ViewRecipeDetailsScreen extends ViewAddEditRecipe {
   final Recipe recipe;
@@ -41,9 +42,12 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
         .init(widget.recipe);
   }
 
-  Widget getBody(ViewRecipeViewModel vm) {
-    if (vm.isLoading) {
-      return Center(child: CircularProgressIndicator());
+  Widget getBody() {
+    if (context.watch<ViewRecipeViewModel>().isLoading) {
+      return Center(
+          child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [CircularProgressIndicator()]));
     }
 
     return Container(
@@ -55,37 +59,16 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
         crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
           ActivePhoto(
-            recipePhotos: vm.recipeImages,
+            recipePhotos: context.watch<ViewRecipeViewModel>().recipeImages,
             activePhoto: activePhoto,
             swipeActivePhoto: swipeActivePhoto,
           ),
           PhotoPreviewList(
               scrollController: previewScrollController,
-              recipePhotos: vm.recipeImages,
+              recipePhotos: context.watch<ViewRecipeViewModel>().recipeImages,
               setActivePhoto: setActivePhoto,
               activePhoto: activePhoto),
-          ExpansionTile(
-            title: Text('Ingredients', style: TextStyle(fontSize: 25)),
-            initiallyExpanded: vm.recipeIngredients.length != 0,
-            children: [
-              vm.recipeIngredients.length == 0
-                  ? Container(
-                      padding: EdgeInsets.all(10),
-                      child: Text("No ingredients added"))
-                  : ListView.builder(
-                      padding: EdgeInsets.only(bottom: 10),
-                      shrinkWrap: true,
-                      physics: NeverScrollableScrollPhysics(),
-                      itemCount: vm.recipeIngredients.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return IngredientListItem(
-                            key: UniqueKey(),
-                            item: vm.recipeIngredients[index],
-                            showDivider:
-                                index != vm.recipeIngredients.length - 1);
-                      })
-            ],
-          )
+          IngredientsView()
         ],
       )),
     );
@@ -93,13 +76,12 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<ViewRecipeViewModel>(
-        builder: (context, vm, child) => Scaffold(
-            key: _scaffoldKey,
-            appBar: RecipeAppBar(
-              title: vm.recipe.name,
-              actions: getAppBarActions(),
-            ),
-            body: SingleChildScrollView(child: getBody(vm))));
+    return Scaffold(
+        key: _scaffoldKey,
+        appBar: RecipeAppBar(
+          title: context.watch<ViewRecipeViewModel>().recipe.name,
+          actions: getAppBarActions(),
+        ),
+        body: SingleChildScrollView(child: getBody()));
   }
 }

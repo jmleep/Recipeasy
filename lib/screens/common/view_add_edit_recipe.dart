@@ -67,6 +67,6 @@ class ViewAddEditRecipeState<T extends ViewAddEditRecipe> extends State<T> {
 
   @override
   Widget build(BuildContext context) {
-    return Container();
+    return SizedBox.shrink();
   }
 }
