@@ -27,6 +27,10 @@ class PhotoPreviewList extends StatelessWidget {
       itemCount += 1;
     }
 
+    if (recipePhotos.length == 0 && addPhoto == null) {
+      return SizedBox.shrink();
+    }
+
     if (recipePhotos.length <= 5) {
       return Container(
         width: double.infinity,
