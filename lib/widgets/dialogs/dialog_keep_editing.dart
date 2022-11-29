@@ -5,7 +5,7 @@ import '../buttons/button_recipeasy.dart';
 
 class KeepEditingDialog extends StatelessWidget {
   final String recipeName;
-  final ValueSetter<bool> saveRecipe;
+  final Function saveRecipe;
 
   KeepEditingDialog({required this.recipeName, required this.saveRecipe})
       : super();
@@ -34,7 +34,7 @@ class KeepEditingDialog extends StatelessWidget {
         RoundedButton(
           buttonText: 'Save and Leave',
           onPressed: () {
-            saveRecipe(true);
+            saveRecipe();
           },
           borderColor: Theme.of(context).colorScheme.primary,
           fillColor: Theme.of(context).colorScheme.primary,
