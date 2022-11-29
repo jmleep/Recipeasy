@@ -107,6 +107,7 @@ class AddEditRecipeViewModel extends ChangeNotifier {
       tempRecipePhotos[oldPrimary].isPrimary = false;
     }
     tempRecipePhotos[activePhoto].isPrimary = true;
+    notifyListeners();
   }
 
   addIngredient(String text) {
@@ -202,6 +203,7 @@ class AddEditRecipeViewModel extends ChangeNotifier {
       HapticFeedback.heavyImpact();
 
       Navigator.of(context).pop(true);
+      notifyListeners();
     } //else {
     // if (isFromBackAttempt) {
     //   Navigator.of(context).pop(false);
