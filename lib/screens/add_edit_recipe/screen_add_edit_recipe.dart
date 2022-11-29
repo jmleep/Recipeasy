@@ -8,7 +8,7 @@ import 'package:my_recipes/data/repository/recipe_photo_repository.dart';
 import 'package:my_recipes/data/model/ingredient.dart';
 import 'package:my_recipes/data/model/recipe.dart';
 import 'package:my_recipes/data/model/recipe_photo.dart';
-import 'package:my_recipes/screens/add_edit_recipe/ingredient_list_view_builder.dart';
+import 'package:my_recipes/screens/add_edit_recipe/widgets/list_view_edit_ingredient.dart';
 import 'package:my_recipes/widgets/dialogs/dialog_keep_editing.dart';
 import 'package:my_recipes/widgets/inputs/name_text_form_field.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
@@ -16,7 +16,7 @@ import 'package:my_recipes/widgets/photos/active_photo.dart';
 import '../../../widgets/app_bar.dart';
 import '../../../widgets/photos/photo_preview_list.dart';
 import '../common/view_add_edit_recipe.dart';
-import 'ingredient_input.dart';
+import 'widgets/input_new_ingredient.dart';
 
 class AddEditRecipeScreen extends ViewAddEditRecipe {
   final Recipe? recipe;
@@ -319,7 +319,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                         style: TextStyle(fontSize: 30),
                       ),
                     ),
-                    IngredientListViewBuilder(
+                    EditIngredientsListView(
                       key: UniqueKey(),
                       ingredients: _recipeIngredients,
                       controllers: _recipeIngredientControllers,
@@ -327,13 +327,13 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                       updateIngredient: (String text, Ingredient i) =>
                           updateIngredient(text, i),
                     ),
-                    IngredientInput(
+                    NewIngredientInput(
                       addIngredient: (String i) => addIngredient(i),
                       key: UniqueKey(),
                     ),
-                    Container(
-                      padding: EdgeInsets.all(40),
-                    )
+                    // Container(
+                    //   padding: EdgeInsets.all(40),
+                    // )
                   ],
                 ),
               ),

@@ -1,12 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../../data/model/ingredient.dart';
-import '../../data/model/recipe.dart';
-import '../../data/model/recipe_photo.dart';
-import '../../data/repository/recipe_photo_repository.dart';
-import '../../data/repository/recipe_repository.dart';
-import '../add_edit_recipe/screen_add_edit_recipe.dart';
+import '../../../data/model/ingredient.dart';
+import '../../../data/model/recipe.dart';
+import '../../../data/model/recipe_photo.dart';
+import '../../../data/repository/recipe_photo_repository.dart';
+import '../../../data/repository/recipe_repository.dart';
+import '../../add_edit_recipe/screen_add_edit_recipe.dart';
 
 class ViewRecipeViewModel extends ChangeNotifier {
   late Recipe recipe;

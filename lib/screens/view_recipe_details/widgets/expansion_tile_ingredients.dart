@@ -1,11 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_recipes/screens/view_recipe/view_list_item_ingredient.dart';
-import 'package:my_recipes/screens/view_recipe/view_model_view_recipe.dart';
+
+import 'package:my_recipes/screens/view_recipe_details/view_model/view_model_view_recipe_details.dart';
+import 'package:my_recipes/screens/view_recipe_details/widgets/list_item_ingredient_view.dart';
 import 'package:provider/provider.dart';
 
-class IngredientsView extends StatelessWidget {
-  const IngredientsView({
+class IngredientsExpansionTile extends StatelessWidget {
+  const IngredientsExpansionTile({
     Key? key,
   }) : super(key: key);
 

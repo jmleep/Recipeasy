@@ -4,7 +4,8 @@ import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/screens/screen_home.dart';
-import 'package:my_recipes/screens/view_recipe/view_model_view_recipe.dart';
+import 'package:my_recipes/screens/view_recipe_details/view_model/view_model_view_recipe_details.dart';
+
 import 'package:my_recipes/theme/theme.dart';
 import 'package:my_recipes/theme/widget_styles.dart';
 import 'package:provider/provider.dart';

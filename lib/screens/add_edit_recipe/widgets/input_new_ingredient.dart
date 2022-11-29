@@ -4,16 +4,16 @@ import 'package:flutter/services.dart';
 import 'package:my_recipes/theme/widget_styles.dart';
 import 'package:my_recipes/widgets/buttons/button_recipeasy.dart';
 
-class IngredientInput extends StatefulWidget {
+class NewIngredientInput extends StatefulWidget {
   final dynamic Function(String) addIngredient;
-  const IngredientInput({required Key key, required this.addIngredient})
+  const NewIngredientInput({required Key key, required this.addIngredient})
       : super(key: key);
 
   @override
-  State<IngredientInput> createState() => _IngredientInputState();
+  State<NewIngredientInput> createState() => _NewIngredientInputState();
 }
 
-class _IngredientInputState extends State<IngredientInput> {
+class _NewIngredientInputState extends State<NewIngredientInput> {
   var _textFieldController = TextEditingController();
 
   addIngredient() {

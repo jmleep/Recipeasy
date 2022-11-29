@@ -1,16 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_recipes/screens/add_edit_recipe/ingredient_list_item.dart';
+import 'package:my_recipes/screens/add_edit_recipe/widgets/list_item_edit_ingredient.dart';
 
-import '../../data/model/ingredient.dart';
+import '../../../data/model/ingredient.dart';
 
-class IngredientListViewBuilder extends StatelessWidget {
+class EditIngredientsListView extends StatelessWidget {
   final List<Ingredient> ingredients;
   final List<TextEditingController> controllers;
   final Function(int) removeIngredient;
   final Function(String, Ingredient) updateIngredient;
 
-  const IngredientListViewBuilder(
+  const EditIngredientsListView(
       {required Key key,
       required this.ingredients,
       required this.controllers,
@@ -42,7 +42,7 @@ class IngredientListViewBuilder extends StatelessWidget {
               removeIngredient(index);
             },
             key: UniqueKey(),
-            child: IngredientListItem(
+            child: EditIngredientListItem(
               item: ingredients[index],
               updateIngredient: updateIngredient,
               controller: controllers[index],
