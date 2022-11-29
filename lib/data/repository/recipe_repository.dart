@@ -77,8 +77,9 @@ class RecipeDatabaseManager {
     final List<Map<String, dynamic>> maps = await db!.rawQuery('' +
         'SELECT $recipeTable.id, $recipeTable.name, $recipeTable.list_order, $recipeTable.color, $recipeTable.meat_content, $photosTable.image ' +
         'FROM $recipeTable ' +
-        'INNER JOIN $photosTable ON $photosTable.recipe_id = $recipeTable.id ' +
-        'WHERE $photosTable.is_primary = 1 ' +
+        'LEFT JOIN $photosTable ' +
+        'ON $photosTable.recipe_id = $recipeTable.id ' +
+        'AND $photosTable.is_primary = 1 ' +
         'ORDER BY $recipeTable.list_order DESC');
 
     return List.generate(maps.length, (i) {
