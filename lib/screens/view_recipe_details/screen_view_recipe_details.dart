@@ -50,7 +50,6 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
     }
 
     return Container(
-      height: 900,
       child: Center(
           child: Column(
         mainAxisSize: MainAxisSize.max,
