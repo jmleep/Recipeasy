@@ -99,7 +99,7 @@ class PhotoPreviewList extends StatelessWidget {
                           alignment: Alignment.center,
                           children: <Widget>[...stackContents]));
                 }
-                return Container();
+                return SizedBox.shrink();
               },
               separatorBuilder: (BuildContext context, int index) {
                 return SizedBox(

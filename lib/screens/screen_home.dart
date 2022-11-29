@@ -115,7 +115,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ))
           .toList();
     }
-    return [Container()];
+    return [SizedBox.shrink()];
   }
 
   @override

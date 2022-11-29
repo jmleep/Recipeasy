@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/data/model/ingredient.dart';
 
-class IngredientListItem extends StatelessWidget {
+class ViewIngredientListItem extends StatelessWidget {
   final Ingredient item;
   final bool showDivider;
 
-  const IngredientListItem(
+  const ViewIngredientListItem(
       {required Key key, required this.item, required this.showDivider})
       : super(key: key);
 

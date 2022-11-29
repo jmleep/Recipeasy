@@ -24,7 +24,7 @@ class ActivePhoto extends StatelessWidget {
       var button;
       RecipePhoto currentPhoto = recipePhotos[activePhoto!];
 
-      button = Container();
+      button = SizedBox.shrink();
 
       if (setPrimaryPhoto != null) {
         if (currentPhoto.isPrimary) {
@@ -68,7 +68,7 @@ class ActivePhoto extends StatelessWidget {
             },
           ));
     }
-    return Container();
+    return SizedBox.shrink();
   }
 
   @override
@@ -82,13 +82,14 @@ class ActivePhoto extends StatelessWidget {
               Center(
                   child: activePhoto != null
                       ? Image.memory(recipePhotos[activePhoto!].image!)
-                      : Container()), // Image.file(new File(recipePhotos[activePhoto].value))),
+                      : SizedBox
+                          .shrink()), // Image.file(new File(recipePhotos[activePhoto].value))),
               getPrimaryPhotoButton(),
               getDeleteButton()
             ],
           ));
     } else {
-      return Container();
+      return SizedBox.shrink();
     }
 
     return Container(
