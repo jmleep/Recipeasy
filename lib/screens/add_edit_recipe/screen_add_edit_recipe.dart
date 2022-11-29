@@ -4,7 +4,7 @@ import 'package:my_recipes/data/model/ingredient.dart';
 import 'package:my_recipes/data/model/recipe.dart';
 import 'package:my_recipes/screens/add_edit_recipe/view_model/view_model_add_edit_recipe.dart';
 import 'package:my_recipes/screens/add_edit_recipe/widgets/list_view_edit_ingredient.dart';
-import 'package:my_recipes/widgets/inputs/name_text_form_field.dart';
+import 'package:my_recipes/screens/add_edit_recipe/widgets/text_form_field_recipe_name.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
 import 'package:provider/provider.dart';
 
@@ -75,7 +75,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
-                    NameTextFormField(
+                    RecipeNameTextFormField(
                       formKey: context.watch<AddEditRecipeViewModel>().formKey,
                       recipeNameController: context
                           .watch<AddEditRecipeViewModel>()

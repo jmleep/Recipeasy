@@ -2,11 +2,11 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/theme/widget_styles.dart';
 
-class NameTextFormField extends StatelessWidget {
+class RecipeNameTextFormField extends StatelessWidget {
   final GlobalKey formKey;
   final TextEditingController recipeNameController;
 
-  NameTextFormField(
+  RecipeNameTextFormField(
       {required this.formKey, required this.recipeNameController});
 
   @override
@@ -21,7 +21,7 @@ class NameTextFormField extends StatelessWidget {
               ReusableStyleWidget.inputDecoration(context, 'Recipe Name'),
           validator: (value) {
             if (value != null && value.isEmpty) {
-              return 'Please a recipe name!';
+              return 'Please enter a recipe name!';
             }
             return null;
           },
