@@ -3,15 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:my_recipes/data/model/recipe_ingredient.dart';
 import 'package:my_recipes/data/model/recipe.dart';
 import 'package:my_recipes/screens/add_edit_recipe/view_model/view_model_add_edit_recipe.dart';
-import 'package:my_recipes/screens/add_edit_recipe/widgets/list_view_edit_ingredient.dart';
+import 'package:my_recipes/screens/add_edit_recipe/widgets/edit_recipe_attribute.dart';
 import 'package:my_recipes/screens/add_edit_recipe/widgets/text_form_field_recipe_name.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
 import 'package:provider/provider.dart';
 
 import '../../../widgets/app_bar.dart';
 import '../../../widgets/photos/photo_preview_list.dart';
+import '../../data/model/recipe_step.dart';
 import '../common/view_add_edit_recipe.dart';
-import 'widgets/input_new_ingredient.dart';
 
 class AddEditRecipeScreen extends ViewAddEditRecipe {
   final Recipe? recipe;
@@ -36,6 +36,29 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
     ];
   }
 
+  setupTextFieldControllers(
+      List<RecipeIngredient> ingredients, List<RecipeStep> steps) {
+    context.watch<AddEditRecipeViewModel>().recipeIngredientControllers = [];
+    context.watch<AddEditRecipeViewModel>().recipeStepControllers = [];
+    ingredients.forEach((element) {
+      var controller = new TextEditingController();
+      controller.value = TextEditingValue(text: element.value ?? '');
+      context
+          .watch<AddEditRecipeViewModel>()
+          .recipeIngredientControllers
+          .add(controller);
+    });
+
+    steps.forEach((element) {
+      var controller = new TextEditingController();
+      controller.value = TextEditingValue(text: element.value ?? '');
+      context
+          .watch<AddEditRecipeViewModel>()
+          .recipeStepControllers
+          .add(controller);
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -46,15 +69,11 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
   @override
   Widget build(BuildContext context) {
     var ingredients = context.watch<AddEditRecipeViewModel>().recipeIngredients;
-    context.watch<AddEditRecipeViewModel>().recipeIngredientControllers = [];
-    ingredients.forEach((element) {
-      var controller = new TextEditingController();
-      controller.value = TextEditingValue(text: element.value ?? '');
-      context
-          .watch<AddEditRecipeViewModel>()
-          .recipeIngredientControllers
-          .add(controller);
-    });
+    var steps = context.watch<AddEditRecipeViewModel>().recipeSteps;
+    var tempRecipePhotos =
+        context.watch<AddEditRecipeViewModel>().tempRecipePhotos;
+
+    setupTextFieldControllers(ingredients, steps);
 
     return WillPopScope(
       onWillPop: () =>
@@ -79,8 +98,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                     .recipeNameController,
               ),
               ActivePhoto(
-                  recipePhotos:
-                      context.watch<AddEditRecipeViewModel>().tempRecipePhotos,
+                  recipePhotos: tempRecipePhotos,
                   activePhoto: activePhoto,
                   addImageToTempListOfPhotos: context
                       .read<AddEditRecipeViewModel>()
@@ -94,8 +112,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                       .setPrimaryPhoto(activePhoto)),
               PhotoPreviewList(
                   scrollController: previewScrollController,
-                  recipePhotos:
-                      context.watch<AddEditRecipeViewModel>().tempRecipePhotos,
+                  recipePhotos: tempRecipePhotos,
                   setActivePhoto: () => context
                       .read<AddEditRecipeViewModel>()
                       .setPrimaryPhoto(activePhoto),
@@ -104,31 +121,33 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                       .read<AddEditRecipeViewModel>()
                       .addImageToTempListOfPhotos(
                           previewScrollController, setActivePhoto)),
-              Container(
-                padding: EdgeInsets.only(top: 10, left: 10, right: 10),
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  'Ingredients',
-                  style: TextStyle(fontSize: 30),
-                ),
-              ),
-              EditIngredientsListView(
-                key: UniqueKey(),
-                ingredients:
-                    context.watch<AddEditRecipeViewModel>().recipeIngredients,
+              EditRecipeAttribute(
+                title: 'Ingredients',
+                inputHint: 'Add an ingredient',
+                items: ingredients,
                 controllers: context
                     .watch<AddEditRecipeViewModel>()
                     .recipeIngredientControllers,
-                removeIngredient: (int i) =>
-                    context.read<AddEditRecipeViewModel>().removeIngredient(i),
-                updateIngredient: (String text, RecipeIngredient i) => context
-                    .read<AddEditRecipeViewModel>()
-                    .updateIngredient(text, i),
+                addItem: context.read<AddEditRecipeViewModel>().addIngredient,
+                updateItem:
+                    context.read<AddEditRecipeViewModel>().updateIngredient,
+                removeItem:
+                    context.read<AddEditRecipeViewModel>().removeIngredient,
               ),
-              NewIngredientInput(
-                addIngredient: (String i) =>
-                    context.read<AddEditRecipeViewModel>().addIngredient(i),
-                key: UniqueKey(),
+              SizedBox(
+                height: 20,
+              ),
+              EditRecipeAttribute(
+                title: 'Steps',
+                inputHint: 'Add step',
+                items: steps,
+                isNumbered: true,
+                controllers: context
+                    .watch<AddEditRecipeViewModel>()
+                    .recipeStepControllers,
+                addItem: context.read<AddEditRecipeViewModel>().addStep,
+                updateItem: context.read<AddEditRecipeViewModel>().updateStep,
+                removeItem: context.read<AddEditRecipeViewModel>().removeStep,
               ),
               SizedBox(
                 height: 60,

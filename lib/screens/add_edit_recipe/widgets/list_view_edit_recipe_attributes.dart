@@ -1,23 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_recipes/data/model/recipe_attribute.dart';
 import 'package:my_recipes/screens/add_edit_recipe/view_model/view_model_add_edit_recipe.dart';
-import 'package:my_recipes/screens/add_edit_recipe/widgets/list_item_edit_ingredient.dart';
+import 'package:my_recipes/screens/add_edit_recipe/widgets/list_item_edit_recipe_attribute.dart';
 import 'package:provider/provider.dart';
 
-import '../../../data/model/recipe_ingredient.dart';
-
-class EditIngredientsListView extends StatelessWidget {
-  final List<RecipeIngredient> ingredients;
+class EditRecipeAttributesListView extends StatelessWidget {
+  final List<RecipeAttribute> recipeItems;
   final List<TextEditingController> controllers;
-  final Function(int) removeIngredient;
-  final Function(String, RecipeIngredient) updateIngredient;
+  final Function(int) removeItem;
+  final Function(String, int) updateItem;
+  final bool isNumbered;
 
-  const EditIngredientsListView(
+  const EditRecipeAttributesListView(
       {required Key key,
-      required this.ingredients,
+      required this.recipeItems,
       required this.controllers,
-      required this.removeIngredient,
-      required this.updateIngredient})
+      required this.removeItem,
+      required this.updateItem,
+      required this.isNumbered})
       : super(key: key);
 
   @override
@@ -31,12 +32,12 @@ class EditIngredientsListView extends StatelessWidget {
         onReorder: (oldIndex, newIndex) {
           context
               .read<AddEditRecipeViewModel>()
-              .swapIngredients(oldIndex, newIndex);
+              .reorderItems(recipeItems, oldIndex, newIndex);
         },
         shrinkWrap: true,
         padding: EdgeInsets.only(bottom: 5),
         physics: NeverScrollableScrollPhysics(),
-        itemCount: ingredients.length,
+        itemCount: recipeItems.length,
         itemBuilder: (context, index) {
           return Dismissible(
             direction: DismissDirection.endToStart,
@@ -51,18 +52,23 @@ class EditIngredientsListView extends StatelessWidget {
                       child: Icon(Icons.delete, color: Colors.white),
                     ))),
             onDismissed: (DismissDirection direction) {
-              removeIngredient(index);
+              removeItem(index);
             },
             key: UniqueKey(),
             child: Row(
               children: [
+                if (isNumbered)
+                  Padding(
+                    padding: EdgeInsets.only(left: 10, right: 5, top: 10),
+                    child: Text('${index + 1}'),
+                  ),
                 Flexible(
                     child: Padding(
                   padding: const EdgeInsets.only(left: 10, right: 10),
-                  child: EditIngredientListItem(
-                    item: ingredients[index],
+                  child: EditRecipeAttributeListItem(
+                    item: recipeItems[index],
                     index: index,
-                    updateIngredient: updateIngredient,
+                    updateItem: (newValue) => updateItem(newValue, index),
                     controller: controllers[index],
                     showTopDivider: index == 0,
                     key: UniqueKey(),

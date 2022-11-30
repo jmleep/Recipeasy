@@ -142,4 +142,17 @@ class RecipeDatabaseManager {
           id: maps[i]['id'], recipeId: recipeId, value: maps[i]['value']);
     });
   }
+
+  static Future<void> deleteSteps(List<RecipeStep> steps) async {
+    final Database? db = await RecipeDatabase.instance.database;
+
+    Batch batch = db!.batch();
+
+    steps.forEach((element) {
+      batch.delete(RecipeDatabase.stepsTable,
+          where: 'id = ?', whereArgs: [element.id]);
+    });
+
+    batch.apply();
+  }
 }

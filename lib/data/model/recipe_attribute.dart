@@ -19,4 +19,16 @@ class RecipeAttribute {
 
     return values;
   }
+
+  RecipeAttribute copyWith(
+    int? id,
+    int? recipeId,
+    String? value,
+  ) {
+    return RecipeAttribute(
+      id: id ?? this.id,
+      recipeId: recipeId ?? this.recipeId,
+      value: value ?? this.value,
+    );
+  }
 }

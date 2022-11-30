@@ -37,12 +37,7 @@ class ViewRecipeViewModel extends ChangeNotifier {
     recipeImages.addAll(results[0] as List<RecipePhoto>);
     recipeIngredients.addAll(results[1] as List<RecipeIngredient>);
     recipeSteps.addAll(results[2] as List<RecipeStep>);
-    recipeSteps.add(RecipeStep(
-        id: 0,
-        recipeId: 0,
-        value:
-            'Do the thingasdfasdfasdfasdfasdfasdflkjsdf;lkajs;dlfkja;sldfkja;lskjdf;alskjdf;laksjdflakfkadfjk;lsdjkfa;lsdkjf;lasjk;kjf;asf'));
-    recipeSteps.add(RecipeStep(id: 0, recipeId: 0, value: 'Cook 30 minutes'));
+
     isLoading = false;
     notifyListeners();
   }

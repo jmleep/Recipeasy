@@ -4,21 +4,31 @@ import 'package:flutter/services.dart';
 import 'package:my_recipes/theme/widget_styles.dart';
 import 'package:my_recipes/widgets/buttons/button_recipeasy.dart';
 
-class NewIngredientInput extends StatefulWidget {
-  final dynamic Function(String) addIngredient;
-  const NewIngredientInput({required Key key, required this.addIngredient})
+class NewRecipeAttributeInput extends StatefulWidget {
+  final dynamic Function(String) addAttribute;
+  final String inputHint;
+  final bool isNumbered;
+  final int activeIndex;
+
+  const NewRecipeAttributeInput(
+      {required Key key,
+      required this.addAttribute,
+      required this.inputHint,
+      required this.isNumbered,
+      required this.activeIndex})
       : super(key: key);
 
   @override
-  State<NewIngredientInput> createState() => _NewIngredientInputState();
+  State<NewRecipeAttributeInput> createState() =>
+      _NewRecipeAttributeInputState();
 }
 
-class _NewIngredientInputState extends State<NewIngredientInput> {
+class _NewRecipeAttributeInputState extends State<NewRecipeAttributeInput> {
   var _textFieldController = TextEditingController();
 
   addIngredient() {
     HapticFeedback.mediumImpact();
-    widget.addIngredient(_textFieldController.text);
+    widget.addAttribute(_textFieldController.text);
     _textFieldController.clear();
   }
 
@@ -30,6 +40,11 @@ class _NewIngredientInputState extends State<NewIngredientInput> {
 
   @override
   Widget build(BuildContext context) {
+    var inputHintText = widget.inputHint;
+    if (widget.isNumbered) {
+      inputHintText += ' ${widget.activeIndex + 1}';
+    }
+
     return Row(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.end,
@@ -43,7 +58,7 @@ class _NewIngredientInputState extends State<NewIngredientInput> {
                         addIngredient();
                       },
                       decoration: ReusableStyleWidget.inputThemeUnderlineBorder(
-                          context, null, 'Enter an ingredient')))),
+                          context, null, inputHintText)))),
           Container(
               padding: EdgeInsets.only(right: 10, top: 5),
               child: RoundedButton(

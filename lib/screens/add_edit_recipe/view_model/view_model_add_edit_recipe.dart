@@ -3,6 +3,8 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:my_recipes/data/model/recipe_attribute.dart';
+import 'package:my_recipes/data/model/recipe_step.dart';
 import '../../../data/model/recipe_ingredient.dart';
 import '../../../data/model/recipe.dart';
 import '../../../data/model/recipe_photo.dart';
@@ -14,7 +16,10 @@ class AddEditRecipeViewModel extends ChangeNotifier {
   late Recipe? recipe;
   List<RecipePhoto> tempRecipePhotos = [];
   List<RecipePhoto> tempRecipePhotosToDelete = [];
+  List<RecipeStep> recipeSteps = [];
+  List<RecipeStep> recipeStepsToDelete = [];
   List<TextEditingController> recipeIngredientControllers = [];
+  List<TextEditingController> recipeStepControllers = [];
   List<RecipeIngredient> recipeIngredients = [];
   List<RecipeIngredient> recipeIngredientsToDelete = [];
   ScrollController scrollController = ScrollController();
@@ -30,6 +35,9 @@ class AddEditRecipeViewModel extends ChangeNotifier {
     for (final controller in recipeIngredientControllers) {
       controller.dispose();
     }
+    for (final controller in recipeStepControllers) {
+      controller.dispose();
+    }
     super.dispose();
   }
 
@@ -37,8 +45,12 @@ class AddEditRecipeViewModel extends ChangeNotifier {
     recipe = r;
     tempRecipePhotos = [];
     tempRecipePhotosToDelete = [];
+    recipeSteps = [];
+    recipeStepsToDelete = [];
     recipeIngredientControllers = [];
+    recipeStepControllers = [];
     recipeIngredients = [];
+    recipeIngredientsToDelete = [];
     scrollController = ScrollController();
     recipeNameController = TextEditingController();
     hasChangeBeenMade = false;
@@ -52,11 +64,14 @@ class AddEditRecipeViewModel extends ChangeNotifier {
 
       var imagesFuture = RecipePhotoDatabaseManager.getImages(recipe!.id!);
       var ingredientsFuture = RecipeDatabaseManager.getIngredients(recipe!.id!);
+      var stepsFuture = RecipeDatabaseManager.getSteps(recipe!.id!);
 
-      var results = await Future.wait([imagesFuture, ingredientsFuture]);
+      var results =
+          await Future.wait([imagesFuture, ingredientsFuture, stepsFuture]);
 
       tempRecipePhotos.addAll(results[0] as List<RecipePhoto>);
       recipeIngredients.addAll(results[1] as List<RecipeIngredient>);
+      recipeSteps.addAll(results[2] as List<RecipeStep>);
     }
 
     recipeNameController.addListener(() {
@@ -104,12 +119,35 @@ class AddEditRecipeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  addStep(String text) {
+    recipeSteps.add(RecipeStep(value: text));
+    hasChangeBeenMade = true;
+
+    // scrollController.animateTo(scrollController.position.maxScrollExtent,
+    //     duration: Duration(milliseconds: 10), curve: Curves.ease);
+    notifyListeners();
+  }
+
+  removeStep(int index) {
+    recipeStepsToDelete.add(recipeSteps[index]);
+    recipeSteps.removeAt(index);
+    notifyListeners();
+  }
+
+  updateStep(String text, int index) {
+    var step = recipeSteps[index];
+
+    recipeSteps[index] = step.copyWith(null, null, text) as RecipeStep;
+    hasChangeBeenMade = true;
+    notifyListeners();
+  }
+
   addIngredient(String text) {
     recipeIngredients.add(RecipeIngredient(value: text));
     hasChangeBeenMade = true;
 
-    scrollController.animateTo(scrollController.position.maxScrollExtent,
-        duration: Duration(milliseconds: 10), curve: Curves.ease);
+    // scrollController.animateTo(scrollController.position.maxScrollExtent,
+    //     duration: Duration(milliseconds: 10), curve: Curves.ease);
     notifyListeners();
   }
 
@@ -119,25 +157,25 @@ class AddEditRecipeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateIngredient(String text, RecipeIngredient i) {
-    var index = recipeIngredients.indexOf(i);
+  updateIngredient(String text, int index) {
     var ingredient = recipeIngredients[index];
 
-    recipeIngredients[index] = ingredient.copyWith(null, null, text);
+    recipeIngredients[index] =
+        ingredient.copyWith(null, null, text) as RecipeIngredient;
     hasChangeBeenMade = true;
     notifyListeners();
   }
 
-  swapIngredients(int oldIndex, int newIndex) {
+  reorderItems(List<RecipeAttribute> items, int oldIndex, int newIndex) {
     var updatedIndex = newIndex;
 
     // have to do this due to a bug in reorderable list where moving a value down
     // incorrectly increments the new index by + 1
-    if (newIndex > recipeIngredients.length - 1) {
+    if (newIndex > items.length - 1) {
       updatedIndex -= 1;
     }
-    var ingredient = recipeIngredients.removeAt(oldIndex);
-    recipeIngredients.insert(updatedIndex, ingredient);
+    var ingredient = items.removeAt(oldIndex);
+    items.insert(updatedIndex, ingredient);
     notifyListeners();
   }
 
@@ -175,19 +213,26 @@ class AddEditRecipeViewModel extends ChangeNotifier {
         recipeIngredients[i].value = recipeIngredientControllers[i].value.text;
       }
 
+      for (var i = 0; i < recipeSteps.length; i += 1) {
+        recipeSteps[i].value = recipeStepControllers[i].value.text;
+      }
+
       if (recipe != null) {
         editingRecipe = recipe!;
         editingRecipe.name = recipeNameController.text;
         editingRecipe.photos = tempRecipePhotos;
         editingRecipe.ingredients = recipeIngredients;
+        editingRecipe.steps = recipeSteps;
       } else {
         editingRecipe = new Recipe(
             name: recipeNameController.text,
             photos: tempRecipePhotos,
-            ingredients: recipeIngredients);
+            ingredients: recipeIngredients,
+            steps: recipeSteps);
       }
 
       RecipeDatabaseManager.deleteIngredients(recipeIngredientsToDelete);
+      RecipeDatabaseManager.deleteSteps(recipeStepsToDelete);
 
       var recipeId = await RecipeDatabaseManager.upsertRecipe(editingRecipe);
 
