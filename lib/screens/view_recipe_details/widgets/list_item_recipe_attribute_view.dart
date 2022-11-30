@@ -29,8 +29,8 @@ class ViewRecipeAttributeListItem extends StatelessWidget {
               children: [
                 if (isNumbered)
                   Padding(
-                      padding: EdgeInsets.only(right: 10),
-                      child: Text('${index + 1}')),
+                      padding: EdgeInsets.only(right: 15),
+                      child: Text('${index + 1}.')),
                 Flexible(child: Text(item.value ?? '', softWrap: true)),
               ],
             )),
