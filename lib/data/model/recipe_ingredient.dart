@@ -1,15 +1,15 @@
 import 'package:my_recipes/data/model/recipe_attribute.dart';
 
-class Ingredient extends RecipeAttribute {
-  Ingredient({int? id, int? recipeId, String? value})
+class RecipeIngredient extends RecipeAttribute {
+  RecipeIngredient({int? id, int? recipeId, String? value})
       : super(id: id, recipeId: recipeId, value: value);
 
-  Ingredient copyWith(
+  RecipeIngredient copyWith(
     int? id,
     int? recipeId,
     String? value,
   ) {
-    return Ingredient(
+    return RecipeIngredient(
       id: id ?? this.id,
       recipeId: recipeId ?? this.recipeId,
       value: value ?? this.value,

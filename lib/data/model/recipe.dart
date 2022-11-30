@@ -3,16 +3,16 @@ import 'dart:ui';
 
 import 'package:my_recipes/data/model/recipe_photo.dart';
 
-import 'ingredient.dart';
+import 'recipe_ingredient.dart';
 
-import 'step.dart';
+import 'recipe_step.dart';
 
 class Recipe {
   final int? id;
   String name;
   int? order;
-  List<Ingredient>? ingredients;
-  List<Step>? steps;
+  List<RecipeIngredient>? ingredients;
+  List<RecipeStep>? steps;
   List<RecipePhoto>? photos;
   String? notes;
   MeatContent? meatContent;

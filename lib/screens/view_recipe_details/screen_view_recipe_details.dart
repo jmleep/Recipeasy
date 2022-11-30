@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/data/model/recipe.dart';
 import 'package:my_recipes/screens/view_recipe_details/view_model/view_model_view_recipe_details.dart';
+import 'package:my_recipes/screens/view_recipe_details/widgets/expansion_tile_recipe_attribute.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
 import 'package:my_recipes/widgets/photos/photo_preview_list.dart';
 import 'package:provider/provider.dart';
 
 import '../common/view_add_edit_recipe.dart';
-import 'widgets/expansion_tile_ingredients.dart';
 
 class ViewRecipeDetailsScreen extends ViewAddEditRecipe {
   final Recipe recipe;
@@ -70,7 +70,18 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
                 recipePhotos: context.watch<ViewRecipeViewModel>().recipeImages,
                 setActivePhoto: setActivePhoto,
                 activePhoto: activePhoto),
-            IngredientsExpansionTile()
+            RecipeAttributeExpansionTile(
+              items: context.watch<ViewRecipeViewModel>().recipeIngredients,
+              title: 'Ingredients',
+              noItemsText: 'No ingredients added',
+            ),
+            RecipeAttributeExpansionTile(
+              title: 'Steps',
+              isNumbered: true,
+              items: context.watch<ViewRecipeViewModel>().recipeSteps,
+              noItemsText: 'No steps added',
+              key: UniqueKey(),
+            )
           ],
         )),
       ));

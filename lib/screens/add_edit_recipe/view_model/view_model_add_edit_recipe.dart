@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_recipes/extensions/extension_list.dart';
-import '../../../data/model/ingredient.dart';
+import '../../../data/model/recipe_ingredient.dart';
 import '../../../data/model/recipe.dart';
 import '../../../data/model/recipe_photo.dart';
 import '../../../data/repository/recipe_photo_repository.dart';
@@ -16,8 +16,8 @@ class AddEditRecipeViewModel extends ChangeNotifier {
   List<RecipePhoto> tempRecipePhotos = [];
   List<RecipePhoto> tempRecipePhotosToDelete = [];
   List<TextEditingController> recipeIngredientControllers = [];
-  List<Ingredient> recipeIngredients = [];
-  List<Ingredient> recipeIngredientsToDelete = [];
+  List<RecipeIngredient> recipeIngredients = [];
+  List<RecipeIngredient> recipeIngredientsToDelete = [];
   ScrollController scrollController = ScrollController();
   TextEditingController recipeNameController = TextEditingController();
   ImagePicker imagePicker = ImagePicker();
@@ -57,7 +57,7 @@ class AddEditRecipeViewModel extends ChangeNotifier {
       var results = await Future.wait([imagesFuture, ingredientsFuture]);
 
       tempRecipePhotos.addAll(results[0] as List<RecipePhoto>);
-      recipeIngredients.addAll(results[1] as List<Ingredient>);
+      recipeIngredients.addAll(results[1] as List<RecipeIngredient>);
     }
 
     recipeNameController.addListener(() {
@@ -106,7 +106,7 @@ class AddEditRecipeViewModel extends ChangeNotifier {
   }
 
   addIngredient(String text) {
-    recipeIngredients.add(Ingredient(value: text));
+    recipeIngredients.add(RecipeIngredient(value: text));
     hasChangeBeenMade = true;
 
     scrollController.animateTo(scrollController.position.maxScrollExtent,
@@ -120,7 +120,7 @@ class AddEditRecipeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  updateIngredient(String text, Ingredient i) {
+  updateIngredient(String text, RecipeIngredient i) {
     var index = recipeIngredients.indexOf(i);
     var ingredient = recipeIngredients[index];
 

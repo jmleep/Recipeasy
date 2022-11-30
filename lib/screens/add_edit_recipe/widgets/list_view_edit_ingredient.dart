@@ -1,17 +1,16 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_recipes/extensions/extension_list.dart';
 import 'package:my_recipes/screens/add_edit_recipe/view_model/view_model_add_edit_recipe.dart';
 import 'package:my_recipes/screens/add_edit_recipe/widgets/list_item_edit_ingredient.dart';
 import 'package:provider/provider.dart';
 
-import '../../../data/model/ingredient.dart';
+import '../../../data/model/recipe_ingredient.dart';
 
 class EditIngredientsListView extends StatelessWidget {
-  final List<Ingredient> ingredients;
+  final List<RecipeIngredient> ingredients;
   final List<TextEditingController> controllers;
   final Function(int) removeIngredient;
-  final Function(String, Ingredient) updateIngredient;
+  final Function(String, RecipeIngredient) updateIngredient;
 
   const EditIngredientsListView(
       {required Key key,

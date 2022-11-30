@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:my_recipes/data/model/recipe_step.dart';
 import 'package:my_recipes/data/repository/recipe_photo_repository.dart';
-import 'package:my_recipes/data/model/ingredient.dart';
+import 'package:my_recipes/data/model/recipe_ingredient.dart';
 import 'package:my_recipes/data/model/recipe.dart';
 import 'package:sqflite/sqflite.dart';
 
@@ -15,8 +16,6 @@ class RecipeDatabaseManager {
     int recipeId = await db!.insert(RecipeDatabase.recipeTable, recipe.toMap(),
         conflictAlgorithm: ConflictAlgorithm.replace);
 
-    var upsertFutures = <Future>[];
-
     Batch ingredientsBatch = db.batch();
     if (recipe.ingredients != null && recipe.ingredients!.length > 0) {
       recipe.ingredients?.asMap().forEach((index, value) {
@@ -26,16 +25,17 @@ class RecipeDatabaseManager {
       });
     }
 
+    Batch stepsBatch = db.batch();
     if (recipe.steps != null && recipe.steps!.length > 0) {
       recipe.steps?.asMap().forEach((index, element) {
-        upsertFutures.add(db.insert(
+        stepsBatch.insert(
             RecipeDatabase.stepsTable, element.toMap(recipeId, index),
-            conflictAlgorithm: ConflictAlgorithm.replace));
+            conflictAlgorithm: ConflictAlgorithm.replace);
       });
     }
 
     await ingredientsBatch.commit(noResult: true);
-    await Future.wait(upsertFutures);
+    await stepsBatch.commit(noResult: true);
 
     return recipeId;
   }
@@ -54,7 +54,7 @@ class RecipeDatabaseManager {
         where: "id = ?", whereArgs: [recipe.id]);
   }
 
-  static Future<List<Ingredient>> getIngredients(int? recipeId) async {
+  static Future<List<RecipeIngredient>> getIngredients(int? recipeId) async {
     final Database? db = await RecipeDatabase.instance.database;
 
     final List<Map<String, dynamic>> maps = await db!.query(
@@ -64,7 +64,7 @@ class RecipeDatabaseManager {
         orderBy: 'list_order');
 
     return List.generate(maps.length, (i) {
-      return Ingredient(
+      return RecipeIngredient(
           id: maps[i]['id'], recipeId: recipeId, value: maps[i]['value']);
     });
   }
@@ -112,7 +112,8 @@ class RecipeDatabaseManager {
     );
   }
 
-  static Future<void> deleteIngredients(List<Ingredient> ingredients) async {
+  static Future<void> deleteIngredients(
+      List<RecipeIngredient> ingredients) async {
     final Database? db = await RecipeDatabase.instance.database;
 
     Batch batch = db!.batch();
@@ -126,4 +127,19 @@ class RecipeDatabaseManager {
   }
 
   static T? cast<T>(x) => x is T ? x : null;
+
+  static Future<List<RecipeStep>> getSteps(int? recipeId) async {
+    final Database? db = await RecipeDatabase.instance.database;
+
+    final List<Map<String, dynamic>> maps = await db!.query(
+        RecipeDatabase.stepsTable,
+        where: 'recipe_id = ?',
+        whereArgs: [recipeId],
+        orderBy: 'list_order');
+
+    return List.generate(maps.length, (i) {
+      return RecipeStep(
+          id: maps[i]['id'], recipeId: recipeId, value: maps[i]['value']);
+    });
+  }
 }

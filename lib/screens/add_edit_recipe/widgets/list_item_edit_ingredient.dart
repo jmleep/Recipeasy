@@ -2,13 +2,13 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/theme/widget_styles.dart';
 
-import '../../../data/model/ingredient.dart';
+import '../../../data/model/recipe_ingredient.dart';
 
 class EditIngredientListItem extends StatelessWidget {
-  final Ingredient item;
+  final RecipeIngredient item;
   final bool showTopDivider;
   final TextEditingController controller;
-  final Function(String, Ingredient) updateIngredient;
+  final Function(String, RecipeIngredient) updateIngredient;
   final int index;
 
   const EditIngredientListItem(

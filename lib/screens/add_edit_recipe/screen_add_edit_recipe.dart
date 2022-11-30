@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_recipes/data/model/ingredient.dart';
+import 'package:my_recipes/data/model/recipe_ingredient.dart';
 import 'package:my_recipes/data/model/recipe.dart';
 import 'package:my_recipes/screens/add_edit_recipe/view_model/view_model_add_edit_recipe.dart';
 import 'package:my_recipes/screens/add_edit_recipe/widgets/list_view_edit_ingredient.dart';
@@ -121,7 +121,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                     .recipeIngredientControllers,
                 removeIngredient: (int i) =>
                     context.read<AddEditRecipeViewModel>().removeIngredient(i),
-                updateIngredient: (String text, Ingredient i) => context
+                updateIngredient: (String text, RecipeIngredient i) => context
                     .read<AddEditRecipeViewModel>()
                     .updateIngredient(text, i),
               ),
