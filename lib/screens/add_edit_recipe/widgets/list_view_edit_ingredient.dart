@@ -27,7 +27,7 @@ class EditIngredientsListView extends StatelessWidget {
           canvasColor: Colors.grey[500]?.withOpacity(0.5),
           shadowColor: Colors.grey[500]),
       child: ReorderableListView.builder(
-        buildDefaultDragHandles: true,
+        buildDefaultDragHandles: false,
         onReorder: (oldIndex, newIndex) {
           context
               .read<AddEditRecipeViewModel>()
