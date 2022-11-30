@@ -3,7 +3,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:my_recipes/extensions/extension_list.dart';
 import '../../../data/model/recipe_ingredient.dart';
 import '../../../data/model/recipe.dart';
 import '../../../data/model/recipe_photo.dart';
@@ -137,7 +136,8 @@ class AddEditRecipeViewModel extends ChangeNotifier {
     if (newIndex > recipeIngredients.length - 1) {
       updatedIndex -= 1;
     }
-    recipeIngredients.swap(oldIndex, updatedIndex);
+    var ingredient = recipeIngredients.removeAt(oldIndex);
+    recipeIngredients.insert(updatedIndex, ingredient);
     notifyListeners();
   }
 

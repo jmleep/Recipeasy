@@ -61,6 +61,7 @@ class ViewRecipeViewModel extends ChangeNotifier {
     recipe = updatedRecipe;
     recipeImages = [];
     recipeIngredients = [];
+    recipeSteps = [];
 
     notifyListeners();
     getRecipeData();

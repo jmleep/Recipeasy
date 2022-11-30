@@ -22,59 +22,66 @@ class EditIngredientsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReorderableListView.builder(
-      buildDefaultDragHandles: false,
-      onReorder: (oldIndex, newIndex) {
-        context
-            .read<AddEditRecipeViewModel>()
-            .swapIngredients(oldIndex, newIndex);
-      },
-      shrinkWrap: true,
-      padding: EdgeInsets.only(bottom: 5),
-      physics: NeverScrollableScrollPhysics(),
-      itemCount: ingredients.length,
-      itemBuilder: (context, index) {
-        return Dismissible(
-          direction: DismissDirection.endToStart,
-          background: Container(
-              color: Colors.red,
-              //margin: EdgeInsets.only(top: 9, bottom: 9),
-              alignment: Alignment.center,
-              child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 16.0),
-                    child: Icon(Icons.delete, color: Colors.white),
-                  ))),
-          onDismissed: (DismissDirection direction) {
-            removeIngredient(index);
-          },
-          key: UniqueKey(),
-          child: Row(
-            children: [
-              Flexible(
-                  child: Padding(
-                padding: const EdgeInsets.only(left: 10, right: 10),
-                child: EditIngredientListItem(
-                  item: ingredients[index],
-                  index: index,
-                  updateIngredient: updateIngredient,
-                  controller: controllers[index],
-                  showTopDivider: index == 0,
-                  key: UniqueKey(),
-                ),
-              )),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 30, top: 10),
-                child: ReorderableDragStartListener(
-                  index: index,
-                  child: const Icon(Icons.drag_handle, size: 30),
-                ),
-              )
-            ],
-          ),
-        );
-      },
+    return Theme(
+      data: Theme.of(context).copyWith(
+          canvasColor: Colors.grey[500]?.withOpacity(0.5),
+          shadowColor: Colors.grey[500]),
+      child: ReorderableListView.builder(
+        buildDefaultDragHandles: true,
+        onReorder: (oldIndex, newIndex) {
+          context
+              .read<AddEditRecipeViewModel>()
+              .swapIngredients(oldIndex, newIndex);
+        },
+        shrinkWrap: true,
+        padding: EdgeInsets.only(bottom: 5),
+        physics: NeverScrollableScrollPhysics(),
+        itemCount: ingredients.length,
+        itemBuilder: (context, index) {
+          return Dismissible(
+            direction: DismissDirection.endToStart,
+            background: Container(
+                color: Colors.red,
+                //margin: EdgeInsets.only(top: 9, bottom: 9),
+                alignment: Alignment.center,
+                child: Align(
+                    alignment: Alignment.centerRight,
+                    child: Padding(
+                      padding: EdgeInsets.only(right: 16.0),
+                      child: Icon(Icons.delete, color: Colors.white),
+                    ))),
+            onDismissed: (DismissDirection direction) {
+              removeIngredient(index);
+            },
+            key: UniqueKey(),
+            child: Row(
+              children: [
+                Flexible(
+                    child: Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 10),
+                  child: EditIngredientListItem(
+                    item: ingredients[index],
+                    index: index,
+                    updateIngredient: updateIngredient,
+                    controller: controllers[index],
+                    showTopDivider: index == 0,
+                    key: UniqueKey(),
+                  ),
+                )),
+                Padding(
+                  padding: const EdgeInsets.only(left: 20, right: 30, top: 10),
+                  child: ReorderableDragStartListener(
+                    index: index,
+                    child: Icon(Icons.drag_handle,
+                        size: 30,
+                        color: Theme.of(context).colorScheme.onBackground),
+                  ),
+                )
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 }
