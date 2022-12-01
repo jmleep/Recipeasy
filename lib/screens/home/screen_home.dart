@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/screens/home/view_model/view_model_home.dart';
 import 'package:my_recipes/screens/home/widgets/grid_recipe.dart';
+import 'package:my_recipes/screens/home/widgets/list_home_view_arrangement.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/button_add_recipe_floating_action.dart';
 import 'package:provider/provider.dart';
@@ -35,8 +36,41 @@ class _HomeScreenState extends State<HomeScreen> {
         style: TextStyle(fontSize: 16),
       ));
     } else {
-      body = RecipeGrid(
-        scaffoldKey: _scaffoldKey,
+      body = Column(
+        children: [
+          GestureDetector(
+            onTap: () {
+              showModalBottomSheet<void>(
+                builder: (context) {
+                  return HomeViewArrangementList(
+                    items: [
+                      ArrangementListItem('Grid', Icons.grid_on, () {
+                        print('tap grid');
+                      }),
+                      ArrangementListItem('List', Icons.format_list_bulleted,
+                          () {
+                        print('tap list');
+                      })
+                    ],
+                  );
+                },
+                context: context,
+              );
+            },
+            child: Container(
+                alignment: Alignment.centerLeft,
+                padding: EdgeInsets.only(left: 10),
+                child: Icon(
+                  Icons.sort,
+                  color: Theme.of(context).colorScheme.onSurface,
+                )),
+          ),
+          Flexible(
+            child: RecipeGrid(
+              scaffoldKey: _scaffoldKey,
+            ),
+          ),
+        ],
       );
     }
 
