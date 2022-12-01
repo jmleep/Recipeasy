@@ -3,6 +3,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_ui_auth/firebase_ui_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
+import 'package:flutter/services.dart';
 import 'package:my_recipes/screens/add_edit_recipe/view_model/view_model_add_edit_recipe.dart';
 import 'package:my_recipes/screens/home/screen_home.dart';
 import 'package:my_recipes/screens/home/view_model/view_model_home.dart';
@@ -14,6 +16,16 @@ import 'package:provider/provider.dart';
 
 import 'firebase_options.dart';
 
+setNavBarColor() {
+  var brightness = SchedulerBinding.instance.window.platformBrightness;
+  bool isDarkMode = brightness == Brightness.dark;
+
+  SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+      systemNavigationBarColor: isDarkMode ? Colors.grey[900] : Colors.white,
+      systemNavigationBarIconBrightness:
+          isDarkMode ? Brightness.light : Brightness.dark));
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(
@@ -23,6 +35,7 @@ void main() async {
     EmailAuthProvider(),
   ]);
 
+  setNavBarColor();
   runApp(MyRecipeApp());
 }
 

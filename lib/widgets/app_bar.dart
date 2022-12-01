@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:my_recipes/theme/widget_styles.dart';
 
 class RecipeAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -26,6 +27,12 @@ class RecipeAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      systemOverlayStyle: SystemUiOverlayStyle(
+          statusBarColor: Theme.of(context).colorScheme.background,
+          statusBarIconBrightness:
+              Theme.of(context).colorScheme.brightness == Brightness.light
+                  ? Brightness.dark
+                  : Brightness.light),
       leading: allowBack
           ? BackButton(color: Theme.of(context).colorScheme.primary)
           : null,
