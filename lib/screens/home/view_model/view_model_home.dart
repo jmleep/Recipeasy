@@ -10,11 +10,19 @@ import '../../view_recipe_details/screen_view_recipe_details.dart';
 
 class HomeViewModel extends ChangeNotifier {
   late List<Recipe> recipes;
+  int gridColumnCount = 2;
   bool isLoading = true;
+  bool isGrid = true;
 
   init() {
     recipes = [];
     getRecipes();
+  }
+
+  setGridColumnCount(int columnCount) {
+    isGrid = true;
+    gridColumnCount = columnCount;
+    notifyListeners();
   }
 
   getRecipes() async {
@@ -53,5 +61,10 @@ class HomeViewModel extends ChangeNotifier {
       context,
       MaterialPageRoute(builder: (context) => SettingsScreen()),
     );
+  }
+
+  void setIsGrid(bool isGrid) {
+    this.isGrid = isGrid;
+    notifyListeners();
   }
 }

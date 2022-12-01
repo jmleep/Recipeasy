@@ -44,12 +44,15 @@ class _HomeScreenState extends State<HomeScreen> {
                 builder: (context) {
                   return HomeViewArrangementList(
                     items: [
-                      ArrangementListItem('Grid', Icons.grid_on, () {
-                        print('tap grid');
+                      ArrangementListItem('2 Column Grid', Icons.grid_view, () {
+                        context.read<HomeViewModel>().setGridColumnCount(2);
+                      }),
+                      ArrangementListItem('3 Column Grid', Icons.grid_on, () {
+                        context.read<HomeViewModel>().setGridColumnCount(3);
                       }),
                       ArrangementListItem('List', Icons.format_list_bulleted,
                           () {
-                        print('tap list');
+                        context.read<HomeViewModel>().setIsGrid(false);
                       })
                     ],
                   );
@@ -59,17 +62,13 @@ class _HomeScreenState extends State<HomeScreen> {
             },
             child: Container(
                 alignment: Alignment.centerLeft,
-                padding: EdgeInsets.only(left: 10),
+                padding: EdgeInsets.only(left: 10, bottom: 5),
                 child: Icon(
                   Icons.sort,
                   color: Theme.of(context).colorScheme.onSurface,
                 )),
           ),
-          Flexible(
-            child: RecipeGrid(
-              scaffoldKey: _scaffoldKey,
-            ),
-          ),
+          RecipeItems(scaffoldKey: _scaffoldKey),
         ],
       );
     }
@@ -94,5 +93,49 @@ class _HomeScreenState extends State<HomeScreen> {
           key: UniqueKey(),
           onPressAddRecipeFAB: context.read<HomeViewModel>().navigateTo,
         ));
+  }
+}
+
+class RecipeItems extends StatelessWidget {
+  const RecipeItems({
+    Key? key,
+    required GlobalKey<ScaffoldState> scaffoldKey,
+  })  : _scaffoldKey = scaffoldKey,
+        super(key: key);
+
+  final GlobalKey<ScaffoldState> _scaffoldKey;
+
+  @override
+  Widget build(BuildContext context) {
+    if (context.watch<HomeViewModel>().isGrid) {
+      return Flexible(
+        child: RecipeGrid(
+          scaffoldKey: _scaffoldKey,
+        ),
+      );
+    } else {
+      return Padding(
+        padding: const EdgeInsets.only(top: 10.0),
+        child: ListView.separated(
+            shrinkWrap: true,
+            itemBuilder: (context, index) {
+              return ListTile(
+                leading: context
+                            .watch<HomeViewModel>()
+                            .recipes[index]
+                            .primaryImage !=
+                        null
+                    ? Image.memory(context
+                        .watch<HomeViewModel>()
+                        .recipes[index]
+                        .primaryImage!)
+                    : SizedBox.shrink(),
+                title: Text(context.watch<HomeViewModel>().recipes[index].name),
+              );
+            },
+            separatorBuilder: (context, index) => Divider(),
+            itemCount: context.watch<HomeViewModel>().recipes.length),
+      );
+    }
   }
 }

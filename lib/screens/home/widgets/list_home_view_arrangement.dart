@@ -23,29 +23,28 @@ class HomeViewArrangementList extends StatefulWidget {
 class _HomeViewArrangementListState extends State<HomeViewArrangementList> {
   @override
   Widget build(BuildContext context) {
-    return FractionallySizedBox(
-      heightFactor: 0.33,
-      child: Container(
-        color: Theme.of(context).colorScheme.background,
-        child: ListView.separated(
-          padding: EdgeInsets.all(20),
-          itemCount: widget.items.length,
-          itemBuilder: (BuildContext context, int index) => ListTile(
-            onTap: () {
-              widget.items[index].onTap();
-              Navigator.pop(context);
-            },
-            tileColor: Theme.of(context).colorScheme.background,
-            leading: Icon(widget.items[index].icon,
-                color: Theme.of(context).colorScheme.onSurface),
-            title: Text(
-              widget.items[index].text,
-              style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
-            ),
+    return Container(
+      color: Theme.of(context).colorScheme.background,
+      child: ListView.separated(
+        shrinkWrap: true,
+        physics: NeverScrollableScrollPhysics(),
+        padding: EdgeInsets.all(20),
+        itemCount: widget.items.length,
+        itemBuilder: (BuildContext context, int index) => ListTile(
+          onTap: () {
+            widget.items[index].onTap();
+            Navigator.pop(context);
+          },
+          tileColor: Theme.of(context).colorScheme.background,
+          leading: Icon(widget.items[index].icon,
+              color: Theme.of(context).colorScheme.onSurface),
+          title: Text(
+            widget.items[index].text,
+            style: TextStyle(color: Theme.of(context).colorScheme.onSurface),
           ),
-          separatorBuilder: (BuildContext context, int index) => Divider(
-            color: Theme.of(context).colorScheme.onSurface,
-          ),
+        ),
+        separatorBuilder: (BuildContext context, int index) => Divider(
+          color: Theme.of(context).colorScheme.onSurface,
         ),
       ),
     );

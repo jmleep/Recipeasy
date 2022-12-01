@@ -43,6 +43,7 @@ class _RecipeGridState extends State<RecipeGrid> {
                 child: Padding(
                   padding: const EdgeInsets.all(5.0),
                   child: Card(
+                    elevation: 50,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15)),
                     child: Container(
@@ -101,7 +102,7 @@ class _RecipeGridState extends State<RecipeGrid> {
           .toList();
 
       return GridView.count(
-        crossAxisCount: 2,
+        crossAxisCount: context.watch<HomeViewModel>().gridColumnCount,
         mainAxisSpacing: 10,
         children: <Widget>[...gridItems],
       );
