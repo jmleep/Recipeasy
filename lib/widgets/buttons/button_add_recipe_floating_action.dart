@@ -19,15 +19,15 @@ class AddRecipeFloatingActionButton extends StatelessWidget {
       },
       shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(15))),
-      backgroundColor: Theme.of(context).colorScheme.primary,
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       icon: Icon(
         Icons.note_add,
-        color: Colors.white,
+        color: Theme.of(context).colorScheme.onPrimary,
       ),
       label: Text(
         'New Recipe',
         style: GoogleFonts.pacifico(
-          color: Colors.white,
+          color: Theme.of(context).colorScheme.onPrimary,
           fontSize: 20,
         ),
       ),
