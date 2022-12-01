@@ -81,7 +81,7 @@ class PhotoPreviewList extends StatelessWidget {
                             border: Border(
                           bottom: BorderSide(
                               width: 5,
-                              color: Theme.of(context).colorScheme.secondary),
+                              color: Theme.of(context).colorScheme.primary),
                         ))));
                   }
 
@@ -92,7 +92,8 @@ class PhotoPreviewList extends StatelessWidget {
                         child: FilledIcon(
                             icon: Icons.check_circle,
                             fillColor: Colors.white,
-                            iconColor: Colors.blueAccent)));
+                            iconColor:
+                                Theme.of(context).colorScheme.secondary)));
                   }
 
                   return GestureDetector(

@@ -41,35 +41,60 @@ class _RecipeGridState extends State<RecipeGrid> {
                           ));
                 },
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      Expanded(
-                        child: Container(
-                            decoration: BoxDecoration(
-                                color: Theme.of(context).colorScheme.background,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(15))),
-                            child: ClipRRect(
-                              borderRadius: BorderRadius.circular(8.0),
-                              child: FittedBox(
-                                child: recipe.primaryImage != null
-                                    ? Image.memory(recipe.primaryImage!)
-                                    : Icon(Icons.photo),
-                                fit: BoxFit.cover,
+                  padding: const EdgeInsets.all(5.0),
+                  child: Card(
+                    shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(15)),
+                    child: Container(
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          gradient: LinearGradient(
+                              begin: Alignment.topLeft,
+                              colors: [
+                                Theme.of(context).colorScheme.secondary,
+                                Theme.of(context).colorScheme.primary
+                              ])),
+                      padding: const EdgeInsets.all(15.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: <Widget>[
+                          Expanded(
+                            child: Container(
+                                decoration: BoxDecoration(
+                                    color: Colors.transparent,
+                                    borderRadius:
+                                        BorderRadius.all(Radius.circular(15))),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                  child: FittedBox(
+                                    child: recipe.primaryImage != null
+                                        ? Image.memory(recipe.primaryImage!)
+                                        : Text(recipe.name,
+                                            style: TextStyle(
+                                                color: Theme.of(context)
+                                                    .colorScheme
+                                                    .onPrimary)),
+                                    fit: recipe.primaryImage != null
+                                        ? BoxFit.cover
+                                        : BoxFit.fitWidth,
+                                  ),
+                                )),
+                          ),
+                          if (recipe.primaryImage != null)
+                            Padding(
+                              padding: const EdgeInsets.only(top: 8.0),
+                              child: Text(
+                                recipe.name,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    color: Theme.of(context)
+                                        .colorScheme
+                                        .onPrimary),
                               ),
-                            )),
+                            )
+                        ],
                       ),
-                      Container(
-                          color: recipe.color != null
-                              ? recipe.color
-                              : Colors.black,
-                          child: Text(
-                            recipe.name,
-                            style: TextStyle(fontSize: 18),
-                          ))
-                    ],
+                    ),
                   ),
                 ),
               ))

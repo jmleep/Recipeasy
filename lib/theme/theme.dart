@@ -8,8 +8,10 @@ class RecipeasyTheme {
     return themeData.copyWith(
       colorScheme: themeData.colorScheme.copyWith(
           primary: Colors.green[800],
-          secondary: Colors.green[800],
+          secondary: Color.fromRGBO(59, 133, 136, 1.0),
           background: Colors.white,
+          onSurface: Colors.black,
+          onPrimary: Colors.white,
           brightness: Brightness.light,
           onBackground: Colors.black),
       inputDecorationTheme: ReusableStyleWidget.inputThemeBordered(),
@@ -25,8 +27,11 @@ class RecipeasyTheme {
 
     return themeData.copyWith(
         colorScheme: themeData.colorScheme.copyWith(
-            secondary: Colors.green[500],
-            primary: Colors.green[500],
+            secondary: Color.fromRGBO(
+                59, 133, 136, 1.0), //Color.fromRGBO(76, 171, 175, 1),
+            primary: Colors.green[800],
+            onSurface: Colors.white,
+            onPrimary: Colors.white,
             brightness: Brightness.dark,
             background: Colors.grey[900],
             onBackground: Colors.white),

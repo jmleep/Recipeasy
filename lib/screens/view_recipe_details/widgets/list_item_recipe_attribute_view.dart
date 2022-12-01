@@ -19,6 +19,8 @@ class ViewRecipeAttributeListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var style = TextStyle(color: Theme.of(context).colorScheme.onPrimary);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -30,11 +32,26 @@ class ViewRecipeAttributeListItem extends StatelessWidget {
                 if (isNumbered)
                   Padding(
                       padding: EdgeInsets.only(right: 15),
-                      child: Text('${index + 1}.')),
-                Flexible(child: Text(item.value ?? '', softWrap: true)),
+                      child: Text(
+                        '${index + 1}.',
+                        style: style,
+                      )),
+                Flexible(
+                    child: Text(
+                  item.value ?? '',
+                  softWrap: true,
+                  style: style,
+                )),
               ],
             )),
-        if (showDivider) ...[Divider()]
+        if (showDivider) ...[
+          Padding(
+            padding: const EdgeInsets.only(left: 25, right: 25),
+            child: Divider(
+              color: Theme.of(context).colorScheme.onPrimary,
+            ),
+          )
+        ]
       ],
     );
   }

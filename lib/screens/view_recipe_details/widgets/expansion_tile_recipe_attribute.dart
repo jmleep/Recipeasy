@@ -22,18 +22,27 @@ class RecipeAttributeExpansionTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ViewExpansionPanel(
-        title: title,
-        isInitiallyExpanded: items.length != 0,
-        items: items,
-        noItemsText: noItemsText,
-        itemBuilder: (context, index) {
-          return ViewRecipeAttributeListItem(
-              key: UniqueKey(),
-              item: items[index],
-              index: index,
-              isNumbered: isNumbered != null ? isNumbered! : false,
-              showDivider: index != items.length - 1);
-        });
+    return Container(
+      margin: EdgeInsets.all(10),
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.all(Radius.circular(15)),
+          gradient: LinearGradient(begin: Alignment.topLeft, colors: [
+            Theme.of(context).colorScheme.primary,
+            Theme.of(context).colorScheme.secondary
+          ])),
+      child: ViewExpansionPanel(
+          title: title,
+          isInitiallyExpanded: items.length != 0,
+          items: items,
+          noItemsText: noItemsText,
+          itemBuilder: (context, index) {
+            return ViewRecipeAttributeListItem(
+                key: UniqueKey(),
+                item: items[index],
+                index: index,
+                isNumbered: isNumbered != null ? isNumbered! : false,
+                showDivider: index != items.length - 1);
+          }),
+    );
   }
 }
