@@ -155,4 +155,37 @@ class RecipeDatabaseManager {
 
     batch.apply();
   }
+
+  static Future<List<Recipe>> searchRecipes(String text) async {
+    final Database? db = await RecipeDatabase.instance.database;
+
+    final String recipeTable = RecipeDatabase.recipeTable;
+    final String photosTable = RecipeDatabase.photosTable;
+
+    if (text == '') {
+      return await getAllRecipes();
+    }
+
+    final List<Map<String, dynamic>> maps = await db!.rawQuery(
+        '' +
+            'SELECT $recipeTable.id, $recipeTable.name, $recipeTable.list_order, $recipeTable.color, $recipeTable.meat_content, $photosTable.image ' +
+            'FROM $recipeTable ' +
+            'LEFT JOIN $photosTable ' +
+            'ON $photosTable.recipe_id = $recipeTable.id ' +
+            'WHERE UPPER($recipeTable.name) LIKE ? '
+                'ORDER BY $recipeTable.list_order DESC',
+        ['%${text.toUpperCase()}%']);
+
+    return List.generate(maps.length, (i) {
+      return Recipe(
+          id: maps[i]['id'],
+          name: maps[i]['name'],
+          order: maps[i]['order'],
+          meatContent: cast<String>(maps[i]['meat_content'])?.toMeatContent(),
+          color: new Color(maps[i]['color']),
+          primaryImage: maps[i]['image'] != null
+              ? base64.decode(maps[i]['image'])
+              : null);
+    });
+  }
 }

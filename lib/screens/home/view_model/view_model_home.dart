@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,6 +19,14 @@ class HomeViewModel extends ChangeNotifier {
   int gridColumnCount = 2;
   bool isLoading = true;
   bool isGrid = true;
+  Timer? debounce;
+  bool isAnyRecipePresent = false;
+
+  @mustCallSuper
+  void dispose() {
+    debounce?.cancel();
+    super.dispose();
+  }
 
   init() async {
     recipes = [];
@@ -52,6 +62,9 @@ class HomeViewModel extends ChangeNotifier {
 
     recipes = retrievedRecipes;
     isLoading = false;
+    if (retrievedRecipes.length > 0) {
+      isAnyRecipePresent = true;
+    }
     notifyListeners();
   }
 
@@ -91,5 +104,18 @@ class HomeViewModel extends ChangeNotifier {
 
     this.isGrid = isGrid;
     notifyListeners();
+  }
+
+  searchRecipes(String text) {
+    if (debounce?.isActive ?? false) {
+      debounce?.cancel();
+    }
+    debounce = Timer(
+      const Duration(milliseconds: 500),
+      () async {
+        recipes = await RecipeDatabaseManager.searchRecipes(text);
+        notifyListeners();
+      },
+    );
   }
 }
