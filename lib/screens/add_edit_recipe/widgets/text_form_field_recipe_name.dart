@@ -16,6 +16,7 @@ class RecipeNameTextFormField extends StatelessWidget {
       child: Form(
         key: formKey,
         child: TextFormField(
+          maxLength: 40,
           controller: recipeNameController,
           decoration:
               ReusableStyleWidget.inputDecoration(context, 'Recipe Name'),

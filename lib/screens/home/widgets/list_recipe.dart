@@ -39,7 +39,12 @@ class RecipeList extends StatelessWidget {
                   : null,
               title: Padding(
                 padding: hasImage ? EdgeInsets.zero : EdgeInsets.only(left: 5),
-                child: Text(context.watch<HomeViewModel>().recipes[index].name),
+                child: Text(
+                  context.watch<HomeViewModel>().recipes[index].name,
+                  maxLines: 2,
+                  softWrap: true,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
               onTap: () {
                 context.read<HomeViewModel>().navigateTo(

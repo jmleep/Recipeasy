@@ -87,8 +87,6 @@ class HomeViewModel extends ChangeNotifier {
       );
     }
 
-    isLoading = true;
-    notifyListeners();
     getRecipes();
   }
 

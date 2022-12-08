@@ -19,6 +19,8 @@ class _RecipeGridState extends State<RecipeGrid> {
   @override
   Widget build(BuildContext context) {
     var recipes = context.watch<HomeViewModel>().recipes;
+    var gridColumnCount = context.watch<HomeViewModel>().gridColumnCount;
+    var textSize = gridColumnCount >= 3 ? 24.0 : 36.0;
 
     var gridItems = [];
     if (recipes.length > 0) {
@@ -58,8 +60,11 @@ class _RecipeGridState extends State<RecipeGrid> {
                       padding: const EdgeInsets.all(15.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Expanded(
+                          Flexible(
+                            fit: FlexFit.loose,
+                            flex: 2,
                             child: Container(
                                 decoration: BoxDecoration(
                                     color: Colors.transparent,
@@ -67,32 +72,51 @@ class _RecipeGridState extends State<RecipeGrid> {
                                         BorderRadius.all(Radius.circular(15))),
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(8.0),
-                                  child: FittedBox(
-                                    child: recipe.primaryImage != null
-                                        ? Image.memory(recipe.primaryImage!)
-                                        : Text(recipe.name,
-                                            style: TextStyle(
-                                                color: Theme.of(context)
-                                                    .colorScheme
-                                                    .onPrimary)),
-                                    fit: recipe.primaryImage != null
-                                        ? BoxFit.cover
-                                        : BoxFit.fitWidth,
-                                  ),
+                                  child: recipe.primaryImage != null
+                                      ? FittedBox(
+                                          child: Image.memory(
+                                              recipe.primaryImage!),
+                                          fit: BoxFit.cover)
+                                      : Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Center(
+                                                child: Text(recipe.name,
+                                                    overflow: TextOverflow.fade,
+                                                    softWrap: true,
+                                                    style: TextStyle(
+                                                        fontSize: textSize,
+                                                        color: Theme.of(context)
+                                                            .colorScheme
+                                                            .onPrimary)),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
                                 )),
                           ),
                           if (recipe.primaryImage != null)
-                            Padding(
-                              padding: const EdgeInsets.only(top: 8.0),
-                              child: Text(
-                                recipe.name,
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    color: Theme.of(context)
-                                        .colorScheme
-                                        .onPrimary),
+                            Flexible(
+                              flex: 1,
+                              fit: FlexFit.tight,
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  recipe.name,
+                                  softWrap: true,
+                                  overflow: TextOverflow.fade,
+                                  style: TextStyle(
+                                      fontSize: 18,
+                                      color: Theme.of(context)
+                                          .colorScheme
+                                          .onPrimary),
+                                ),
                               ),
-                            )
+                            ),
                         ],
                       ),
                     ),
@@ -102,7 +126,7 @@ class _RecipeGridState extends State<RecipeGrid> {
           .toList();
 
       return GridView.count(
-        crossAxisCount: context.watch<HomeViewModel>().gridColumnCount,
+        crossAxisCount: gridColumnCount,
         mainAxisSpacing: 10,
         children: <Widget>[...gridItems],
       );
