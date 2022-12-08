@@ -171,7 +171,7 @@ class RecipeDatabaseManager {
             'SELECT $recipeTable.id, $recipeTable.name, $recipeTable.list_order, $recipeTable.color, $recipeTable.meat_content, $photosTable.image ' +
             'FROM $recipeTable ' +
             'LEFT JOIN $photosTable ' +
-            'ON $photosTable.recipe_id = $recipeTable.id ' +
+            'ON $photosTable.recipe_id = $recipeTable.id AND $photosTable.is_primary = 1 ' +
             'WHERE UPPER($recipeTable.name) LIKE ? '
                 'ORDER BY $recipeTable.list_order DESC',
         ['%${text.toUpperCase()}%']);
