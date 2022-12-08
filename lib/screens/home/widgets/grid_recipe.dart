@@ -47,10 +47,10 @@ class _RecipeGridState extends State<RecipeGrid> {
                   child: Card(
                     elevation: 50,
                     shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15)),
+                        borderRadius: BorderRadius.circular(8)),
                     child: Container(
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.all(Radius.circular(15)),
+                          borderRadius: BorderRadius.all(Radius.circular(8)),
                           gradient: LinearGradient(
                               begin: Alignment.topLeft,
                               colors: [

@@ -72,6 +72,7 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
     var steps = context.watch<AddEditRecipeViewModel>().recipeSteps;
     var tempRecipePhotos =
         context.watch<AddEditRecipeViewModel>().tempRecipePhotos;
+    var tags = context.watch<AddEditRecipeViewModel>().recipeTags;
 
     setupTextFieldControllers(ingredients, steps);
 
@@ -96,6 +97,56 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                 recipeNameController: context
                     .watch<AddEditRecipeViewModel>()
                     .recipeNameController,
+              ),
+              tags.isNotEmpty
+                  ? Row(
+                      mainAxisSize: MainAxisSize.max,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10.0),
+                          child: SizedBox(
+                            height: 30,
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              scrollDirection: Axis.horizontal,
+                              itemCount: tags.length,
+                              itemBuilder: (context, index) {
+                                return Chip(
+                                    label: Text(context
+                                        .read<AddEditRecipeViewModel>()
+                                        .recipeTags[index]
+                                        .value!));
+                              },
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
+                  : SizedBox.shrink(),
+              SizedBox(
+                height: 30,
+              ),
+              Row(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 10),
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(8)),
+                        border: Border.all(
+                            color: Theme.of(context).colorScheme.primary)),
+                    child: TextButton(
+                      onPressed: () {
+                        context.read<AddEditRecipeViewModel>().addTag(context);
+                      },
+                      child: Row(
+                        children: [Icon(Icons.add), Text('Add tag')],
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 20,
               ),
               ActivePhoto(
                   recipePhotos: tempRecipePhotos,

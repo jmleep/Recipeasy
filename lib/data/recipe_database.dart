@@ -4,12 +4,13 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 class RecipeDatabase {
-  static final databaseName = "recipe.db";
+  static const databaseName = "recipe.db";
 
-  static final recipeTable = 'recipes';
-  static final ingredientsTable = 'ingredients';
-  static final stepsTable = 'steps';
-  static final photosTable = 'photos';
+  static const recipeTable = 'recipes';
+  static const ingredientsTable = 'ingredients';
+  static const stepsTable = 'steps';
+  static const photosTable = 'photos';
+  static const tagsTable = 'tags';
 
   // Private constructor to enforce singleton
   RecipeDatabase._();
@@ -44,6 +45,9 @@ class RecipeDatabase {
         );
         db.execute(
           '''CREATE TABLE $photosTable(id INTEGER PRIMARY KEY, recipe_id INTEGER, is_primary INTEGER, image TEXT)''',
+        );
+        db.execute(
+          '''CREATE TABLE $stepsTable(id INTEGER PRIMARY KEY, recipe_id INTEGER, value TEXT, list_order INTEGER)''',
         );
       },
       // Set the version. This executes the onCreate function and provides a

@@ -5,9 +5,11 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_recipes/data/model/recipe_attribute.dart';
 import 'package:my_recipes/data/model/recipe_step.dart';
+import 'package:my_recipes/widgets/dialogs/dialog_add_edit_tag.dart';
 import '../../../data/model/recipe_ingredient.dart';
 import '../../../data/model/recipe.dart';
 import '../../../data/model/recipe_photo.dart';
+import '../../../data/model/recipe_tag.dart';
 import '../../../data/repository/recipe_photo_repository.dart';
 import '../../../data/repository/recipe_repository.dart';
 import '../../../widgets/dialogs/dialog_keep_editing.dart';
@@ -22,6 +24,7 @@ class AddEditRecipeViewModel extends ChangeNotifier {
   List<TextEditingController> recipeStepControllers = [];
   List<RecipeIngredient> recipeIngredients = [];
   List<RecipeIngredient> recipeIngredientsToDelete = [];
+  List<RecipeTag> recipeTags = [];
   ScrollController scrollController = ScrollController();
   TextEditingController recipeNameController = TextEditingController();
   ImagePicker imagePicker = ImagePicker();
@@ -286,5 +289,25 @@ class AddEditRecipeViewModel extends ChangeNotifier {
 
     Navigator.pop(context, true);
     return Future.value(false);
+  }
+
+  void upsertTag(RecipeTag? tag, String value) {
+    if (tag != null) {
+      tag.value = value;
+    } else {
+      recipeTags.add(RecipeTag(value: value));
+    }
+
+    notifyListeners();
+  }
+
+  void addTag(BuildContext context) {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) {
+        return AddEditTagDialog(upsertTag: upsertTag);
+      },
+    );
   }
 }

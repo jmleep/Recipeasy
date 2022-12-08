@@ -55,13 +55,9 @@ class RecipeDatabaseManager {
   }
 
   static Future<List<RecipeIngredient>> getIngredients(int? recipeId) async {
-    final Database? db = await RecipeDatabase.instance.database;
-
-    final List<Map<String, dynamic>> maps = await db!.query(
-        RecipeDatabase.ingredientsTable,
-        where: 'recipe_id = ?',
-        whereArgs: [recipeId],
-        orderBy: 'list_order');
+    final List<Map<String, dynamic>> maps =
+        await queryRecipeAttributeBasedTable(
+            RecipeDatabase.ingredientsTable, recipeId);
 
     return List.generate(maps.length, (i) {
       return RecipeIngredient(
@@ -112,6 +108,14 @@ class RecipeDatabaseManager {
     );
   }
 
+  static Future<List<Map<String, dynamic>>> queryRecipeAttributeBasedTable(
+      String table, int? recipeId) async {
+    final Database? db = await RecipeDatabase.instance.database;
+
+    return await db!.query(table,
+        where: 'recipe_id = ?', whereArgs: [recipeId], orderBy: 'list_order');
+  }
+
   static Future<void> deleteIngredients(
       List<RecipeIngredient> ingredients) async {
     final Database? db = await RecipeDatabase.instance.database;
@@ -129,13 +133,20 @@ class RecipeDatabaseManager {
   static T? cast<T>(x) => x is T ? x : null;
 
   static Future<List<RecipeStep>> getSteps(int? recipeId) async {
-    final Database? db = await RecipeDatabase.instance.database;
+    final List<Map<String, dynamic>> maps =
+        await queryRecipeAttributeBasedTable(
+            RecipeDatabase.stepsTable, recipeId);
 
-    final List<Map<String, dynamic>> maps = await db!.query(
-        RecipeDatabase.stepsTable,
-        where: 'recipe_id = ?',
-        whereArgs: [recipeId],
-        orderBy: 'list_order');
+    return List.generate(maps.length, (i) {
+      return RecipeStep(
+          id: maps[i]['id'], recipeId: recipeId, value: maps[i]['value']);
+    });
+  }
+
+  static Future<List<RecipeStep>> getTags(int? recipeId) async {
+    final List<Map<String, dynamic>> maps =
+        await queryRecipeAttributeBasedTable(
+            RecipeDatabase.tagsTable, recipeId);
 
     return List.generate(maps.length, (i) {
       return RecipeStep(

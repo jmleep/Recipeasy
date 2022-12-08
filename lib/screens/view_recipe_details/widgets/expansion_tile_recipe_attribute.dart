@@ -25,7 +25,7 @@ class RecipeAttributeExpansionTile extends StatelessWidget {
     return Container(
       margin: EdgeInsets.all(10),
       decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
+          borderRadius: BorderRadius.all(Radius.circular(8)),
           gradient: LinearGradient(begin: Alignment.topLeft, colors: [
             Theme.of(context).colorScheme.primary,
             Theme.of(context).colorScheme.secondary
