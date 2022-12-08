@@ -54,8 +54,10 @@ class LayoutAndSearch extends StatelessWidget {
                     hintText: 'Search recipes',
                     hintStyle: TextStyle(color: Colors.grey),
                     contentPadding: EdgeInsets.only(left: 5)),
-                onChanged: (value) =>
-                    context.read<HomeViewModel>().searchRecipes(value)),
+                onChanged: (value) {
+                  context.read<HomeViewModel>().setIsSearchLoading(true);
+                  context.read<HomeViewModel>().searchRecipes(value);
+                }),
           ),
         )
       ],

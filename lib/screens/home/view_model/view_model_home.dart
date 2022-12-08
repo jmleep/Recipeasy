@@ -18,6 +18,7 @@ class HomeViewModel extends ChangeNotifier {
   late List<Recipe> recipes;
   int gridColumnCount = 2;
   bool isLoading = true;
+  bool isSearchLoading = false;
   bool isGrid = true;
   Timer? debounce;
   bool isAnyRecipePresent = false;
@@ -106,6 +107,11 @@ class HomeViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
+  setIsSearchLoading(bool isLoadingInput) {
+    isSearchLoading = isLoadingInput;
+    notifyListeners();
+  }
+
   searchRecipes(String text) {
     if (debounce?.isActive ?? false) {
       debounce?.cancel();
@@ -114,6 +120,7 @@ class HomeViewModel extends ChangeNotifier {
       const Duration(milliseconds: 500),
       () async {
         recipes = await RecipeDatabaseManager.searchRecipes(text);
+        isSearchLoading = false;
         notifyListeners();
       },
     );

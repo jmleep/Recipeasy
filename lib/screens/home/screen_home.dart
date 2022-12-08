@@ -24,10 +24,6 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (context.watch<HomeViewModel>().isLoading) {
-      return Center(child: CircularProgressIndicator());
-    }
-
     Widget body;
 
     if (!context.watch<HomeViewModel>().isAnyRecipePresent) {
@@ -40,7 +36,13 @@ class _HomeScreenState extends State<HomeScreen> {
       body = Column(
         children: [
           LayoutAndSearch(),
-          RecipeItems(scaffoldKey: _scaffoldKey),
+          context.watch<HomeViewModel>().isSearchLoading
+              ? Center(
+                  child: Padding(
+                  padding: const EdgeInsets.all(25),
+                  child: CircularProgressIndicator(),
+                ))
+              : RecipeItems(scaffoldKey: _scaffoldKey),
         ],
       );
     }
