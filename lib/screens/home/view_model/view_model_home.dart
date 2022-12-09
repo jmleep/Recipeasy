@@ -35,13 +35,17 @@ class HomeViewModel extends ChangeNotifier {
     var prefsIsGrid = prefs.getBool(preferences_is_grid);
     var prefsGridColumnCount = prefs.getInt(preferences_grid_column_count);
 
-    if (prefsIsGrid == null || !prefsIsGrid) {
-      isGrid = false;
-    } else {
+    if (prefsIsGrid == null) {
+      prefs.setBool(preferences_is_grid, true);
       isGrid = true;
+    } else {
+      isGrid = prefsIsGrid;
     }
 
-    if (prefsGridColumnCount != null) {
+    if (prefsGridColumnCount == null) {
+      prefs.setInt(preferences_grid_column_count, 2);
+      gridColumnCount = 2;
+    } else {
       gridColumnCount = prefsGridColumnCount;
     }
 
@@ -54,6 +58,7 @@ class HomeViewModel extends ChangeNotifier {
 
     final prefs = await SharedPreferences.getInstance();
     prefs.setInt(preferences_grid_column_count, columnCount);
+    prefs.setBool(preferences_is_grid, true);
 
     notifyListeners();
   }
