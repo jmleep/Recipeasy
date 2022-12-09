@@ -18,8 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    super.initState();
     context.read<HomeViewModel>().init();
+    super.initState();
   }
 
   @override
@@ -86,7 +86,7 @@ class RecipeItems extends StatelessWidget {
     }
 
     if (context.watch<HomeViewModel>().isGrid) {
-      return Flexible(
+      return Expanded(
         child: RecipeGrid(
           scaffoldKey: _scaffoldKey,
         ),

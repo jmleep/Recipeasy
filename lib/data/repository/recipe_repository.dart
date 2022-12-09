@@ -40,7 +40,7 @@ class RecipeDatabaseManager {
       recipe.tags?.asMap().forEach((index, element) {
         stepsBatch.insert(
             RecipeDatabase.tagsTable, element.toMap(recipeId, index),
-            conflictAlgorithm: ConflictAlgorithm.replace);
+            conflictAlgorithm: ConflictAlgorithm.ignore);
       });
     }
 

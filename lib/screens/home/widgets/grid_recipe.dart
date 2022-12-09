@@ -74,8 +74,12 @@ class _RecipeGridState extends State<RecipeGrid> {
                                   borderRadius: BorderRadius.circular(8.0),
                                   child: recipe.primaryImage != null
                                       ? FittedBox(
-                                          child: Image.memory(
-                                              recipe.primaryImage!),
+                                          child: ConstrainedBox(
+                                            constraints: BoxConstraints(
+                                                minWidth: 1, minHeight: 1),
+                                            child: Image.memory(
+                                                recipe.primaryImage!),
+                                          ),
                                           fit: BoxFit.cover)
                                       : Column(
                                           mainAxisAlignment:
