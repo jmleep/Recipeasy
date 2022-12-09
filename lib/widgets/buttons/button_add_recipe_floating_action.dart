@@ -14,6 +14,7 @@ class AddRecipeFloatingActionButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return FloatingActionButton.extended(
+      heroTag: null,
       onPressed: () {
         this.onPressAddRecipeFAB(context, null);
       },
