@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:my_recipes/data/model/recipe_ingredient.dart';
 import 'package:my_recipes/data/model/recipe.dart';
 import 'package:my_recipes/screens/add_edit_recipe/view_model/view_model_add_edit_recipe.dart';
+import 'package:my_recipes/screens/add_edit_recipe/widgets/add_tag.dart';
 import 'package:my_recipes/screens/add_edit_recipe/widgets/edit_recipe_attribute.dart';
 import 'package:my_recipes/screens/add_edit_recipe/widgets/text_form_field_recipe_name.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
@@ -11,6 +12,7 @@ import 'package:provider/provider.dart';
 import '../../../widgets/app_bar.dart';
 import '../../../widgets/photos/photo_preview_list.dart';
 import '../../data/model/recipe_step.dart';
+import '../../widgets/tags/list_tags.dart';
 import '../common/view_add_edit_recipe.dart';
 
 class AddEditRecipeScreen extends ViewAddEditRecipe {
@@ -98,53 +100,13 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                     .watch<AddEditRecipeViewModel>()
                     .recipeNameController,
               ),
+              tags.isNotEmpty ? TagList(tags: tags) : SizedBox.shrink(),
               tags.isNotEmpty
-                  ? Row(
-                      mainAxisSize: MainAxisSize.max,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(left: 10.0),
-                          child: SizedBox(
-                            height: 30,
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              scrollDirection: Axis.horizontal,
-                              itemCount: tags.length,
-                              itemBuilder: (context, index) {
-                                return Chip(
-                                    label: Text(context
-                                        .read<AddEditRecipeViewModel>()
-                                        .recipeTags[index]
-                                        .value!));
-                              },
-                            ),
-                          ),
-                        ),
-                      ],
+                  ? SizedBox(
+                      height: 30,
                     )
                   : SizedBox.shrink(),
-              SizedBox(
-                height: 30,
-              ),
-              Row(
-                children: [
-                  Container(
-                    margin: EdgeInsets.only(left: 10),
-                    decoration: BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(8)),
-                        border: Border.all(
-                            color: Theme.of(context).colorScheme.primary)),
-                    child: TextButton(
-                      onPressed: () {
-                        context.read<AddEditRecipeViewModel>().addTag(context);
-                      },
-                      child: Row(
-                        children: [Icon(Icons.add), Text('Add tag')],
-                      ),
-                    ),
-                  ),
-                ],
-              ),
+              AddTag(),
               SizedBox(
                 height: 20,
               ),

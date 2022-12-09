@@ -2,6 +2,7 @@ import 'dart:typed_data';
 import 'dart:ui';
 
 import 'package:my_recipes/data/model/recipe_photo.dart';
+import 'package:my_recipes/data/model/recipe_tag.dart';
 
 import 'recipe_ingredient.dart';
 
@@ -14,23 +15,24 @@ class Recipe {
   List<RecipeIngredient>? ingredients;
   List<RecipeStep>? steps;
   List<RecipePhoto>? photos;
+  List<RecipeTag>? tags;
   String? notes;
   MeatContent? meatContent;
   Color? color;
   Uint8List? primaryImage;
 
-  Recipe({
-    this.id,
-    required this.name,
-    this.order,
-    this.ingredients,
-    this.steps,
-    this.photos,
-    this.notes,
-    this.meatContent,
-    this.color,
-    this.primaryImage,
-  });
+  Recipe(
+      {this.id,
+      required this.name,
+      this.order,
+      this.ingredients,
+      this.steps,
+      this.photos,
+      this.notes,
+      this.meatContent,
+      this.color,
+      this.primaryImage,
+      this.tags});
 
   Map<String, dynamic> toMap() {
     Map<String, dynamic> values = new Map();

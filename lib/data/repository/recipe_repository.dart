@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:my_recipes/data/model/recipe_step.dart';
+import 'package:my_recipes/data/model/recipe_tag.dart';
 import 'package:my_recipes/data/repository/recipe_photo_repository.dart';
 import 'package:my_recipes/data/model/recipe_ingredient.dart';
 import 'package:my_recipes/data/model/recipe.dart';
@@ -34,8 +35,21 @@ class RecipeDatabaseManager {
       });
     }
 
-    await ingredientsBatch.commit(noResult: true);
-    await stepsBatch.commit(noResult: true);
+    Batch tagsBatch = db.batch();
+    if (recipe.tags != null && recipe.tags!.length > 0) {
+      recipe.tags?.asMap().forEach((index, element) {
+        stepsBatch.insert(
+            RecipeDatabase.tagsTable, element.toMap(recipeId, index),
+            conflictAlgorithm: ConflictAlgorithm.replace);
+      });
+    }
+
+    var ingredientsBatchFuture = ingredientsBatch.commit(noResult: true);
+    var stepsBatchFuture = stepsBatch.commit(noResult: true);
+    var tagsBatchFuture = tagsBatch.commit(noResult: true);
+
+    await Future.wait(
+        [ingredientsBatchFuture, stepsBatchFuture, tagsBatchFuture]);
 
     return recipeId;
   }
@@ -143,13 +157,13 @@ class RecipeDatabaseManager {
     });
   }
 
-  static Future<List<RecipeStep>> getTags(int? recipeId) async {
+  static Future<List<RecipeTag>> getTags(int? recipeId) async {
     final List<Map<String, dynamic>> maps =
         await queryRecipeAttributeBasedTable(
             RecipeDatabase.tagsTable, recipeId);
 
     return List.generate(maps.length, (i) {
-      return RecipeStep(
+      return RecipeTag(
           id: maps[i]['id'], recipeId: recipeId, value: maps[i]['value']);
     });
   }

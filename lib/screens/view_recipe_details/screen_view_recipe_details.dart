@@ -6,6 +6,7 @@ import 'package:my_recipes/screens/view_recipe_details/widgets/expansion_tile_re
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/photos/active_photo.dart';
 import 'package:my_recipes/widgets/photos/photo_preview_list.dart';
+import 'package:my_recipes/widgets/tags/list_tags.dart';
 import 'package:provider/provider.dart';
 
 import '../common/view_add_edit_recipe.dart';
@@ -44,6 +45,7 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     Widget body;
+    var tags = context.watch<ViewRecipeViewModel>().recipeTags;
 
     if (context.watch<ViewRecipeViewModel>().isLoading) {
       body = Column(
@@ -70,6 +72,14 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
                 recipePhotos: context.watch<ViewRecipeViewModel>().recipeImages,
                 setActivePhoto: setActivePhoto,
                 activePhoto: activePhoto),
+            tags.isNotEmpty
+                ? SizedBox(
+                    height: 10,
+                  )
+                : SizedBox.shrink(),
+            tags.isNotEmpty
+                ? TagList(tags: context.watch<ViewRecipeViewModel>().recipeTags)
+                : SizedBox.shrink(),
             RecipeAttributeExpansionTile(
               items: context.watch<ViewRecipeViewModel>().recipeIngredients,
               title: 'Ingredients',

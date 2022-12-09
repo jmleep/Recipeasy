@@ -49,6 +49,7 @@ class AddEditRecipeViewModel extends ChangeNotifier {
     tempRecipePhotos = [];
     tempRecipePhotosToDelete = [];
     recipeSteps = [];
+    recipeTags = [];
     recipeStepsToDelete = [];
     recipeIngredientControllers = [];
     recipeStepControllers = [];
@@ -68,13 +69,15 @@ class AddEditRecipeViewModel extends ChangeNotifier {
       var imagesFuture = RecipePhotoDatabaseManager.getImages(recipe!.id!);
       var ingredientsFuture = RecipeDatabaseManager.getIngredients(recipe!.id!);
       var stepsFuture = RecipeDatabaseManager.getSteps(recipe!.id!);
+      var tagsFuture = RecipeDatabaseManager.getTags(recipe!.id);
 
-      var results =
-          await Future.wait([imagesFuture, ingredientsFuture, stepsFuture]);
+      var results = await Future.wait(
+          [imagesFuture, ingredientsFuture, stepsFuture, tagsFuture]);
 
       tempRecipePhotos.addAll(results[0] as List<RecipePhoto>);
       recipeIngredients.addAll(results[1] as List<RecipeIngredient>);
       recipeSteps.addAll(results[2] as List<RecipeStep>);
+      recipeTags.addAll(results[3] as List<RecipeTag>);
     }
 
     recipeNameController.addListener(() {
@@ -226,12 +229,14 @@ class AddEditRecipeViewModel extends ChangeNotifier {
         editingRecipe.photos = tempRecipePhotos;
         editingRecipe.ingredients = recipeIngredients;
         editingRecipe.steps = recipeSteps;
+        editingRecipe.tags = recipeTags;
       } else {
         editingRecipe = new Recipe(
             name: recipeNameController.text,
             photos: tempRecipePhotos,
             ingredients: recipeIngredients,
-            steps: recipeSteps);
+            steps: recipeSteps,
+            tags: recipeTags);
       }
 
       RecipeDatabaseManager.deleteIngredients(recipeIngredientsToDelete);
