@@ -16,6 +16,8 @@ class RecipeNameTextFormField extends StatelessWidget {
       child: Form(
         key: formKey,
         child: TextFormField(
+          autofocus: true,
+          textInputAction: TextInputAction.next,
           maxLength: 40,
           controller: recipeNameController,
           decoration:
