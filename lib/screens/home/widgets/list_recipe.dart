@@ -40,22 +40,22 @@ class RecipeList extends StatelessWidget {
               title: Padding(
                 padding: hasImage ? EdgeInsets.zero : EdgeInsets.only(left: 5),
                 child: Text(
-                  context.watch<HomeViewModel>().recipes[index].name,
+                  context.watch<HomeViewModel>().filteredRecipes[index].name,
                   maxLines: 2,
                   softWrap: true,
                   overflow: TextOverflow.ellipsis,
                 ),
               ),
               onTap: () {
-                context.read<HomeViewModel>().navigateTo(
-                    context, context.read<HomeViewModel>().recipes[index]);
+                context.read<HomeViewModel>().navigateTo(context,
+                    context.read<HomeViewModel>().filteredRecipes[index]);
               },
             );
           },
           separatorBuilder: (context, index) => Divider(
                 color: Theme.of(context).colorScheme.onSurface,
               ),
-          itemCount: context.watch<HomeViewModel>().recipes.length),
+          itemCount: context.watch<HomeViewModel>().filteredRecipes.length),
     );
   }
 }

@@ -83,7 +83,7 @@ class HomeViewModel extends ChangeNotifier {
     if (retrievedRecipes.length > 0) {
       isAnyRecipePresent = true;
     }
-    notifyListeners();
+    filterRecipesByTag();
   }
 
   void navigateTo(BuildContext context, Recipe? recipe) async {
