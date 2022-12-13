@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_recipes/data/repository/recipe_repository.dart';
+import 'package:my_recipes/data/repository/recipe_repository_interface.dart';
+import 'package:my_recipes/data/repository/sqlite_recipe_repository.dart';
 import 'package:my_recipes/data/repository/recipe_photo_repository.dart';
 import 'package:my_recipes/data/model/recipe.dart';
 import 'package:my_recipes/data/model/recipe_photo.dart';
@@ -8,19 +9,32 @@ import 'package:my_recipes/widgets/buttons/button_recipeasy.dart';
 
 class DeleteRecipeConfirmationDialog extends StatelessWidget {
   final Recipe recipe;
+  final RecipeRepository repository;
   final GlobalKey<ScaffoldState> scaffoldKey;
   final Function getRecipes;
 
   DeleteRecipeConfirmationDialog(
       {required this.recipe,
       required this.scaffoldKey,
-      required this.getRecipes});
+      required this.getRecipes,
+      required this.repository});
+
+  TextStyle getStyle(BuildContext context) {
+    return TextStyle(color: Theme.of(context).colorScheme.onBackground);
+  }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text("Delete ${recipe.name}"),
-      content: Text("Are you sure you want to delete this recipe?"),
+      backgroundColor: Theme.of(context).colorScheme.background,
+      title: Text(
+        "Delete ${recipe.name}",
+        style: getStyle(context),
+      ),
+      content: Text(
+        "Are you sure you want to delete this recipe?",
+        style: getStyle(context),
+      ),
       actions: [
         RoundedButton(
           buttonText: 'Cancel',
@@ -38,7 +52,7 @@ class DeleteRecipeConfirmationDialog extends StatelessWidget {
             List<RecipePhoto> photosRefInCaseOfUndo =
                 await RecipePhotoDatabaseManager.getImages(recipe.id!);
 
-            await RecipeDatabaseManager.deleteRecipe(recipe);
+            await repository.deleteRecipe(recipe);
 
             getRecipes();
 
@@ -54,8 +68,7 @@ class DeleteRecipeConfirmationDialog extends StatelessWidget {
                 onPressed: () async {
                   recipe.photos = photosRefInCaseOfUndo;
 
-                  RecipeDatabaseManager.upsertRecipe(recipe)
-                      .then((value) => getRecipes());
+                  repository.upsertRecipe(recipe).then((value) => getRecipes());
                 },
               ),
             );
