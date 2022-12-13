@@ -13,7 +13,9 @@ class RecipeasyTheme {
           onSurface: Colors.black,
           onPrimary: Colors.white,
           brightness: Brightness.light,
-          onBackground: Colors.black),
+          onBackground: Colors.black,
+          tertiary: Colors.grey[600],
+          onTertiary: Colors.white),
       inputDecorationTheme: ReusableStyleWidget.inputThemeBordered(),
       outlinedButtonTheme: ReusableStyleWidget.outlinedButtonTheme(),
       textButtonTheme: ReusableStyleWidget.textButtonTheme(),
@@ -34,7 +36,9 @@ class RecipeasyTheme {
           onPrimary: Colors.white,
           brightness: Brightness.dark,
           background: Colors.grey[900],
-          onBackground: Colors.white),
+          onBackground: Colors.white,
+          tertiary: Colors.grey[700],
+          onTertiary: Colors.white),
       inputDecorationTheme:
           ReusableStyleWidget.inputThemeBordered(isDark: true),
       outlinedButtonTheme:

@@ -18,7 +18,7 @@ class HomeViewModel extends ChangeNotifier {
 
   late List<Recipe> recipes;
   List<RecipeTag> allRecipeTags = [];
-  List<int> activeFilteredTags = [];
+  List<RecipeTag> activeFilteredTags = [];
   int gridColumnCount = 2;
   bool isLoading = true;
   bool isSearchLoading = false;
@@ -135,5 +135,23 @@ class HomeViewModel extends ChangeNotifier {
         notifyListeners();
       },
     );
+  }
+
+  toggleTagFilter(RecipeTag tag) {
+    if (activeFilteredTags.any(
+      (element) => element.value == tag.value,
+    )) {
+      activeFilteredTags.removeWhere((element) => element.value == tag.value);
+    } else {
+      activeFilteredTags.add(tag);
+    }
+    notifyListeners();
+  }
+
+  // todo: implement
+  applyTagFilter() {
+    print('filter ${activeFilteredTags.length}');
+
+    notifyListeners();
   }
 }

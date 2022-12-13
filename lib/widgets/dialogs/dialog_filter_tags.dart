@@ -9,7 +9,7 @@ class FilterTagSelectorDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<HomeViewModel>().getRecipeTags();
     var tags = context.watch<HomeViewModel>().allRecipeTags;
-    var filteredTagIndexes = context.watch<HomeViewModel>().activeFilteredTags;
+    var filteredTags = context.watch<HomeViewModel>().activeFilteredTags;
 
     if (tags.isEmpty) {
       return Column(
@@ -27,26 +27,42 @@ class FilterTagSelectorDialog extends StatelessWidget {
         width: double.maxFinite,
         child: Wrap(
           spacing: 5.0,
-          children: tags.asMap().entries.map((e) {
-            int index = e.key;
+          children: tags.map((e) {
+            var isFiltered = filteredTags.any(
+              (element) => element.value == e.value,
+            );
 
-            // todo: add search actions using filtered tags
-            // todo: figure out background color for selected tags
             return GestureDetector(
-              onTap: () => filteredTagIndexes.add(index),
+              onTap: () => context.read<HomeViewModel>().toggleTagFilter(e),
               child: Chip(
-                  backgroundColor: filteredTagIndexes.contains(index)
-                      ? Colors.blue
-                      : Theme.of(context).colorScheme.primary,
+                  backgroundColor: isFiltered
+                      ? Theme.of(context).colorScheme.secondary
+                      : Theme.of(context).colorScheme.tertiary,
                   label: Text(
-                    e.value.value as String ?? '',
+                    // todo: fix this weird string issue
+                    e.value as String ?? '',
                     style: TextStyle(
-                        color: Theme.of(context).colorScheme.onBackground),
+                        color: isFiltered
+                            ? Theme.of(context).colorScheme.onSecondary
+                            : Theme.of(context).colorScheme.onTertiary),
                   )),
             );
           }).toList(),
         ),
       ),
+      actions: [
+        TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('Cancel')),
+        TextButton(
+            onPressed: () {
+              context.read<HomeViewModel>().applyTagFilter();
+              Navigator.pop(context);
+            },
+            child: Text('Filter')),
+      ],
     );
   }
 }

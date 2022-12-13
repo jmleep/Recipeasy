@@ -45,7 +45,6 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
   @override
   Widget build(BuildContext context) {
     Widget body;
-    var tags = context.watch<ViewRecipeViewModel>().recipeTags;
 
     if (context.watch<ViewRecipeViewModel>().isLoading) {
       body = Column(
@@ -72,14 +71,7 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
                 recipePhotos: context.watch<ViewRecipeViewModel>().recipeImages,
                 setActivePhoto: setActivePhoto,
                 activePhoto: activePhoto),
-            tags.isNotEmpty
-                ? SizedBox(
-                    height: 10,
-                  )
-                : SizedBox.shrink(),
-            tags.isNotEmpty
-                ? TagList(tags: context.watch<ViewRecipeViewModel>().recipeTags)
-                : SizedBox.shrink(),
+            TagList(tags: context.watch<ViewRecipeViewModel>().recipeTags),
             RecipeAttributeExpansionTile(
               items: context.watch<ViewRecipeViewModel>().recipeIngredients,
               title: 'Ingredients',

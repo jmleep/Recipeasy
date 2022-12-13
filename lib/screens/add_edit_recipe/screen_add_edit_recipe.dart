@@ -100,13 +100,11 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
                     .watch<AddEditRecipeViewModel>()
                     .recipeNameController,
               ),
-              tags.isNotEmpty ? TagList(tags: tags) : SizedBox.shrink(),
-              tags.isNotEmpty
-                  ? SizedBox(
-                      height: 30,
-                    )
-                  : SizedBox.shrink(),
-              AddTag(),
+              TagList(tags: tags),
+              Padding(
+                padding: const EdgeInsets.only(top: 10.0),
+                child: AddTag(),
+              ),
               SizedBox(
                 height: 20,
               ),

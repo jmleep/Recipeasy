@@ -12,11 +12,17 @@ class RecipeNameTextFormField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(10.0),
+      padding: const EdgeInsets.only(top: 10.0, left: 10, right: 10),
       child: Form(
         key: formKey,
         child: TextFormField(
-          autofocus: true,
+          buildCounter: (_,
+                  {required currentLength, maxLength, required isFocused}) =>
+              Container(
+            alignment: Alignment.centerRight,
+            child: Text(currentLength.toString() + "/" + maxLength.toString()),
+          ),
+          autofocus: false,
           textInputAction: TextInputAction.next,
           maxLength: 40,
           controller: recipeNameController,

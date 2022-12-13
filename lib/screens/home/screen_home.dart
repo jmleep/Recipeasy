@@ -6,6 +6,7 @@ import 'package:my_recipes/screens/home/widgets/layout_and_search.dart';
 import 'package:my_recipes/screens/home/widgets/list_recipe.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
 import 'package:my_recipes/widgets/buttons/button_add_recipe_floating_action.dart';
+import 'package:my_recipes/widgets/tags/list_tags.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -24,6 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    var filteredTags = context.watch<HomeViewModel>().activeFilteredTags;
     Widget body;
 
     if (!context.watch<HomeViewModel>().isAnyRecipePresent) {
@@ -34,8 +36,19 @@ class _HomeScreenState extends State<HomeScreen> {
       ));
     } else {
       body = Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           LayoutAndSearch(),
+          if (filteredTags.isNotEmpty)
+            Padding(
+              padding: const EdgeInsets.only(top: 10.0),
+              child: TagList(
+                  tags: filteredTags,
+                  showCloseIcon: true,
+                  removeTag: (tag) =>
+                      context.read<HomeViewModel>().toggleTagFilter(tag)),
+            ),
           context.watch<HomeViewModel>().isSearchLoading
               ? Center(
                   child: Padding(
