@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../data/model/recipe.dart';
+import '../../../data/model/recipe_tag.dart';
 import '../../../data/repository/recipe_repository.dart';
 import '../../add_edit_recipe/screen_add_edit_recipe.dart';
 import '../../settings/screen_settings.dart';
@@ -16,6 +17,8 @@ class HomeViewModel extends ChangeNotifier {
   static const preferences_is_grid = 'preferences_is_grid';
 
   late List<Recipe> recipes;
+  List<RecipeTag> allRecipeTags = [];
+  List<int> activeFilteredTags = [];
   int gridColumnCount = 2;
   bool isLoading = true;
   bool isSearchLoading = false;
@@ -60,6 +63,11 @@ class HomeViewModel extends ChangeNotifier {
     prefs.setInt(preferences_grid_column_count, columnCount);
     prefs.setBool(preferences_is_grid, true);
 
+    notifyListeners();
+  }
+
+  getRecipeTags() async {
+    allRecipeTags = await RecipeDatabaseManager.getAllTags();
     notifyListeners();
   }
 

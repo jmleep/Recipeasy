@@ -192,8 +192,7 @@ class RecipeDatabaseManager {
     }
 
     final List<Map<String, dynamic>> maps = await db!.rawQuery(
-        '' +
-            'SELECT $recipeTable.id, $recipeTable.name, $recipeTable.list_order, $recipeTable.color, $recipeTable.meat_content, $photosTable.image ' +
+        'SELECT $recipeTable.id, $recipeTable.name, $recipeTable.list_order, $recipeTable.color, $recipeTable.meat_content, $photosTable.image ' +
             'FROM $recipeTable ' +
             'LEFT JOIN $photosTable ' +
             'ON $photosTable.recipe_id = $recipeTable.id AND $photosTable.is_primary = 1 ' +
@@ -211,6 +210,17 @@ class RecipeDatabaseManager {
           primaryImage: maps[i]['image'] != null
               ? base64.decode(maps[i]['image'])
               : null);
+    });
+  }
+
+  static Future<List<RecipeTag>> getAllTags() async {
+    final db = await RecipeDatabase.instance.database;
+
+    final List<Map<String, dynamic>> maps = await db!
+        .rawQuery('SELECT DISTINCT value FROM ' + RecipeDatabase.tagsTable);
+
+    return List.generate(maps.length, (i) {
+      return RecipeTag(id: null, recipeId: null, value: maps[i]['value']);
     });
   }
 }
