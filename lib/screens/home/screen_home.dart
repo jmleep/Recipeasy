@@ -25,7 +25,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var filteredTags = context.watch<HomeViewModel>().activeFilteredTags;
+    var activeFilteredTags = context.watch<HomeViewModel>().activeFilteredTags;
     Widget body;
 
     if (!context.watch<HomeViewModel>().isAnyRecipePresent) {
@@ -40,14 +40,14 @@ class _HomeScreenState extends State<HomeScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           LayoutAndSearch(),
-          if (filteredTags.isNotEmpty)
+          if (activeFilteredTags.isNotEmpty)
             Padding(
               padding: const EdgeInsets.only(top: 10.0),
               child: TagList(
-                  tags: filteredTags,
+                  tags: activeFilteredTags,
                   showCloseIcon: true,
                   removeTag: (tag) =>
-                      context.read<HomeViewModel>().toggleTagFilter(tag)),
+                      context.read<HomeViewModel>().removeActiveTag(tag)),
             ),
           context.watch<HomeViewModel>().isSearchLoading
               ? Center(

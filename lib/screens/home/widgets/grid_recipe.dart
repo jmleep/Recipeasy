@@ -18,7 +18,7 @@ class RecipeGrid extends StatefulWidget {
 class _RecipeGridState extends State<RecipeGrid> {
   @override
   Widget build(BuildContext context) {
-    var recipes = context.watch<HomeViewModel>().recipes;
+    var recipes = context.watch<HomeViewModel>().filteredRecipes;
     var gridColumnCount = context.watch<HomeViewModel>().gridColumnCount;
     var textSize = gridColumnCount >= 3 ? 24.0 : 36.0;
 

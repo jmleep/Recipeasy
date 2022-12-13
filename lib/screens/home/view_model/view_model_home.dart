@@ -17,8 +17,10 @@ class HomeViewModel extends ChangeNotifier {
   static const preferences_is_grid = 'preferences_is_grid';
 
   late List<Recipe> recipes;
+  List<Recipe> filteredRecipes = [];
   List<RecipeTag> allRecipeTags = [];
   List<RecipeTag> activeFilteredTags = [];
+  List<RecipeTag> tempFilteredTags = [];
   int gridColumnCount = 2;
   bool isLoading = true;
   bool isSearchLoading = false;
@@ -34,6 +36,7 @@ class HomeViewModel extends ChangeNotifier {
 
   init() async {
     recipes = [];
+    filteredRecipes = [];
     final prefs = await SharedPreferences.getInstance();
     var prefsIsGrid = prefs.getBool(preferences_is_grid);
     var prefsGridColumnCount = prefs.getInt(preferences_grid_column_count);
@@ -75,6 +78,7 @@ class HomeViewModel extends ChangeNotifier {
     List<Recipe> retrievedRecipes = await RecipeDatabaseManager.getAllRecipes();
 
     recipes = retrievedRecipes;
+    filteredRecipes = [...recipes];
     isLoading = false;
     if (retrievedRecipes.length > 0) {
       isAnyRecipePresent = true;
@@ -138,20 +142,45 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   toggleTagFilter(RecipeTag tag) {
-    if (activeFilteredTags.any(
+    if (tempFilteredTags.any(
       (element) => element.value == tag.value,
     )) {
-      activeFilteredTags.removeWhere((element) => element.value == tag.value);
+      tempFilteredTags.removeWhere((element) => element.value == tag.value);
     } else {
-      activeFilteredTags.add(tag);
+      tempFilteredTags.add(tag);
     }
+
     notifyListeners();
   }
 
-  // todo: implement
-  applyTagFilter() {
-    print('filter ${activeFilteredTags.length}');
+  filterRecipesByTag() {
+    activeFilteredTags = [...tempFilteredTags];
 
+    if (activeFilteredTags.isEmpty) {
+      filteredRecipes = [...recipes];
+    } else {
+      filteredRecipes = [];
+    }
+
+    for (var i = 0; i < recipes.length; i++) {
+      var tagLength = recipes[i].tags?.length ?? 0;
+      for (var j = 0; j < tagLength; j++) {
+        if (activeFilteredTags
+            .any((activeTag) => activeTag.value == recipes[i].tags?[j].value)) {
+          filteredRecipes.add(recipes[i]);
+          break;
+        }
+      }
+    }
+
+    notifyListeners();
+  }
+
+  removeActiveTag(RecipeTag tag) {
+    activeFilteredTags.removeWhere((element) => element.value == tag.value);
+    tempFilteredTags.removeWhere((element) => element.value == tag.value);
+
+    filterRecipesByTag();
     notifyListeners();
   }
 }

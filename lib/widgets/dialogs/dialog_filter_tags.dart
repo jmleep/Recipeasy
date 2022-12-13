@@ -9,7 +9,7 @@ class FilterTagSelectorDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     context.read<HomeViewModel>().getRecipeTags();
     var tags = context.watch<HomeViewModel>().allRecipeTags;
-    var filteredTags = context.watch<HomeViewModel>().activeFilteredTags;
+    var tempFilteredTags = context.watch<HomeViewModel>().tempFilteredTags;
 
     if (tags.isEmpty) {
       return Column(
@@ -28,7 +28,7 @@ class FilterTagSelectorDialog extends StatelessWidget {
         child: Wrap(
           spacing: 5.0,
           children: tags.map((e) {
-            var isFiltered = filteredTags.any(
+            var isFiltered = tempFilteredTags.any(
               (element) => element.value == e.value,
             );
 
@@ -53,7 +53,12 @@ class FilterTagSelectorDialog extends StatelessWidget {
       actions: [
         TextButton(
             onPressed: () {
-              context.read<HomeViewModel>().applyTagFilter();
+              Navigator.pop(context);
+            },
+            child: Text('Cancel')),
+        TextButton(
+            onPressed: () {
+              context.read<HomeViewModel>().filterRecipesByTag();
               Navigator.pop(context);
             },
             child: Text('Filter')),

@@ -93,17 +93,31 @@ class RecipeDatabaseManager {
         'AND $photosTable.is_primary = 1 ' +
         'ORDER BY $recipeTable.list_order DESC');
 
-    return List.generate(maps.length, (i) {
-      return Recipe(
+    Map<int, Recipe> recipes = {};
+
+    for (var i = 0; i < maps.length; i++) {
+      recipes[maps[i]['id']] = Recipe(
           id: maps[i]['id'],
           name: maps[i]['name'],
           order: maps[i]['order'],
-          meatContent: cast<String>(maps[i]['meat_content'])?.toMeatContent(),
-          color: new Color(maps[i]['color']),
           primaryImage: maps[i]['image'] != null
               ? base64.decode(maps[i]['image'])
               : null);
-    });
+    }
+
+    final List<Map<String, dynamic>> tagMaps =
+        await db.query(RecipeDatabase.tagsTable);
+    for (var i = 0; i < tagMaps.length; i++) {
+      if (recipes[tagMaps[i]['recipe_id']]?.tags == null) {
+        recipes[tagMaps[i]['recipe_id']]?.tags = [];
+      }
+      recipes[tagMaps[i]['recipe_id']]?.tags?.add(RecipeTag(
+          recipeId: tagMaps[i]['recipe_id'],
+          value: tagMaps[i]['value'],
+          id: tagMaps[i]['id']));
+    }
+
+    return recipes.values.toList();
   }
 
   static Future<Recipe> getRecipe(int recipeId) async {
@@ -205,8 +219,6 @@ class RecipeDatabaseManager {
           id: maps[i]['id'],
           name: maps[i]['name'],
           order: maps[i]['order'],
-          meatContent: cast<String>(maps[i]['meat_content'])?.toMeatContent(),
-          color: new Color(maps[i]['color']),
           primaryImage: maps[i]['image'] != null
               ? base64.decode(maps[i]['image'])
               : null);
