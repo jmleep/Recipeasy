@@ -75,7 +75,7 @@ class LayoutAndSearch extends StatelessWidget {
             child: Chip(
               backgroundColor: Theme.of(context).colorScheme.primary,
               label: Text(
-                'Filter by tag',
+                'Filter',
                 style:
                     TextStyle(color: Theme.of(context).colorScheme.onPrimary),
               ),

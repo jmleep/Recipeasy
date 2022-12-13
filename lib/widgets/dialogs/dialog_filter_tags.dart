@@ -53,11 +53,6 @@ class FilterTagSelectorDialog extends StatelessWidget {
       actions: [
         TextButton(
             onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text('Cancel')),
-        TextButton(
-            onPressed: () {
               context.read<HomeViewModel>().applyTagFilter();
               Navigator.pop(context);
             },
