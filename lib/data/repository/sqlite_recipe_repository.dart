@@ -6,12 +6,13 @@ import 'package:my_recipes/data/model/recipe_tag.dart';
 import 'package:my_recipes/data/repository/recipe_photo_repository.dart';
 import 'package:my_recipes/data/model/recipe_ingredient.dart';
 import 'package:my_recipes/data/model/recipe.dart';
+import 'package:my_recipes/data/repository/recipe_repository_interface.dart';
 import 'package:sqflite/sqflite.dart';
 
 import '../recipe_database.dart';
 
-class RecipeDatabaseManager {
-  static Future<int> upsertRecipe(Recipe recipe) async {
+class SQLiteRecipeRepository implements RecipeRepository {
+  Future<int> upsertRecipe(Recipe recipe) async {
     final Database? db = await RecipeDatabase.instance.database;
 
     int recipeId = await db!.insert(RecipeDatabase.recipeTable, recipe.toMap(),
@@ -54,7 +55,7 @@ class RecipeDatabaseManager {
     return recipeId;
   }
 
-  static Future<int> deleteRecipe(Recipe recipe) async {
+  Future<int> deleteRecipe(Recipe recipe) async {
     final Database? db = await RecipeDatabase.instance.database;
 
     await db!.delete(RecipeDatabase.ingredientsTable,
@@ -68,9 +69,9 @@ class RecipeDatabaseManager {
         where: "id = ?", whereArgs: [recipe.id]);
   }
 
-  static Future<List<RecipeIngredient>> getIngredients(int? recipeId) async {
+  Future<List<RecipeIngredient>> getIngredients(int? recipeId) async {
     final List<Map<String, dynamic>> maps =
-        await queryRecipeAttributeBasedTable(
+        await _queryRecipeAttributeBasedTable(
             RecipeDatabase.ingredientsTable, recipeId);
 
     return List.generate(maps.length, (i) {
@@ -79,7 +80,7 @@ class RecipeDatabaseManager {
     });
   }
 
-  static Future<List<Recipe>> getAllRecipes() async {
+  Future<List<Recipe>> getAllRecipes() async {
     final Database? db = await RecipeDatabase.instance.database;
 
     final String recipeTable = RecipeDatabase.recipeTable;
@@ -120,7 +121,7 @@ class RecipeDatabaseManager {
     return recipes.values.toList();
   }
 
-  static Future<Recipe> getRecipe(int recipeId) async {
+  Future<Recipe> getRecipe(int recipeId) async {
     final Database? db = await RecipeDatabase.instance.database;
 
     final List<Map<String, dynamic>> maps = await db!.query(
@@ -136,7 +137,7 @@ class RecipeDatabaseManager {
     );
   }
 
-  static Future<List<Map<String, dynamic>>> queryRecipeAttributeBasedTable(
+  Future<List<Map<String, dynamic>>> _queryRecipeAttributeBasedTable(
       String table, int? recipeId) async {
     final Database? db = await RecipeDatabase.instance.database;
 
@@ -144,8 +145,7 @@ class RecipeDatabaseManager {
         where: 'recipe_id = ?', whereArgs: [recipeId], orderBy: 'list_order');
   }
 
-  static Future<void> deleteIngredients(
-      List<RecipeIngredient> ingredients) async {
+  Future<void> deleteIngredients(List<RecipeIngredient> ingredients) async {
     final Database? db = await RecipeDatabase.instance.database;
 
     Batch batch = db!.batch();
@@ -160,9 +160,9 @@ class RecipeDatabaseManager {
 
   static T? cast<T>(x) => x is T ? x : null;
 
-  static Future<List<RecipeStep>> getSteps(int? recipeId) async {
+  Future<List<RecipeStep>> getSteps(int? recipeId) async {
     final List<Map<String, dynamic>> maps =
-        await queryRecipeAttributeBasedTable(
+        await _queryRecipeAttributeBasedTable(
             RecipeDatabase.stepsTable, recipeId);
 
     return List.generate(maps.length, (i) {
@@ -171,9 +171,9 @@ class RecipeDatabaseManager {
     });
   }
 
-  static Future<List<RecipeTag>> getTags(int? recipeId) async {
+  Future<List<RecipeTag>> getTags(int? recipeId) async {
     final List<Map<String, dynamic>> maps =
-        await queryRecipeAttributeBasedTable(
+        await _queryRecipeAttributeBasedTable(
             RecipeDatabase.tagsTable, recipeId);
 
     return List.generate(maps.length, (i) {
@@ -182,7 +182,7 @@ class RecipeDatabaseManager {
     });
   }
 
-  static Future<void> deleteSteps(List<RecipeStep> steps) async {
+  Future<void> deleteSteps(List<RecipeStep> steps) async {
     final Database? db = await RecipeDatabase.instance.database;
 
     Batch batch = db!.batch();
@@ -195,7 +195,7 @@ class RecipeDatabaseManager {
     batch.apply();
   }
 
-  static Future<List<Recipe>> searchRecipes(String text) async {
+  Future<List<Recipe>> searchRecipes(String text) async {
     final Database? db = await RecipeDatabase.instance.database;
 
     final String recipeTable = RecipeDatabase.recipeTable;
@@ -225,7 +225,7 @@ class RecipeDatabaseManager {
     });
   }
 
-  static Future<List<RecipeTag>> getAllTags() async {
+  Future<List<RecipeTag>> getAllTags() async {
     final db = await RecipeDatabase.instance.database;
 
     final List<Map<String, dynamic>> maps = await db!

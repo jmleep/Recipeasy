@@ -1,29 +1,31 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/data/model/recipe_step.dart';
+import 'package:my_recipes/data/repository/recipe_repository_interface.dart';
 
 import '../../../data/model/recipe_ingredient.dart';
 import '../../../data/model/recipe.dart';
 import '../../../data/model/recipe_photo.dart';
 import '../../../data/model/recipe_tag.dart';
 import '../../../data/repository/recipe_photo_repository.dart';
-import '../../../data/repository/recipe_repository.dart';
 import '../../add_edit_recipe/screen_add_edit_recipe.dart';
 
 class ViewRecipeViewModel extends ChangeNotifier {
   late Recipe recipe;
+  late RecipeRepository repository;
   List<RecipePhoto> recipeImages = [];
   List<RecipeIngredient> recipeIngredients = [];
   List<RecipeStep> recipeSteps = [];
   List<RecipeTag> recipeTags = [];
   bool isLoading = true;
 
-  init(Recipe r) {
+  init(Recipe r, RecipeRepository rep) {
     recipeIngredients = [];
     recipeImages = [];
     recipeSteps = [];
     recipeTags = [];
     recipe = r;
+    repository = rep;
     isLoading = true;
 
     getRecipeData();
@@ -31,9 +33,9 @@ class ViewRecipeViewModel extends ChangeNotifier {
 
   getRecipeData() async {
     var imageFuture = RecipePhotoDatabaseManager.getImages(recipe.id);
-    var ingredientFuture = RecipeDatabaseManager.getIngredients(recipe.id);
-    var stepsFuture = RecipeDatabaseManager.getSteps(recipe.id);
-    var tagsFuture = RecipeDatabaseManager.getTags(recipe.id);
+    var ingredientFuture = repository.getIngredients(recipe.id);
+    var stepsFuture = repository.getSteps(recipe.id);
+    var tagsFuture = repository.getTags(recipe.id);
 
     var results = await Future.wait(
         [imageFuture, ingredientFuture, stepsFuture, tagsFuture]);
@@ -53,10 +55,11 @@ class ViewRecipeViewModel extends ChangeNotifier {
       MaterialPageRoute(
           builder: (context) => AddEditRecipeScreen(
                 recipe: recipe,
+                repository: repository,
               )),
     );
 
-    Recipe updatedRecipe = await RecipeDatabaseManager.getRecipe(recipe.id!);
+    Recipe updatedRecipe = await repository.getRecipe(recipe.id!);
 
     recipe = updatedRecipe;
     recipeImages = [];

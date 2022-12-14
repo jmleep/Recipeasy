@@ -3,11 +3,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:my_recipes/data/repository/recipe_repository_interface.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../data/model/recipe.dart';
 import '../../../data/model/recipe_tag.dart';
-import '../../../data/repository/recipe_repository.dart';
+import '../../../data/repository/sqlite_recipe_repository.dart';
 import '../../add_edit_recipe/screen_add_edit_recipe.dart';
 import '../../settings/screen_settings.dart';
 import '../../view_recipe_details/screen_view_recipe_details.dart';
@@ -27,6 +28,7 @@ class HomeViewModel extends ChangeNotifier {
   bool isGrid = true;
   Timer? debounce;
   bool isAnyRecipePresent = false;
+  RecipeRepository repository = SQLiteRecipeRepository();
 
   @mustCallSuper
   void dispose() {
@@ -70,12 +72,12 @@ class HomeViewModel extends ChangeNotifier {
   }
 
   getRecipeTags() async {
-    allRecipeTags = await RecipeDatabaseManager.getAllTags();
+    allRecipeTags = await repository.getAllTags();
     notifyListeners();
   }
 
   getRecipes() async {
-    List<Recipe> retrievedRecipes = await RecipeDatabaseManager.getAllRecipes();
+    List<Recipe> retrievedRecipes = await repository.getAllRecipes();
 
     recipes = retrievedRecipes;
     filteredRecipes = [...recipes];
@@ -94,13 +96,13 @@ class HomeViewModel extends ChangeNotifier {
         context,
         MaterialPageRoute(
             builder: (context) => ViewRecipeDetailsScreen(
-                  recipe: recipe,
-                )),
+                recipe: recipe, repository: repository)),
       );
     } else {
       await Navigator.push(
         context,
-        MaterialPageRoute(builder: (context) => AddEditRecipeScreen()),
+        MaterialPageRoute(
+            builder: (context) => AddEditRecipeScreen(repository: repository)),
       );
     }
 
@@ -134,7 +136,7 @@ class HomeViewModel extends ChangeNotifier {
     debounce = Timer(
       const Duration(milliseconds: 500),
       () async {
-        recipes = await RecipeDatabaseManager.searchRecipes(text);
+        recipes = await repository.searchRecipes(text);
         isSearchLoading = false;
         notifyListeners();
       },

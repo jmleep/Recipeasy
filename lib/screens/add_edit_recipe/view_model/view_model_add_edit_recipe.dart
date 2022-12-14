@@ -5,17 +5,19 @@ import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_recipes/data/model/recipe_attribute.dart';
 import 'package:my_recipes/data/model/recipe_step.dart';
+import 'package:my_recipes/data/repository/recipe_repository_interface.dart';
 import 'package:my_recipes/widgets/dialogs/dialog_add_edit_tag.dart';
 import '../../../data/model/recipe_ingredient.dart';
 import '../../../data/model/recipe.dart';
 import '../../../data/model/recipe_photo.dart';
 import '../../../data/model/recipe_tag.dart';
 import '../../../data/repository/recipe_photo_repository.dart';
-import '../../../data/repository/recipe_repository.dart';
+import '../../../data/repository/sqlite_recipe_repository.dart';
 import '../../../widgets/dialogs/dialog_keep_editing.dart';
 
 class AddEditRecipeViewModel extends ChangeNotifier {
   late Recipe? recipe;
+  late RecipeRepository repository;
   List<RecipePhoto> tempRecipePhotos = [];
   List<RecipePhoto> tempRecipePhotosToDelete = [];
   List<RecipeStep> recipeSteps = [];
@@ -44,8 +46,9 @@ class AddEditRecipeViewModel extends ChangeNotifier {
     super.dispose();
   }
 
-  init(Recipe? r) {
+  init(Recipe? r, RecipeRepository rep) {
     recipe = r;
+    repository = rep;
     tempRecipePhotos = [];
     tempRecipePhotosToDelete = [];
     recipeSteps = [];
@@ -67,9 +70,9 @@ class AddEditRecipeViewModel extends ChangeNotifier {
       recipeNameController = TextEditingController(text: recipe!.name);
 
       var imagesFuture = RecipePhotoDatabaseManager.getImages(recipe!.id!);
-      var ingredientsFuture = RecipeDatabaseManager.getIngredients(recipe!.id!);
-      var stepsFuture = RecipeDatabaseManager.getSteps(recipe!.id!);
-      var tagsFuture = RecipeDatabaseManager.getTags(recipe!.id);
+      var ingredientsFuture = repository.getIngredients(recipe!.id!);
+      var stepsFuture = repository.getSteps(recipe!.id!);
+      var tagsFuture = repository.getTags(recipe!.id);
 
       var results = await Future.wait(
           [imagesFuture, ingredientsFuture, stepsFuture, tagsFuture]);
@@ -239,10 +242,10 @@ class AddEditRecipeViewModel extends ChangeNotifier {
             tags: recipeTags);
       }
 
-      RecipeDatabaseManager.deleteIngredients(recipeIngredientsToDelete);
-      RecipeDatabaseManager.deleteSteps(recipeStepsToDelete);
+      repository.deleteIngredients(recipeIngredientsToDelete);
+      repository.deleteSteps(recipeStepsToDelete);
 
-      var recipeId = await RecipeDatabaseManager.upsertRecipe(editingRecipe);
+      var recipeId = await repository.upsertRecipe(editingRecipe);
 
       await RecipePhotoDatabaseManager.savePhotos(recipeId, tempRecipePhotos);
 

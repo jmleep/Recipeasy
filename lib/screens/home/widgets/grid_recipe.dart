@@ -38,6 +38,8 @@ class _RecipeGridState extends State<RecipeGrid> {
                           DeleteRecipeConfirmationDialog(
                             scaffoldKey: widget.scaffoldKey,
                             recipe: recipe,
+                            repository:
+                                context.read<HomeViewModel>().repository,
                             getRecipes:
                                 context.read<HomeViewModel>().getRecipes,
                           ));

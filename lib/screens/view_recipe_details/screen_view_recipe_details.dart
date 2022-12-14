@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/data/model/recipe.dart';
+import 'package:my_recipes/data/repository/recipe_repository_interface.dart';
 import 'package:my_recipes/screens/view_recipe_details/view_model/view_model_view_recipe_details.dart';
 import 'package:my_recipes/screens/view_recipe_details/widgets/expansion_tile_recipe_attribute.dart';
 import 'package:my_recipes/widgets/app_bar.dart';
@@ -13,11 +14,12 @@ import '../common/view_add_edit_recipe.dart';
 
 class ViewRecipeDetailsScreen extends ViewAddEditRecipe {
   final Recipe recipe;
+  final RecipeRepository repository;
 
   @override
   _ViewRecipeState createState() => _ViewRecipeState();
 
-  ViewRecipeDetailsScreen({required this.recipe});
+  ViewRecipeDetailsScreen({required this.recipe, required this.repository});
 }
 
 class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
@@ -38,8 +40,8 @@ class _ViewRecipeState extends ViewAddEditRecipeState<ViewRecipeDetailsScreen> {
   @override
   void initState() {
     super.initState();
-    Provider.of<ViewRecipeViewModel>(context, listen: false)
-        .init(widget.recipe);
+
+    context.read<ViewRecipeViewModel>().init(widget.recipe, widget.repository);
   }
 
   @override

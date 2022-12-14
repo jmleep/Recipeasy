@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_recipes/data/model/recipe_ingredient.dart';
 import 'package:my_recipes/data/model/recipe.dart';
+import 'package:my_recipes/data/repository/recipe_repository_interface.dart';
 import 'package:my_recipes/screens/add_edit_recipe/view_model/view_model_add_edit_recipe.dart';
 import 'package:my_recipes/screens/add_edit_recipe/widgets/add_tag.dart';
 import 'package:my_recipes/screens/add_edit_recipe/widgets/edit_recipe_attribute.dart';
@@ -17,11 +18,12 @@ import '../common/view_add_edit_recipe.dart';
 
 class AddEditRecipeScreen extends ViewAddEditRecipe {
   final Recipe? recipe;
+  final RecipeRepository repository;
 
   @override
   _AddEditRecipeState createState() => _AddEditRecipeState();
 
-  AddEditRecipeScreen({this.recipe});
+  AddEditRecipeScreen({this.recipe, required this.repository});
 }
 
 class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
@@ -65,7 +67,9 @@ class _AddEditRecipeState extends ViewAddEditRecipeState<AddEditRecipeScreen> {
   void initState() {
     super.initState();
 
-    context.read<AddEditRecipeViewModel>().init(widget.recipe);
+    context
+        .read<AddEditRecipeViewModel>()
+        .init(widget.recipe, widget.repository);
   }
 
   @override
